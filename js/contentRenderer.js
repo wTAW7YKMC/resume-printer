@@ -56,22 +56,13 @@ class ContentRenderer {
             return '个人信息不可用';
         }
         
-        let content = this.templates.about.header;
-        
-        content += `${this.templates.about.name}${personalInfo.name}\n`;
-        content += `${this.templates.about.title}${personalInfo.title}\n\n`;
-        content += `${personalInfo.tagline}\n\n`;
-        content += `${this.templates.about.contact}\n`;
-        content += `${this.templates.about.email}${personalInfo.email}\n`;
-        content += `${this.templates.about.phone}${personalInfo.phone}\n`;
-        content += `${this.templates.about.location}${personalInfo.location}\n\n`;
-        
-        if (personalInfo.socialLinks && personalInfo.socialLinks.length > 0) {
-            content += `${this.templates.about.social}\n`;
-            personalInfo.socialLinks.forEach(link => {
-                content += `${this.templates.about.socialLink}${link.platform}: ${link.url}\n`;
-            });
-        }
+        // 按照用户指定的格式渲染About部分
+        let content = `姓名： 喻贝贝（Becky）\n\n`;
+        content += `院校：武汉理工大学\n\n`;
+        content += `学院：经济学院\n\n`;
+        content += `专业：智能经济\n\n`;
+        content += `个人标签：对宏观经济、数据分析充满热情的经济学学习者，擅长将理论知识应用于实践，曾参与校园经济调研与金融模拟竞赛，期待在经济领域探索更多可能性。\n\n`;
+        content += `个人宣言：风萧萧兮易水寒\n\n`;
         
         return content;
     }
@@ -82,25 +73,16 @@ class ContentRenderer {
      * @returns {string} 格式化后的内容
      */
     renderExperience(workExperience) {
-        if (!workExperience || workExperience.length === 0) {
-            return '暂无工作经历';
-        }
-        
-        let content = this.templates.experience.header;
-        
-        workExperience.forEach(job => {
-            content += `${this.templates.experience.company}${job.company} | ${job.position} (${job.period})\n`;
-            content += `${this.templates.experience.location}${job.location}\n\n`;
-            content += `${job.description}\n\n`;
-            
-            if (job.highlights && job.highlights.length > 0) {
-                content += `${this.templates.experience.highlights}\n`;
-                job.highlights.forEach(highlight => {
-                    content += `${this.templates.experience.highlight}${highlight}\n`;
-                });
-                content += '\n';
-            }
-        });
+        // 按照用户指定的格式渲染Experience部分
+        let content = `1. 武汉理工大学经济学人协会\n`;
+        content += `职位：办公室副部长 | 荣誉：年度之星\n`;
+        content += `核心工作：\n`;
+        content += `策划并落地学术研讨、案例分享等活动，衔接专业知识与实践应用；\n`;
+        content += `负责活动流程协调、物料准备，责任心强、执行高效获评 "年度之星"。\n\n`;
+        content += `2. 武汉理工大学经济学院科学技术协会\n`;
+        content += `职位：干事\n`;
+        content += `核心工作：\n`;
+        content += `参与统筹 "创新杯""品牌策划赛""能源经济大赛" 等科创赛事，负责宣传推广、师生对接、评审流程把控；\n\n`;
         
         return content;
     }
@@ -111,25 +93,10 @@ class ContentRenderer {
      * @returns {string} 格式化后的内容
      */
     renderEducation(education) {
-        if (!education || education.length === 0) {
-            return '暂无教育经历';
-        }
-        
-        let content = this.templates.education.header;
-        
-        education.forEach(edu => {
-            content += `${this.templates.education.institution}${edu.institution}\n`;
-            content += `${this.templates.education.degree}${edu.degree} - ${edu.major} (${edu.period})\n`;
-            content += `${this.templates.education.location}${edu.location}\n\n`;
-            
-            if (edu.achievements && edu.achievements.length > 0) {
-                content += `${this.templates.education.achievements}\n`;
-                edu.achievements.forEach(achievement => {
-                    content += `${this.templates.education.achievement}${achievement}\n`;
-                });
-                content += '\n';
-            }
-        });
+        // 按照用户指定的格式渲染Education部分
+        let content = `武汉理工大学 ｜ 经济学院 ｜ 经济学专业 ｜ 2024.09 - 至今\n`;
+        content += `- 核心课程：微观经济学、宏观经济学、统计学、货币金融学；\n`;
+        content += `- 成绩：专业前30%\n\n`;
         
         return content;
     }
@@ -140,21 +107,11 @@ class ContentRenderer {
      * @returns {string} 格式化后的内容
      */
     renderSkills(skills) {
-        if (!skills) {
-            return '暂无技能信息';
-        }
-        
-        let content = this.templates.skills.header;
-        
-        ['design', 'development', 'other'].forEach(category => {
-            if (skills[category] && skills[category].length > 0) {
-                content += `${this.getCategoryName(category)}:\n`;
-                skills[category].forEach(skill => {
-                    content += `${this.templates.skills.item}${skill.name} (${this.getProficiencyLevel(skill.proficiency)})\n`;
-                });
-                content += '\n';
-            }
-        });
+        // 按照用户指定的格式渲染Skills部分
+        let content = `个人优势\n`;
+        content += `1.责任担当：曾任班级纪律委员、学习委员，牵头学风建设与日常管理，获评 "经济学院优秀团员"，具备良好的 服务意识与执行力；\n`;
+        content += `2.工具技能：精通 PowerPoint、Excel、Word；熟练运用 Trae、v0、DeepSeek、文心一言等辅助学习，掌握 Axure 产品策划基础操作；\n`;
+        content += `3.组织统筹：曾任学院志愿者协会负责人，策划执行志愿服务活动，涵盖人员调度、资源对接、全流程把控。\n\n`;
         
         return content;
     }
@@ -165,28 +122,27 @@ class ContentRenderer {
      * @returns {string} 格式化后的内容
      */
     renderProjects(projects) {
-        if (!projects || projects.length === 0) {
-            return '暂无项目经历';
-        }
-        
-        let content = this.templates.projects.header;
-        
-        projects.forEach(project => {
-            content += `${this.templates.projects.name}${project.name} | ${project.role} (${project.period})\n\n`;
-            content += `${project.description}\n\n`;
-            
-            if (project.technologies && project.technologies.length > 0) {
-                content += `${this.templates.projects.technologies}${project.technologies.join(', ')}\n\n`;
-            }
-            
-            if (project.outcomes && project.outcomes.length > 0) {
-                content += `${this.templates.projects.outcomes}\n`;
-                project.outcomes.forEach(outcome => {
-                    content += `${this.templates.projects.outcome}${outcome}\n`;
-                });
-                content += '\n';
-            }
-        });
+        // 按照用户指定的格式渲染Projects部分
+        let content = `实践经历\n`;
+        content += `1.经济学院 "创新杯"\n`;
+        content += `2024-12\n`;
+        content += `角色：核心成员 | 作品：《氢动氨能》（创业类）| 成果：校级优秀奖\n`;
+        content += `核心贡献：\n`;
+        content += `主导项目 PPT 设计与创业策划书撰写，结合智能经济思维优化项目逻辑框架；\n`;
+        content += `参与可行性分析与创意打磨，输出完整创业方案，助力团队斩获校级奖项。\n\n`;
+        content += `2.法学与人文社会学院 "创新杯"\n`;
+        content += `2025-3\n`;
+        content += `角色：核心成员 | 作品：《乐享余年 — 基于武汉市情的老年公寓市场分析与城市嵌入式养老研究》\n`;
+        content += `成果：校级铜奖\n`;
+        content += `核心贡献：\n`;
+        content += `负责实地调研（武汉养老机构访谈、数据采集）、PPT 逻辑优化与策划案美工设计；\n`;
+        content += `运用市场分析方法整理调研数据，输出可视化报告，为项目获奖提供关键支撑。\n\n`;
+        content += `3.车路云未来学习项目\n`;
+        content += `2025-6\n`;
+        content += `方向：数字园区数字孪生\n`;
+        content += `核心贡献：\n`;
+        content += `运用 Axure 梳理产品需求，撰写基础策划方案，辅助定义数字园区功能模块；\n`;
+        content += `结合智能经济、数字经济专业知识优化产品逻辑，积累实践经验。\n\n`;
         
         return content;
     }
@@ -197,23 +153,12 @@ class ContentRenderer {
      * @returns {string} 格式化后的内容
      */
     renderContact(personalInfo) {
-        if (!personalInfo) {
-            return '联系信息不可用';
-        }
-        
-        let content = this.templates.contact.header;
-        content += `${this.templates.contact.name}${personalInfo.name}\n`;
-        content += `${this.templates.contact.title}${personalInfo.title}\n\n`;
-        content += `${this.templates.contact.email}${personalInfo.email}\n`;
-        content += `${this.templates.contact.phone}${personalInfo.phone}\n`;
-        content += `${this.templates.contact.location}${personalInfo.location}\n\n`;
-        
-        if (personalInfo.socialLinks && personalInfo.socialLinks.length > 0) {
-            content += `${this.templates.contact.social}\n`;
-            personalInfo.socialLinks.forEach(link => {
-                content += `${this.templates.contact.socialLink}${link.platform}: ${link.url}\n`;
-            });
-        }
+        // 按照用户指定的格式渲染Contact部分
+        let content = `email：may_seventeen17@126.com\n`;
+        content += `telephone：19571319571\n`;
+        content += `wechat:19571319571\n`;
+        content += `address:武汉市洪山区珞狮路雄楚大道武汉理工大学\n`;
+        content += `github: https://github.com/wTAW7YKMC\n\n`;
         
         return content;
     }
