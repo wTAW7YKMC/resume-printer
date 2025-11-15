@@ -18,6 +18,60 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSection = 'about';
     let touchNavigation = null;
     
+    // 初始化数据获取器和内容渲染器
+    const dataFetcher = new DataFetcher({
+        dataSource: 'resume-data.json',
+        cacheExpiry: 24 * 60 * 60 * 1000, // 24小时
+        cacheStrategy: 'cache-first',
+        useLocalFallback: true
+    });
+    
+    const contentRenderer = new ContentRenderer();
+    
+    // 初始化音效管理器
+    const soundManager = new SoundManager({
+        enabled: true,
+        volume: 0.3,
+        soundPath: 'assets/sounds/',
+        useWebAudioAsDefault: true  // 默认使用Web Audio API生成音效
+    });
+    
+    // 初始化PDF导出器
+    const pdfExporter = new PdfExporter({
+        filename: 'Becky_Resume.pdf',
+        title: 'Becky的个人简历'
+    });
+    
+    // 从本地存储恢复音效设置
+    isMuted = !soundManager.enabled;
+    
+    // 初始化打字机效果
+    const titleTypewriter = new Typewriter({
+        typeSpeed: 150,
+        eraseSpeed: 80,
+        playSound: soundManager.enabled,
+        soundCallback: (action, speed) => {
+            if (action === 'type') {
+                soundManager.playTypingSound({ duration: speed });
+            }
+        }
+    });
+    
+    const contentTypewriter = new Typewriter({
+        typeSpeed: 70,
+        eraseSpeed: 40,
+        playSound: soundManager.enabled,
+        soundCallback: (action, speed) => {
+            if (action === 'type') {
+                soundManager.playTypingSound({ duration: speed });
+            }
+        }
+    });
+    
+    // 设置打字机目标元素
+    titleTypewriter.setElement(titleText);
+    contentTypewriter.setElement(contentText);
+    
     // 初始化应用
     function init() {
         // 从本地存储恢复音效设置
@@ -91,33 +145,6 @@ document.addEventListener('DOMContentLoaded', function() {
             forceRefreshData();
         });
     }
-    
-    // 初始化数据获取器和内容渲染器
-    const dataFetcher = new DataFetcher({
-        dataSource: 'resume-data.json',
-        cacheExpiry: 24 * 60 * 60 * 1000, // 24小时
-        cacheStrategy: 'cache-first',
-        useLocalFallback: true
-    });
-    
-    const contentRenderer = new ContentRenderer();
-    
-    // 初始化音效管理器
-    const soundManager = new SoundManager({
-        enabled: true,
-        volume: 0.3,
-        soundPath: 'assets/sounds/',
-        useWebAudioAsDefault: true  // 默认使用Web Audio API生成音效
-    });
-    
-    // 初始化PDF导出器
-    const pdfExporter = new PdfExporter({
-        filename: 'Becky_Resume.pdf',
-        title: 'Becky的个人简历'
-    });
-    
-    // 从本地存储恢复音效设置
-    isMuted = !soundManager.enabled;
     
     // 加载简历数据
     async function loadResumeData(forceRefresh = false) {
@@ -202,35 +229,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // 使用打字机效果显示内容
         typeText(contentText, content, 50);
     }
-    
-    // 这些格式化函数已经移至ContentRenderer模块中
-    
-    // 初始化打字机效果
-    const titleTypewriter = new Typewriter({
-        typeSpeed: 150,
-        eraseSpeed: 80,
-        playSound: soundManager.enabled,
-        soundCallback: (action, speed) => {
-            if (action === 'type') {
-                soundManager.playTypingSound({ duration: speed });
-            }
-        }
-    });
-    
-    const contentTypewriter = new Typewriter({
-        typeSpeed: 70,
-        eraseSpeed: 40,
-        playSound: soundManager.enabled,
-        soundCallback: (action, speed) => {
-            if (action === 'type') {
-                soundManager.playTypingSound({ duration: speed });
-            }
-        }
-    });
-    
-    // 设置打字机目标元素
-    titleTypewriter.setElement(titleText);
-    contentTypewriter.setElement(contentText);
     
     // 打字机效果 - 使用新的Typewriter类
     function typeText(element, text, speed = 120) {
