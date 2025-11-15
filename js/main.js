@@ -105,45 +105,55 @@ document.addEventListener('DOMContentLoaded', function() {
     // 设置事件监听器
     function setupEventListeners() {
         // 导航按钮点击事件
-        navButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // 播放点击音效
-                soundManager.playClickSound();
-                
-                const section = this.getAttribute('data-section');
-                if (section !== currentSection) {
-                    switchSection(section);
-                }
+        if (navButtons && navButtons.length > 0) {
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 播放点击音效
+                    soundManager.playClickSound();
+                    
+                    const section = this.getAttribute('data-section');
+                    if (section !== currentSection) {
+                        switchSection(section);
+                    }
+                });
             });
-        });
+        }
         
         // 音效开关事件
-        soundToggle.addEventListener('click', function() {
-            // 播放点击音效
-            soundManager.playClickSound();
-            toggleSound();
-        });
+        if (soundToggle) {
+            soundToggle.addEventListener('click', function() {
+                // 播放点击音效
+                soundManager.playClickSound();
+                toggleSound();
+            });
+        }
         
         // PDF导出当前内容事件
-        pdfExportCurrent.addEventListener('click', function() {
-            // 播放点击音效
-            soundManager.playClickSound();
-            exportCurrentContent();
-        });
+        if (pdfExportCurrent) {
+            pdfExportCurrent.addEventListener('click', function() {
+                // 播放点击音效
+                soundManager.playClickSound();
+                exportCurrentContent();
+            });
+        }
         
         // PDF导出完整简历事件
-        pdfExportFull.addEventListener('click', function() {
-            // 播放点击音效
-            soundManager.playClickSound();
-            exportFullResume();
-        });
+        if (pdfExportFull) {
+            pdfExportFull.addEventListener('click', function() {
+                // 播放点击音效
+                soundManager.playClickSound();
+                exportFullResume();
+            });
+        }
         
         // 强制刷新数据事件
-        forceRefresh.addEventListener('click', function() {
-            // 播放点击音效
-            soundManager.playClickSound();
-            forceRefreshData();
-        });
+        if (forceRefresh) {
+            forceRefresh.addEventListener('click', function() {
+                // 播放点击音效
+                soundManager.playClickSound();
+                forceRefreshData();
+            });
+        }
     }
     
     // 加载简历数据
