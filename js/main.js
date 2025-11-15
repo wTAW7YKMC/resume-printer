@@ -106,7 +106,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const soundManager = new SoundManager({
         enabled: true,
         volume: 0.3,
-        soundPath: 'assets/sounds/'
+        soundPath: 'assets/sounds/',
+        useWebAudioAsDefault: true  // 默认使用Web Audio API生成音效
     });
     
     // 初始化PDF导出器
