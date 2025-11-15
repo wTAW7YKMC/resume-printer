@@ -24,10 +24,7 @@ class ContentRenderer {
      * @returns {string} 格式化后的内容
      */
     render(section, data) {
-        if (!data) {
-            return '数据加载中...';
-        }
-        
+        // 不再检查data是否存在，因为我们现在使用静态内容
         switch (section) {
             case 'about':
                 return this.renderAbout(data.personalInfo);

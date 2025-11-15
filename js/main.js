@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const soundToggle = document.getElementById('sound-toggle');
     const pdfExportCurrent = document.getElementById('pdf-export-current');
     const pdfExportFull = document.getElementById('pdf-export-full');
+    const forceRefresh = document.getElementById('force-refresh');
     const lastUpdated = document.getElementById('last-updated');
     const navButtons = document.querySelectorAll('.nav-btn');
     
@@ -82,6 +83,13 @@ document.addEventListener('DOMContentLoaded', function() {
             soundManager.playClickSound();
             exportFullResume();
         });
+        
+        // 强制刷新数据事件
+        forceRefresh.addEventListener('click', function() {
+            // 播放点击音效
+            soundManager.playClickSound();
+            forceRefreshData();
+        });
     }
     
     // 初始化数据获取器和内容渲染器
@@ -111,10 +119,15 @@ document.addEventListener('DOMContentLoaded', function() {
     isMuted = !soundManager.enabled;
     
     // 加载简历数据
-    async function loadResumeData() {
+    async function loadResumeData(forceRefresh = false) {
         try {
             // 显示加载指示器
             loadingIndicator.style.display = 'block';
+            
+            // 如果强制刷新，清除缓存
+            if (forceRefresh) {
+                dataFetcher.clearCache();
+            }
             
             // 使用DataFetcher加载简历数据
             resumeData = await dataFetcher.loadData();
@@ -365,6 +378,36 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     }
     
+    // 强制刷新数据
+    async function forceRefreshData() {
+        try {
+            // 显示加载指示器
+            loadingIndicator.style.display = 'block';
+            loadingIndicator.textContent = '正在刷新数据...';
+            
+            // 强制刷新数据
+            await loadResumeData(true);
+            
+            // 重新显示当前部分内容
+            eraseContent(contentText, () => {
+                showContent(currentSection);
+                
+                // 显示刷新成功提示
+                showAlert('数据刷新成功！', 'success');
+                
+                // 隐藏加载指示器
+                loadingIndicator.style.display = 'none';
+            });
+        } catch (error) {
+            console.error('Error refreshing data:', error);
+            showAlert('数据刷新失败，请稍后重试。', 'error');
+            loadingIndicator.style.display = 'none';
+        }
+    }
+    
     // 初始化应用
     init();
+    
+    // 暴露强制刷新数据函数到全局作用域，以便在控制台中调用
+    window.forceRefreshResumeData = forceRefreshData;
 });
