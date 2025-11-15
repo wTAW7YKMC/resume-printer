@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "siteTitle": "Becky's Resume",
+    "siteDescription": "Personal resume of Becky, a Product Designer.",
+    "lastUpdated": "2024-05-20"
+  },
+  "personalInfo": {
+    "name": "Becky",
+    "title": "Product Designer",
+    "tagline": "热衷于创建直观且愉悦的用户体验，专注于将复杂问题简化为优雅的设计解决方案。",
+    "location": "上海, 中国",
+    "email": "becky@example.com",
+    "phone": "+86 138 0000 0000",
+    "avatarUrl": "https://raw.githubusercontent.com/[your-username]/[your-repo]/main/assets/avatar.jpg",
+    "socialLinks": [
+      {
+        "platform": "GitHub",
+        "url": "https://github.com/becky",
+        "icon": "github-icon.svg"
+      },
+      {
+        "platform": "LinkedIn",
+        "url": "https://linkedin.com/in/becky",
+        "icon": "linkedin-icon.svg"
+      },
+      {
+        "platform": "Dribbble",
+        "url": "https://dribbble.com/becky",
+        "icon": "dribbble-icon.svg"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "上海交通大学",
+      "degree": "设计学硕士",
+      "major": "交互设计",
+      "period": "2019 - 2022",
+      "location": "上海, 中国",
+      "achievements": [
+        "优秀毕业生",
+        "2021年大学设计竞赛一等奖"
+      ]
+    },
+    {
+      "institution": "同济大学",
+      "degree": "设计学学士",
+      "major": "数字媒体艺术",
+      "period": "2015 - 2019",
+      "location": "上海, 中国",
+      "achievements": [
+        "连续三年获得一等奖学金",
+        "优秀学生干部"
+      ]
+    }
+  ],
+  "workExperience": [
+    {
+      "company": "科技创新有限公司",
+      "position": "高级产品设计师",
+      "period": "2022 - 至今",
+      "location": "上海, 中国",
+      "description": "负责公司核心移动应用的用户体验设计，主导多个重要产品的设计迭代。",
+      "highlights": [
+        "主导新手引导流程的重设计，用户留存率提高25%",
+        "与跨职能团队合作，推出3个主要产品更新"
+      ]
+    },
+    {
+      "company": "互联网创业公司",
+      "position": "产品设计师",
+      "period": "2020 - 2022",
+      "location": "杭州, 中国",
+      "description": "参与初创公司产品从0到1的设计过程，负责UI/UX设计和用户研究。",
+      "highlights": [
+        "独立完成产品全流程设计，帮助用户增长200%",
+        "建立并优化设计系统，提高团队设计效率40%"
+      ]
+    }
+  ],
+  "skills": {
+    "design": [
+      {"name": "UI/UX设计", "proficiency": 5},
+      {"name": "Figma", "proficiency": 5},
+      {"name": "Sketch", "proficiency": 4},
+      {"name": "用户研究", "proficiency": 4},
+      {"name": "原型设计", "proficiency": 5}
+    ],
+    "development": [
+      {"name": "HTML/CSS", "proficiency": 3},
+      {"name": "JavaScript", "proficiency": 3},
+      {"name": "React", "proficiency": 2}
+    ],
+    "other": [
+      {"name": "项目管理", "proficiency": 4},
+      {"name": "数据分析", "proficiency": 3},
+      {"name": "设计思维", "proficiency": 5}
+    ]
+  },
+  "projects": [
+    {
+      "name": "健康管理App",
+      "role": "主导设计师",
+      "period": "2023",
+      "description": "一款帮助用户跟踪日常健康活动的移动应用，通过数据可视化帮助用户了解自己的健康状况。",
+      "technologies": ["Figma", "React Native", "数据可视化"],
+      "outcomes": ["上线首月在iOS和Android平台获得1万+下载量", "App Store获得4.8星好评", "被知名健康媒体报道"]
+    },
+    {
+      "name": "智能家居控制平台",
+      "role": "产品设计师",
+      "period": "2022",
+      "description": "为智能家居设备打造的统一控制平台，支持多种设备类型的连接和管理。",
+      "technologies": ["Figma", "用户体验研究", "交互设计"],
+      "outcomes": ["简化了80%的设备配置流程", "用户满意度提升45%", "减少客户支持请求60%"]
+    }
+  ]
+}

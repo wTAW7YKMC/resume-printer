@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Becky's Resume</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- 打字机机身装饰 -->
+        <div class="typewriter-body">
+            <div class="typewriter-roller"></div>
+        </div>
+
+        <!-- 纸张区域 -->
+        <div class="paper-container">
+            <!-- 加载指示器 -->
+            <div id="loading-indicator" class="loading-indicator">
+                Loading resume data...
+            </div>
+
+            <!-- 主标题区域 -->
+            <header class="header">
+                <h1 id="main-title" class="main-title">
+                    <span id="title-text"></span><span class="cursor">|</span>
+                </h1>
+            </header>
+
+            <!-- 导航区域 -->
+            <nav id="navigation" class="navigation">
+                <button class="nav-btn active" data-section="about">About</button>
+                <button class="nav-btn" data-section="experience">Experience</button>
+                <button class="nav-btn" data-section="education">Education</button>
+                <button class="nav-btn" data-section="skills">Skills</button>
+                <button class="nav-btn" data-section="projects">Projects</button>
+                <button class="nav-btn" data-section="contact">Contact</button>
+            </nav>
+
+            <!-- 内容区域 -->
+            <main id="content-area" class="content-area">
+                <div id="content-text"></div>
+            </main>
+
+            <!-- 控制区域 -->
+            <footer class="controls">
+                <div class="control-group">
+                    <button id="sound-toggle" class="control-btn">🔊</button>
+                    <button id="pdf-export-current" class="control-btn">导出当前</button>
+                    <button id="pdf-export-full" class="control-btn">导出完整</button>
+                </div>
+                <div class="control-info">
+                    <p>最后更新: <span id="last-updated">未知</span></p>
+                </div>
+            </footer>
+            
+            <!-- PDF导出加载指示器 -->
+            <div id="pdf-loading-indicator" class="loading-indicator" style="display: none;">
+                正在导出PDF，请稍候...
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF 导出所需库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- JavaScript 文件 -->
+    <script src="js/typewriter.js"></script>
+    <script src="js/dataFetcher.js"></script>
+    <script src="js/contentRenderer.js"></script>
+    <script src="js/soundManager.js"></script>
+    <script src="js/pdfExporter.js"></script>
+    <script src="js/touchGestures.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

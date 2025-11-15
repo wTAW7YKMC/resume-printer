@@ -1,0 +1,479 @@
+/* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 基础样式 */
+body {
+    font-family: 'Courier New', 'Courier Prime', monospace;
+    background-color: #3e2723;
+    color: #212121;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* 容器样式 */
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+    position: relative;
+}
+
+/* 打字机机身装饰 */
+.typewriter-body {
+    background-color: #3e2723;
+    height: 30px;
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    margin-bottom: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* 打字机滚筒 */
+.typewriter-roller {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 10px;
+    height: 10px;
+    background-color: #555;
+    border-radius: 50%;
+}
+
+/* 纸张容器 */
+.paper-container {
+    background-color: #f5f1e6; /* 米黄色打字纸 */
+    position: relative;
+    padding: 40px;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    min-height: 600px;
+    
+    /* 添加纸张纹理 */
+    background-image: linear-gradient(rgba(139, 69, 19, 0.1) 1px, transparent 1px);
+    background-size: 100% 24px;
+    
+    /* 添加噪点效果 */
+    filter: contrast(105%) brightness(95%);
+}
+
+/* 加载指示器 */
+.loading-indicator {
+    text-align: center;
+    font-size: 18px;
+    color: #8b4513;
+    margin: 20px 0;
+    display: block;
+}
+
+/* 头部区域 */
+.header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* 主标题 */
+.main-title {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: 48px;
+    color: #8b4513;
+    margin-bottom: 20px;
+    display: inline-block;
+    position: relative;
+}
+
+/* 光标效果 */
+.cursor {
+    animation: blink 1s step-end infinite;
+    color: #8b4513;
+    font-weight: bold;
+    margin-left: 2px;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* 导航区域 */
+.navigation {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* 导航按钮 */
+.nav-btn {
+    background-color: #e8dcc8; /* 浅棕色 */
+    border: 2px solid #a67c52; /* 复古棕褐色 */
+    color: #333;
+    padding: 10px 20px;
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 5px;
+    position: relative;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav-btn:hover {
+    background-color: #d4b89a; /* 加深棕色 */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nav-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.nav-btn.active {
+    background-color: #d4b89a; /* 加深棕色 */
+    font-weight: bold;
+}
+
+/* 内容区域 */
+.content-area {
+    background-color: #ffffff;
+    border: 1px solid #d4b89a;
+    border-radius: 5px;
+    padding: 30px;
+    min-height: 400px;
+    margin-bottom: 30px;
+    white-space: pre-line; /* 保留换行符 */
+    font-size: 16px;
+    line-height: 1.8;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* 控制区域 */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.control-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* 控制按钮 */
+.control-btn {
+    background-color: #e8dcc8;
+    border: 2px solid #a67c52;
+    color: #333;
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 5px;
+}
+
+.control-btn:hover {
+    background-color: #d4b89a;
+}
+
+/* 音量控制 */
+.volume-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    background-color: rgba(232, 220, 200, 0.3);
+    border-radius: 5px;
+    border: 1px solid rgba(166, 124, 82, 0.3);
+}
+
+.volume-label {
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+}
+
+.volume-slider {
+    width: 60px;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #d4b89a;
+    outline: none;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    border-radius: 2px;
+}
+
+.volume-slider:hover {
+    opacity: 1;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #8b4513;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: #8b4513;
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+}
+
+/* 控制信息 */
+.control-info p {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+    
+    .paper-container {
+        padding: 20px;
+        min-height: 500px;
+    }
+    
+    .main-title {
+        font-size: 36px;
+        text-align: left;
+    }
+    
+    .navigation {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .nav-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .content-area {
+        padding: 20px;
+        min-height: 300px;
+    }
+    
+    .typewriter-roller {
+        display: none;
+    }
+    
+    .controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .control-group {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 10px auto;
+        padding: 0 10px;
+    }
+    
+    .paper-container {
+        padding: 15px;
+        min-height: 450px;
+    }
+    
+    .main-title {
+        font-size: 32px;
+    }
+    
+    .navigation {
+        gap: 8px;
+    }
+    
+    .nav-btn {
+        max-width: 250px;
+    }
+    
+    .content-area {
+        padding: 15px;
+        min-height: 280px;
+    }
+    
+    .controls {
+        margin-top: 15px;
+    }
+    
+    .control-btn {
+        font-size: 13px;
+        padding: 7px 12px;
+    }
+    
+    .control-info p {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin: 5px auto;
+        padding: 0 5px;
+    }
+    
+    .paper-container {
+        padding: 12px;
+        min-height: 400px;
+    }
+    
+    .main-title {
+        font-size: 26px;
+        line-height: 1.2;
+    }
+    
+    .navigation {
+        gap: 6px;
+        margin-bottom: 20px;
+    }
+    
+    .nav-btn {
+        max-width: 100%;
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+    
+    .content-area {
+        padding: 12px;
+        font-size: 14px;
+        min-height: 250px;
+    }
+    
+    .controls {
+        margin-top: 10px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .control-group {
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: space-between;
+    }
+    
+    .control-btn {
+        flex: 1;
+        min-width: 80px;
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+    
+    .volume-controls {
+        order: -1;
+        width: 100%;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+    
+    .volume-slider {
+        width: 40px;
+    }
+    
+    .control-info p {
+        font-size: 12px;
+        width: 100%;
+        text-align: center;
+        margin-top: 5px;
+    }
+}
+
+/* 横屏优化 */
+@media (max-height: 600px) and (orientation: landscape) {
+    .paper-container {
+        min-height: 300px;
+    }
+    
+    .main-title {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+    
+    .navigation {
+        margin-bottom: 15px;
+    }
+    
+    .content-area {
+        min-height: 200px;
+    }
+}
+
+/* 高分辨率优化 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .typewriter-body {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .paper-container {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* 打印样式 */
+@media print {
+    body {
+        background-color: white;
+    }
+    
+    .container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .typewriter-body {
+        background-color: #333;
+        height: 20px;
+    }
+    
+    .paper-container {
+        background-color: white;
+        box-shadow: none;
+        border: 1px solid #ccc;
+        padding: 20px;
+        min-height: auto;
+    }
+    
+    .navigation, .controls {
+        display: none;
+    }
+    
+    .content-area {
+        border: none;
+        padding: 0;
+    }
+}
