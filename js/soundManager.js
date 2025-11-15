@@ -25,6 +25,9 @@ class SoundManager {
         // 预加载的音频对象
         this.audioCache = {};
         
+        // 设置为默认使用Web Audio API
+        this.useWebAudioAsDefault = options.useWebAudioAsDefault !== undefined ? options.useWebAudioAsDefault : true;
+        
         // 初始化
         this.init();
     }
@@ -47,6 +50,14 @@ class SoundManager {
      * 预加载音效文件
      */
     preloadSounds() {
+        // 如果设置为默认使用Web Audio API，则跳过音频文件预加载
+        if (this.useWebAudioAsDefault) {
+            console.debug('SoundManager: Skipping audio file preloading, using Web Audio API by default');
+            // 初始化Web Audio API作为备用音效
+            this.initWebAudioFallback();
+            return;
+        }
+        
         Object.keys(this.soundFiles).forEach(key => {
             try {
                 const audio = new Audio();
@@ -123,6 +134,12 @@ class SoundManager {
         // 检查音效是否存在
         if (!this.soundFiles[soundName]) {
             console.warn(`SoundManager: Sound "${soundName}" not found`);
+            return Promise.resolve();
+        }
+        
+        // 如果设置为默认使用Web Audio API，直接使用备用音效
+        if (this.useWebAudioAsDefault) {
+            this.playWebAudioFallback(soundName, options);
             return Promise.resolve();
         }
         
