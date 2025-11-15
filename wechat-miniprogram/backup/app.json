@@ -1,0 +1,53 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/test/test",
+    "pages/about/about",
+    "pages/resume/resume",
+    "pages/experience/experience",
+    "pages/education/education",
+    "pages/skills/skills",
+    "pages/projects/projects"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#3e2723",
+    "navigationBarTitleText": "简历打印机",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f1e6"
+  },
+  "tabBar": {
+    "color": "#333333",
+    "selectedColor": "#8b4513",
+    "borderStyle": "black",
+    "backgroundColor": "#e8dcc8",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/about/about",
+        "text": "关于我"
+      },
+      {
+        "pagePath": "pages/resume/resume",
+        "text": "个人简历"
+      },
+      {
+        "pagePath": "pages/skills/skills",
+        "text": "技能专长"
+      },
+      {
+        "pagePath": "pages/projects/projects",
+        "text": "项目经验"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  },
+  "debug": true,
+  "sitemapLocation": "sitemap.json"
+}

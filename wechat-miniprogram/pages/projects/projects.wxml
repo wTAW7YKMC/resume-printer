@@ -1,0 +1,57 @@
+<!--projects.wxml-->
+<view class="container">
+  <view class="projects-list" wx:if="{{resumeData.projects && resumeData.projects.length > 0}}">
+    <view class="project-item" wx:for="{{resumeData.projects}}" wx:key="index">
+      <view class="project-header">
+        <view class="project-thumbnail" wx:if="{{item.thumbnail}}">
+          <image src="{{item.thumbnail}}" mode="aspectFill"></image>
+        </view>
+        <view class="project-info">
+          <view class="project-name">{{item.name}}</view>
+          <view class="project-role">{{item.role}}</view>
+          <view class="project-period">{{item.startDate}} - {{item.endDate}}</view>
+        </view>
+      </view>
+      
+      <view class="project-tech-stack" wx:if="{{item.techStack}}">
+        <view class="tech-title">技术栈</view>
+        <view class="tech-tags">
+          <text class="tech-tag" wx:for="{{item.techStack}}" wx:for-item="tech" wx:key="index">{{tech}}</text>
+        </view>
+      </view>
+      
+      <view class="project-description" wx:if="{{item.description}}">
+        <view class="desc-title">项目描述</view>
+        <text class="desc-content">{{item.description}}</text>
+      </view>
+      
+      <view class="project-features" wx:if="{{item.features}}">
+        <view class="features-title">主要功能</view>
+        <view class="features-list">
+          <text class="feature-item" wx:for="{{item.features}}" wx:for-item="feature" wx:key="index">• {{feature}}</text>
+        </view>
+      </view>
+      
+      <view class="project-achievements" wx:if="{{item.achievements}}">
+        <view class="achievements-title">项目成果</view>
+        <view class="achievements-list">
+          <text class="achievement-item" wx:for="{{item.achievements}}" wx:for-item="achievement" wx:key="index">• {{achievement}}</text>
+        </view>
+      </view>
+      
+      <view class="project-links" wx:if="{{item.links && item.links.length > 0}}">
+        <view class="links-title">相关链接</view>
+        <view class="links-list">
+          <view class="link-item" wx:for="{{item.links}}" wx:for-item="link" wx:key="index" bindtap="openLink" data-url="{{link.url}}">
+            <text class="link-text">{{link.text}}</text>
+            <text class="link-icon">→</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="empty-state" wx:else>
+    <text>暂无项目经验信息</text>
+  </view>
+</view>

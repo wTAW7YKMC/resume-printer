@@ -1,0 +1,142 @@
+/* pages/projects/projects.wxss */
+.projects-list {
+  margin-top: 20rpx;
+}
+
+.project-item {
+  background-color: #fff;
+  border-radius: 8rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  border-left: 6rpx solid #722ed1;
+}
+
+.item-header {
+  display: flex;
+  margin-bottom: 20rpx;
+}
+
+.project-thumbnail {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin-right: 20rpx;
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.project-thumbnail image {
+  width: 100%;
+  height: 100%;
+}
+
+.project-info {
+  flex: 1;
+}
+
+.project-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.project-role {
+  font-size: 28rpx;
+  color: #722ed1;
+  margin-bottom: 8rpx;
+}
+
+.project-period {
+  font-size: 24rpx;
+  color: #888;
+  margin-bottom: 10rpx;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tech-tag {
+  background-color: #f9f0ff;
+  color: #722ed1;
+  border-radius: 30rpx;
+  padding: 4rpx 12rpx;
+  margin-right: 10rpx;
+  margin-bottom: 8rpx;
+  font-size: 22rpx;
+}
+
+.item-content {
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+.project-description {
+  margin-bottom: 20rpx;
+  color: #555;
+}
+
+.sub-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin: 20rpx 0 10rpx;
+}
+
+.feature-item, .achievement-item {
+  display: flex;
+  margin-bottom: 10rpx;
+}
+
+.bullet {
+  color: #722ed1;
+  margin-right: 10rpx;
+  font-weight: bold;
+}
+
+.text {
+  flex: 1;
+}
+
+.project-links {
+  margin-top: 20rpx;
+}
+
+.link-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10rpx;
+  padding: 10rpx;
+  background-color: #f9f9f9;
+  border-radius: 6rpx;
+}
+
+.link-icon {
+  margin-right: 10rpx;
+  font-size: 28rpx;
+}
+
+.link-text {
+  color: #722ed1;
+  font-size: 26rpx;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80rpx 0;
+}
+
+.empty-state image {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}

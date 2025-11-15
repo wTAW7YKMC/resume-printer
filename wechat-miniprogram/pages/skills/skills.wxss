@@ -1,0 +1,85 @@
+/* pages/skills/skills.wxss */
+.skill-category {
+  margin-bottom: 40rpx;
+}
+
+.category-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-bottom: 10rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.skills-list {
+  margin-top: 20rpx;
+}
+
+.skill-item {
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.skill-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.skill-level {
+  font-size: 26rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+  background-color: #f0f0f0;
+}
+
+.skill-bar {
+  height: 16rpx;
+  background-color: #f0f0f0;
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin-bottom: 15rpx;
+}
+
+.skill-progress {
+  height: 100%;
+  border-radius: 8rpx;
+  transition: width 1.5s ease-out;
+  animation: progressAnimation 1.5s ease-out;
+}
+
+@keyframes progressAnimation {
+  0% {
+    width: 0 !important;
+  }
+}
+
+.skill-description {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80rpx 0;
+}
+
+.empty-state image {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}

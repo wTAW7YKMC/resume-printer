@@ -1,0 +1,128 @@
+/* pages/education/education.wxss */
+.education-list {
+  margin-top: 20rpx;
+}
+
+.education-item {
+  background-color: #fff;
+  border-radius: 8rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  border-left: 6rpx solid #1890ff;
+}
+
+.item-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.school-logo {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 20rpx;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.school-logo image {
+  width: 60rpx;
+  height: 60rpx;
+}
+
+.school-info {
+  flex: 1;
+}
+
+.school-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5rpx;
+}
+
+.degree {
+  font-size: 28rpx;
+  color: #1890ff;
+  margin-bottom: 5rpx;
+}
+
+.major {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 5rpx;
+}
+
+.period {
+  font-size: 24rpx;
+  color: #888;
+}
+
+.item-content {
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+.education-description {
+  margin-bottom: 20rpx;
+  color: #555;
+}
+
+.sub-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin: 20rpx 0 10rpx;
+}
+
+.course-tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10rpx;
+}
+
+.course-tag {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  border-radius: 30rpx;
+  padding: 6rpx 16rpx;
+  margin-right: 10rpx;
+  margin-bottom: 10rpx;
+  font-size: 24rpx;
+}
+
+.achievement-item, .activity-item {
+  display: flex;
+  margin-bottom: 10rpx;
+}
+
+.bullet {
+  color: #1890ff;
+  margin-right: 10rpx;
+  font-weight: bold;
+}
+
+.text {
+  flex: 1;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80rpx 0;
+}
+
+.empty-state image {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}

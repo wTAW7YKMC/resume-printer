@@ -1,0 +1,16 @@
+/* 解决中文乱码问题的样式 */
+.fix-encoding-container {
+  display: inline-block;
+}
+
+.fix-encoding-text {
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', SimSun, '宋体', sans-serif !important;
+  font-size: 28rpx;
+  line-height: 1.6;
+  word-break: break-word;
+  white-space: pre-wrap;
+  color: #333;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

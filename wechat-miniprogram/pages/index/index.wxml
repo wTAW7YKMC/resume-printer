@@ -1,0 +1,132 @@
+<view class="container">
+  <!-- 打字机机身装饰 -->
+  <view class="typewriter-body">
+    <view class="typewriter-roller"></view>
+  </view>
+  
+  <!-- 纸张容器 -->
+  <view class="paper-container">
+    <view class="title">
+      {{typedText}}
+      <text class="cursor" wx:if="{{isTyping}}">|</text>
+    </view>
+    
+    <!-- 导航栏 -->
+    <view class="nav-bar">
+      <view class="nav-item {{currentSection === 'personal' ? 'active' : ''}}" 
+            bindtap="switchSection" data-section="personal">个人信息</view>
+      <view class="nav-item {{currentSection === 'work' ? 'active' : ''}}" 
+            bindtap="switchSection" data-section="work">工作经验</view>
+      <view class="nav-item {{currentSection === 'education' ? 'active' : ''}}" 
+            bindtap="switchSection" data-section="education">教育背景</view>
+      <view class="nav-item {{currentSection === 'skills' ? 'active' : ''}}" 
+            bindtap="switchSection" data-section="skills">技能专长</view>
+    </view>
+    
+    <!-- 内容区域 -->
+    <view class="content-area">
+      <!-- 个人信息 -->
+      <view wx:if="{{currentSection === 'personal' && resumeData && resumeData.personalInfo}}" class="section">
+        <view wx:if="{{isSectionTyping}}" class="typing-content">
+          <text>{{sectionContent.personalContent}}</text>
+          <text class="cursor">|</text>
+        </view>
+        <view wx:else>
+          <view class="info-item">
+            <text class="label">姓名：</text>
+            <text class="value">{{resumeData.personalInfo.name}}</text>
+          </view>
+          <view class="info-item">
+            <text class="label">职位：</text>
+            <text class="value">{{resumeData.personalInfo.title}}</text>
+          </view>
+          <view class="info-item">
+            <text class="label">简介：</text>
+            <text class="value">{{resumeData.personalInfo.summary}}</text>
+          </view>
+          
+          <!-- 联系方式 -->
+          <view class="contact-info">
+            <view class="contact-item" wx:for="{{resumeData.personalInfo.contact}}" wx:key="type" wx:if="{{item.type === 'email' || item.type === 'phone'}}">
+              <text class="contact-label">{{item.type === 'email' ? 'Email:' : 'Phone:'}}</text>
+              <text class="contact-value">{{item.value}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 工作经验 -->
+      <view wx:if="{{currentSection === 'work' && resumeData && resumeData.workExperience}}" class="section">
+        <view wx:if="{{isSectionTyping}}" class="typing-content">
+          <text>{{sectionContent.workContent}}</text>
+          <text class="cursor">|</text>
+        </view>
+        <view wx:else>
+          <view class="experience-item" wx:for="{{resumeData.workExperience}}" wx:key="id">
+            <view class="item-title">{{item.company}}</view>
+            <view class="item-subtitle">{{item.position}} ({{item.startDate}} - {{item.endDate}})</view>
+            <view class="item-description">{{item.description}}</view>
+          </view>
+          
+          <!-- 联系方式 -->
+          <view class="contact-info">
+            <view class="contact-item" wx:for="{{resumeData.personalInfo.contact}}" wx:key="type" wx:if="{{item.type === 'email' || item.type === 'phone'}}">
+              <text class="contact-label">{{item.type === 'email' ? 'Email:' : 'Phone:'}}</text>
+              <text class="contact-value">{{item.value}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 教育背景 -->
+      <view wx:if="{{currentSection === 'education' && resumeData && resumeData.education}}" class="section">
+        <view wx:if="{{isSectionTyping}}" class="typing-content">
+          <text>{{sectionContent.educationContent}}</text>
+          <text class="cursor">|</text>
+        </view>
+        <view wx:else>
+          <view class="education-item" wx:for="{{resumeData.education}}" wx:key="id">
+            <view class="item-title">{{item.school}} - {{item.major}}</view>
+            <view class="item-subtitle">{{item.degree}} ({{item.period}})</view>
+            <view class="item-description">{{item.description}}</view>
+          </view>
+          
+          <!-- 联系方式 -->
+          <view class="contact-info">
+            <view class="contact-item" wx:for="{{resumeData.personalInfo.contact}}" wx:key="type" wx:if="{{item.type === 'email' || item.type === 'phone'}}">
+              <text class="contact-label">{{item.type === 'email' ? 'Email:' : 'Phone:'}}</text>
+              <text class="contact-value">{{item.value}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 技能专长 -->
+      <view wx:if="{{currentSection === 'skills' && resumeData && resumeData.skills}}" class="section">
+        <view wx:if="{{isSectionTyping}}" class="typing-content">
+          <text>{{sectionContent.skillsContent}}</text>
+          <text class="cursor">|</text>
+        </view>
+        <view wx:else>
+          <view class="skill-category" wx:for="{{resumeData.skills}}" wx:key="category">
+            <view class="category-title">{{item.category}}</view>
+            <view class="skill-item" wx:for="{{item.items}}" wx:for-item="skill" wx:key="name">
+              <view class="skill-name">{{skill.name}}</view>
+              <view class="skill-bar">
+                <view class="skill-level" style="width: {{skill.level}}%"></view>
+              </view>
+            </view>
+          </view>
+          
+          <!-- 联系方式 -->
+          <view class="contact-info">
+            <view class="contact-item" wx:for="{{resumeData.personalInfo.contact}}" wx:key="type" wx:if="{{item.type === 'email' || item.type === 'phone'}}">
+              <text class="contact-label">{{item.type === 'email' ? 'Email:' : 'Phone:'}}</text>
+              <text class="contact-value">{{item.value}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

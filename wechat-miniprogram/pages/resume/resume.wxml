@@ -1,0 +1,341 @@
+<!--pages/resume/resume.wxml-->
+<!-- 引入解决乱码问题的模板 -->
+<import src="../../templates/fix-encoding.wxml" />
+
+<view class="page-container">
+  <!-- 个人信息部分 -->
+  <view class="section personal-section" wx:if="{{activeTab === 'personal'}}">
+    <view class="section-header">
+      <template is="fix-encoding" data="{{content: '个人信息'}}"></template>
+    </view>
+    <view class="personal-info" wx:if="{{resumeData.personalInfo}}">
+      <view class="avatar-container">
+        <image class="avatar" src="{{resumeData.personalInfo.avatar || '/images/avatar.jpg'}}" mode="aspectFill"></image>
+      </view>
+      <view class="info-content">
+        <view class="name">
+          <template is="fix-encoding" data="{{content: resumeData.personalInfo.name}}"></template>
+        </view>
+        <view class="title">
+          <template is="fix-encoding" data="{{content: resumeData.personalInfo.title}}"></template>
+        </view>
+        <view class="intro">
+          <view class="intro-title">
+            <template is="fix-encoding" data="{{content: '自我介绍'}}"></template>
+          </view>
+          <template is="fix-encoding" data="{{content: resumeData.personalInfo.summary}}"></template>
+        </view>
+        <view class="contact-info">
+  <view class="contact-item" bindtap="copyEmail" data-email="{{resumeData.personalInfo.contact[1].value}}">
+    <text class="icon">📧</text>
+    <text class="text">
+      <template is="fix-encoding" data="{{content: resumeData.personalInfo.contact[1].value}}"></template>
+    </text>
+  </view>
+  <view class="contact-item" bindtap="copyPhone" data-phone="{{resumeData.personalInfo.contact[0].value}}">
+    <text class="icon">📱</text>
+    <text class="text">
+      <template is="fix-encoding" data="{{content: resumeData.personalInfo.contact[0].value}}"></template>
+    </text>
+  </view>
+  <view class="contact-item" bindtap="openSocialLink" data-url="{{resumeData.personalInfo.contact[2].value}}">
+    <text class="icon">📍</text>
+    <text class="text">
+      <template is="fix-encoding" data="{{content: resumeData.personalInfo.contact[2].value}}"></template>
+    </text>
+  </view>
+</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 技能部分 -->
+  <view class="section skills-section" wx:if="{{activeTab === 'skills'}}">
+    <view class="section-header">
+      <template is="fix-encoding" data="{{content: '专业技能'}}"></template>
+    </view>
+    <view class="skills-content" wx:if="{{resumeData.skills}}">
+      <!-- 设计技能 -->
+      <view class="skill-group" wx:if="{{resumeData.skills.design.length > 0}}">
+        <view class="skill-group-title">
+          <template is="fix-encoding" data="{{content: '设计技能'}}"></template>
+        </view>
+        <view class="skill-list">
+          <view class="skill-item" wx:for="{{resumeData.skills.design}}" wx:key="name">
+            <view class="skill-info">
+              <text class="skill-name">
+                <template is="fix-encoding" data="{{content: item.name}}"></template>
+              </text>
+              <text class="skill-level">
+                <template is="fix-encoding" data="{{content: item.level}}"></template>
+              </text>
+            </view>
+            <view class="skill-bar">
+              <view class="skill-progress" style="width: {{item.percentage}}%; background-color: {{item.color}};"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 开发技能 -->
+      <view class="skill-group" wx:if="{{resumeData.skills.development.length > 0}}">
+        <view class="skill-group-title">
+          <template is="fix-encoding" data="{{content: '开发技能'}}"></template>
+        </view>
+        <view class="skill-list">
+          <view class="skill-item" wx:for="{{resumeData.skills.development}}" wx:key="name">
+            <view class="skill-info">
+              <text class="skill-name">
+                <template is="fix-encoding" data="{{content: item.name}}"></template>
+              </text>
+              <text class="skill-level">
+                <template is="fix-encoding" data="{{content: item.level}}"></template>
+              </text>
+            </view>
+            <view class="skill-bar">
+              <view class="skill-progress" style="width: {{item.percentage}}%; background-color: {{item.color}};"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 其他技能 -->
+      <view class="skill-group" wx:if="{{resumeData.skills.other.length > 0}}">
+        <view class="skill-group-title">
+          <template is="fix-encoding" data="{{content: '其他技能'}}"></template>
+        </view>
+        <view class="skill-list">
+          <view class="skill-item" wx:for="{{resumeData.skills.other}}" wx:key="name">
+            <view class="skill-info">
+              <text class="skill-name">
+                <template is="fix-encoding" data="{{content: item.name}}"></template>
+              </text>
+              <text class="skill-level">
+                <template is="fix-encoding" data="{{content: item.level}}"></template>
+              </text>
+            </view>
+            <view class="skill-bar">
+              <view class="skill-progress" style="width: {{item.percentage}}%; background-color: {{item.color}};"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 经历部分（合并工作经历和教育经历） -->
+  <view class="section experience-section" wx:if="{{activeTab === 'experience'}}">
+    <view class="section-header">
+      <template is="fix-encoding" data="{{content: '个人经历'}}"></template>
+      <view class="expand-all-btn" bindtap="toggleAllExperience">
+        <text class="expand-all-text">
+          <template is="fix-encoding" data="{{content: '全部展开/收起'}}"></template>
+        </text>
+      </view>
+    </view>
+    
+    <!-- 工作经历 -->
+    <view class="subsection" wx:if="{{resumeData.workExperience.length > 0}}">
+      <view class="subsection-title">
+        <template is="fix-encoding" data="{{content: '工作经历'}}"></template>
+      </view>
+      <view class="work-list">
+        <view class="work-item" wx:for="{{resumeData.workExperience}}" wx:key="id">
+          <view class="work-header" bindtap="toggleWorkExperience" data-index="{{index}}">
+            <view class="work-info">
+              <view class="company">
+                <template is="fix-encoding" data="{{content: item.company}}"></template>
+              </view>
+              <view class="position">
+                <template is="fix-encoding" data="{{content: item.position}}"></template>
+              </view>
+              <view class="period">
+                <template is="fix-encoding" data="{{content: item.period}}"></template>
+              </view>
+            </view>
+            <view class="expand-icon {{item.expanded ? 'expanded' : ''}}">▼</view>
+          </view>
+          <view class="work-detail {{item.expanded ? 'expanded' : ''}}">
+            <view class="description">
+              <template is="fix-encoding" data="{{content: item.description}}"></template>
+            </view>
+            <view class="achievements">
+              <view class="achievement-item" wx:for="{{item.achievements}}" wx:for-item="achievement" wx:key="*this">
+                <template is="fix-encoding" data="{{content: '• ' + achievement}}"></template>
+              </view>
+            </view>
+            <view class="technologies">
+              <text class="tech-label">
+                <template is="fix-encoding" data="{{content: '技术栈：'}}"></template>
+              </text>
+              <view class="tech-list">
+                <text class="tech-item" wx:for="{{item.technologies}}" wx:key="*this">
+                  <template is="fix-encoding" data="{{content: item}}"></template>
+                </text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 教育经历 -->
+    <view class="subsection" wx:if="{{resumeData.education.length > 0}}">
+      <view class="subsection-title">
+        <template is="fix-encoding" data="{{content: '教育经历'}}"></template>
+      </view>
+      <view class="education-list">
+        <view class="education-item" wx:for="{{resumeData.education}}" wx:key="id">
+          <view class="education-header" bindtap="toggleEducation" data-index="{{index}}">
+            <view class="education-info">
+              <view class="school">
+                <template is="fix-encoding" data="{{content: item.school}}"></template>
+              </view>
+              <view class="major">
+                <template is="fix-encoding" data="{{content: item.major}}"></template>
+              </view>
+              <view class="degree">
+                <template is="fix-encoding" data="{{content: item.degree}}"></template>
+              </view>
+              <view class="period">
+                <template is="fix-encoding" data="{{content: item.period}}"></template>
+              </view>
+            </view>
+            <view class="expand-icon {{item.expanded ? 'expanded' : ''}}">▼</view>
+          </view>
+          <view class="education-detail {{item.expanded ? 'expanded' : ''}}">
+            <view class="description">
+              <template is="fix-encoding" data="{{content: item.description}}"></template>
+            </view>
+            <view class="courses" wx:if="{{item.courses.length > 0}}">
+              <text class="courses-label">
+                <template is="fix-encoding" data="{{content: '主修课程：'}}"></template>
+              </text>
+              <view class="course-list">
+                <text class="course-item" wx:for="{{item.courses}}" wx:key="*this">
+                  <template is="fix-encoding" data="{{content: item}}"></template>
+                </text>
+              </view>
+            </view>
+            <view class="achievements" wx:if="{{item.achievements.length > 0}}">
+              <text class="achievements-label">
+                <template is="fix-encoding" data="{{content: '主要成就：'}}"></template>
+              </text>
+              <view class="achievement-list">
+                <text class="achievement-item" wx:for="{{item.achievements}}" wx:key="*this">
+                  <template is="fix-encoding" data="{{content: item}}"></template>
+                </text>
+              </view>
+            </view>
+            <view class="activities" wx:if="{{item.activities.length > 0}}">
+              <text class="activities-label">
+                <template is="fix-encoding" data="{{content: '校园活动：'}}"></template>
+              </text>
+              <view class="activity-list">
+                <text class="activity-item" wx:for="{{item.activities}}" wx:key="*this">
+                  <template is="fix-encoding" data="{{content: item}}"></template>
+                </text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 项目经验部分 -->
+  <view class="section projects-section" wx:if="{{activeTab === 'projects'}}">
+    <view class="section-header">
+      <template is="fix-encoding" data="{{content: '项目经验'}}"></template>
+    </view>
+    <view class="projects-list" wx:if="{{resumeData.projects.length > 0}}">
+      <view class="project-item" wx:for="{{resumeData.projects}}" wx:key="id">
+        <view class="project-header" bindtap="toggleProject" data-index="{{index}}">
+          <view class="project-info">
+            <view class="name">
+              <template is="fix-encoding" data="{{content: item.name}}"></template>
+            </view>
+            <view class="role">
+              <template is="fix-encoding" data="{{content: item.role}}"></template>
+            </view>
+            <view class="period">
+              <template is="fix-encoding" data="{{content: item.period}}"></template>
+            </view>
+          </view>
+          <view class="expand-icon {{item.expanded ? 'expanded' : ''}}">▼</view>
+        </view>
+        <view class="project-detail {{item.expanded ? 'expanded' : ''}}">
+          <view class="description">
+            <template is="fix-encoding" data="{{content: item.description}}"></template>
+          </view>
+          <view class="features" wx:if="{{item.features.length > 0}}">
+            <text class="features-label">
+              <template is="fix-encoding" data="{{content: '功能特点：'}}"></template>
+            </text>
+            <view class="feature-list">
+              <text class="feature-item" wx:for="{{item.features}}" wx:key="*this">
+                <template is="fix-encoding" data="{{content: item}}"></template>
+              </text>
+            </view>
+          </view>
+          <view class="achievements" wx:if="{{item.achievements.length > 0}}">
+            <text class="achievements-label">
+              <template is="fix-encoding" data="{{content: '项目成果：'}}"></template>
+            </text>
+            <view class="achievement-list">
+              <text class="achievement-item" wx:for="{{item.achievements}}" wx:key="*this">
+                <template is="fix-encoding" data="{{content: item}}"></template>
+              </text>
+            </view>
+          </view>
+          <view class="technologies">
+            <text class="tech-label">
+              <template is="fix-encoding" data="{{content: '技术栈：'}}"></template>
+            </text>
+            <view class="tech-list">
+              <text class="tech-item" wx:for="{{item.technologies}}" wx:key="*this">
+                <template is="fix-encoding" data="{{content: item}}"></template>
+              </text>
+            </view>
+          </view>
+          <view class="links" wx:if="{{item.links.length > 0}}">
+            <text class="links-label">
+              <template is="fix-encoding" data="{{content: '相关链接：'}}"></template>
+            </text>
+            <view class="link-list">
+              <view class="link-item" wx:for="{{item.links}}" wx:key="name" bindtap="openSocialLink" data-url="{{item.url}}">
+                <text class="link-text">
+                  <template is="fix-encoding" data="{{content: item.name}}"></template>
+                </text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="tab-bar">
+    <view class="tab-item {{activeTab === 'personal' ? 'active' : ''}}" bindtap="switchTab" data-tab="personal">
+      <text class="tab-text">
+        <template is="fix-encoding" data="{{content: '个人信息'}}"></template>
+      </text>
+    </view>
+    <view class="tab-item {{activeTab === 'skills' ? 'active' : ''}}" bindtap="switchTab" data-tab="skills">
+      <text class="tab-text">
+        <template is="fix-encoding" data="{{content: '技能'}}"></template>
+      </text>
+    </view>
+    <view class="tab-item {{activeTab === 'experience' ? 'active' : ''}}" bindtap="switchTab" data-tab="experience">
+      <text class="tab-text">
+        <template is="fix-encoding" data="{{content: '经历'}}"></template>
+      </text>
+    </view>
+    <view class="tab-item {{activeTab === 'projects' ? 'active' : ''}}" bindtap="switchTab" data-tab="projects">
+      <text class="tab-text">
+        <template is="fix-encoding" data="{{content: '项目'}}"></template>
+      </text>
+    </view>
+  </view>
+</view>

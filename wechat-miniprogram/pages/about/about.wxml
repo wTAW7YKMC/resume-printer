@@ -1,0 +1,51 @@
+<!--about.wxml-->
+<view class="page-container">
+  <view class="content-section card">
+    <view class="section-title">关于我</view>
+    <view class="profile-info">
+      <image class="profile-avatar" src="{{personalInfo.avatar}}" mode="aspectFill"></image>
+      <view class="profile-details">
+        <view class="profile-name">{{personalInfo.name}}</view>
+        <view class="profile-title">{{personalInfo.title}}</view>
+        <view class="profile-location">{{personalInfo.location}}</view>
+      </view>
+    </view>
+    
+    <view class="section-content">
+      <view class="typewriter-container">
+        <text class="typewriter-text">{{displayText}}</text>
+        <text class="cursor" wx:if="{{showCursor}}">|</text>
+      </view>
+      
+      <view class="about-details" wx:if="{{personalInfo.details && personalInfo.details.length > 0}}">
+        <view class="detail-item" wx:for="{{personalInfo.details}}" wx:key="index">
+          <view class="detail-label">{{item.label}}:</view>
+          <view class="detail-value">{{item.value}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="content-section card" wx:if="{{personalInfo.contact && personalInfo.contact.length > 0}}">
+    <view class="section-title">联系方式</view>
+    <view class="contact-list">
+      <view class="contact-item" wx:for="{{personalInfo.contact}}" wx:key="type">
+        <view class="contact-icon">{{item.icon}}</view>
+        <view class="contact-info">
+          <view class="contact-type">{{item.type}}</view>
+          <view class="contact-value">{{item.value}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="content-section card" wx:if="{{personalInfo.social && personalInfo.social.length > 0}}">
+    <view class="section-title">社交媒体</view>
+    <view class="social-list">
+      <view class="social-item" wx:for="{{personalInfo.social}}" wx:key="name" bindtap="openSocialLink" data-url="{{item.url}}">
+        <view class="social-icon">{{item.icon}}</view>
+        <view class="social-name">{{item.name}}</view>
+      </view>
+    </view>
+  </view>
+</view>

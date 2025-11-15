@@ -1,0 +1,87 @@
+<!--contact.wxml-->
+<view class="page-container">
+  <view class="content-section">
+    <view class="section-title">联系方式</view>
+    
+    <view class="contact-card card">
+      <view class="profile-header">
+        <image class="profile-avatar" src="{{resumeData.personalInfo.avatar}}" mode="aspectFill"></image>
+        <view class="profile-info">
+          <view class="profile-name">{{resumeData.personalInfo.name}}</view>
+          <view class="profile-title">{{resumeData.personalInfo.title}}</view>
+        </view>
+      </view>
+      
+      <view class="contact-list">
+        <view class="contact-item" wx:for="{{resumeData.personalInfo.contact}}" wx:key="type" 
+              wx:if="{{item.type === 'phone'}}" bindtap="makePhoneCall" data-phone="{{item.value}}">
+          <view class="contact-icon-wrapper">
+            <image class="contact-icon" src="/assets/icons/{{item.type}}.png"></image>
+          </view>
+          <view class="contact-info">
+            <view class="contact-type">{{item.type}}</view>
+            <view class="contact-value">{{item.value}}</view>
+          </view>
+          <view class="contact-action">拨打</view>
+        </view>
+        
+        <view class="contact-item" wx:for="{{resumeData.personalInfo.contact}}" wx:key="type" 
+              wx:if="{{item.type === 'email'}}" bindtap="sendEmail" data-email="{{item.value}}">
+          <view class="contact-icon-wrapper">
+            <image class="contact-icon" src="/assets/icons/{{item.type}}.png"></image>
+          </view>
+          <view class="contact-info">
+            <view class="contact-type">{{item.type}}</view>
+            <view class="contact-value">{{item.value}}</view>
+          </view>
+          <view class="contact-action">发送</view>
+        </view>
+        
+        <view class="contact-item" wx:for="{{resumeData.personalInfo.contact}}" wx:key="type" 
+              wx:if="{{item.type !== 'phone' && item.type !== 'email'}}" bindtap="copyContact" 
+              data-value="{{item.value}}" data-type="{{item.type}}">
+          <view class="contact-icon-wrapper">
+            <image class="contact-icon" src="/assets/icons/{{item.type}}.png"></image>
+          </view>
+          <view class="contact-info">
+            <view class="contact-type">{{item.type}}</view>
+            <view class="contact-value">{{item.value}}</view>
+          </view>
+          <view class="contact-action">复制</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="content-section" wx:if="{{resumeData.personalInfo.social && resumeData.personalInfo.social.length > 0}}">
+    <view class="section-title">社交媒体</view>
+    <view class="social-grid">
+      <view class="social-item card" wx:for="{{resumeData.personalInfo.social}}" wx:key="name" bindtap="openSocialLink" data-url="{{item.url}}">
+        <image class="social-icon" src="/assets/icons/{{item.name}}.png"></image>
+        <view class="social-name">{{item.name}}</view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="content-section">
+    <view class="section-title">发送消息</view>
+    <view class="message-form card">
+      <view class="form-item">
+        <view class="form-label">您的姓名</view>
+        <input class="form-input" placeholder="请输入您的姓名" value="{{formData.name}}" bindinput="onInputChange" data-field="name" />
+      </view>
+      
+      <view class="form-item">
+        <view class="form-label">您的邮箱</view>
+        <input class="form-input" placeholder="请输入您的邮箱" value="{{formData.email}}" bindinput="onInputChange" data-field="email" />
+      </view>
+      
+      <view class="form-item">
+        <view class="form-label">留言内容</view>
+        <textarea class="form-textarea" placeholder="请输入留言内容" value="{{formData.message}}" bindinput="onInputChange" data-field="message" />
+      </view>
+      
+      <button class="btn btn-primary submit-btn" bindtap="submitMessage" loading="{{submitting}}">发送消息</button>
+    </view>
+  </view>
+</view>

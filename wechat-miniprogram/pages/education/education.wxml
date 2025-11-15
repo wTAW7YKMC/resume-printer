@@ -1,0 +1,53 @@
+<!--education.wxml-->
+<view class="container page-with-bottom-nav">
+  <view class="content-section">
+    <view class="section-title">教育背景</view>
+    <view class="education-list" wx:if="{{resumeData.education && resumeData.education.length > 0}}">
+      <view class="education-item" wx:for="{{resumeData.education}}" wx:key="id">
+        <view class="school-info">
+          <view class="school-name">{{item.school}}</view>
+          <view class="degree">{{item.degree}}</view>
+          <view class="major">{{item.major}}</view>
+          <view class="period">{{item.startDate}} - {{item.endDate}}</view>
+        </view>
+        
+        <view class="education-details">
+          <view class="detail-section" wx:if="{{item.description}}">
+            <view class="education-description">{{item.description}}</view>
+          </view>
+          
+          <view class="detail-section" wx:if="{{item.courses}}">
+            <view class="detail-title">主要课程</view>
+            <view class="detail-content">
+              <text class="detail-item" wx:for="{{item.courses}}" wx:for-item="course" wx:key="*this">• {{course}}</text>
+            </view>
+          </view>
+          
+          <view class="detail-section" wx:if="{{item.achievements}}">
+            <view class="detail-title">学术成就</view>
+            <view class="detail-content">
+              <text class="detail-item" wx:for="{{item.achievements}}" wx:for-item="achievement" wx:key="*this">• {{achievement}}</text>
+            </view>
+          </view>
+          
+          <view class="detail-section" wx:if="{{item.activities}}">
+            <view class="detail-title">课外活动</view>
+            <view class="detail-content">
+              <text class="detail-item" wx:for="{{item.activities}}" wx:for-item="activity" wx:key="*this">• {{activity}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="content-section" wx:else>
+    <view class="empty-state">
+      <image src="/assets/icons/empty.png" mode="aspectFit"></image>
+      <view class="empty-text">暂无教育背景</view>
+    </view>
+  </view>
+  
+  <!-- 底部导航栏 -->
+  <include src="../common/bottom-nav.wxml" />
+</view>

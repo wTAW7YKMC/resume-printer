@@ -1,0 +1,493 @@
+/* 引入解决乱码问题的样式 */
+@import "../../templates/fix-encoding.wxss";
+
+/* pages/resume/resume.wxss */
+.container {
+  padding: 20rpx;
+  padding-bottom: 120rpx;
+  background-color: #f5f5f5;
+}
+
+.section {
+  background-color: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.section-header {
+  padding: 30rpx;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.section-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 个人信息部分 */
+.personal-section {
+  padding-bottom: 40rpx;
+}
+
+.personal-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 30rpx 30rpx;
+}
+
+.avatar-container {
+  margin-bottom: 30rpx;
+}
+
+.avatar {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  border: 4rpx solid #f0f0f0;
+}
+
+.info-content {
+  width: 100%;
+  text-align: center;
+}
+
+.name {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.title {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.intro {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 30rpx;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10rpx 0;
+}
+
+.icon {
+  font-size: 28rpx;
+  margin-right: 10rpx;
+}
+
+.text {
+  font-size: 26rpx;
+  color: #333;
+}
+
+/* 技能部分 */
+.skills-content {
+  padding: 20rpx 30rpx 30rpx;
+}
+
+.skill-group {
+  margin-bottom: 40rpx;
+}
+
+.skill-group:last-child {
+  margin-bottom: 0;
+}
+
+.skill-group-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.skill-group-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8rpx;
+  height: 30rpx;
+  background-color: #1890ff;
+  border-radius: 4rpx;
+}
+
+.skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.skill-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.skill-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skill-name {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.skill-level {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.skill-bar {
+  height: 10rpx;
+  background-color: #f0f0f0;
+  border-radius: 5rpx;
+  overflow: hidden;
+}
+
+.skill-progress {
+  height: 100%;
+  border-radius: 5rpx;
+  transition: width 0.3s ease;
+}
+
+/* 经历部分（合并工作经历和教育经历） */
+.experience-section {
+  padding-bottom: 40rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.expand-all-btn {
+  padding: 10rpx 20rpx;
+  background-color: #f0f8ff;
+  border-radius: 30rpx;
+}
+
+.expand-all-text {
+  font-size: 24rpx;
+  color: #1890ff;
+}
+
+.subsection {
+  padding: 0 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.subsection:last-child {
+  margin-bottom: 0;
+}
+
+.subsection-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.subsection-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8rpx;
+  height: 32rpx;
+  background-color: #1890ff;
+  border-radius: 4rpx;
+}
+
+.work-list {
+  margin-bottom: 40rpx;
+}
+
+.work-list:last-child {
+  margin-bottom: 0;
+}
+
+.work-item {
+  margin-bottom: 30rpx;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 20rpx;
+}
+
+.work-item:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.work-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.work-info {
+  flex: 1;
+}
+
+.company {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.position {
+  font-size: 28rpx;
+  color: #1890ff;
+  margin-bottom: 8rpx;
+}
+
+.period {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.expand-icon {
+  font-size: 24rpx;
+  color: #999;
+  transition: transform 0.3s ease;
+  margin-left: 20rpx;
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.work-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.work-detail.expanded {
+  max-height: 1000rpx;
+  margin-top: 20rpx;
+}
+
+.responsibilities {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.responsibility-item {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 教育经历部分 */
+.education-list {
+  margin-bottom: 40rpx;
+}
+
+.education-list:last-child {
+  margin-bottom: 0;
+}
+
+.education-item {
+  margin-bottom: 30rpx;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 20rpx;
+}
+
+.education-item:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.education-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.education-info {
+  flex: 1;
+}
+
+.school {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.major {
+  font-size: 28rpx;
+  color: #1890ff;
+  margin-bottom: 8rpx;
+}
+
+.degree {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.period {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.education-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.education-detail.expanded {
+  max-height: 1000rpx;
+  margin-top: 20rpx;
+}
+
+.description {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 项目经验部分 */
+.projects-list {
+  padding: 0 30rpx 30rpx;
+}
+
+.project-item {
+  margin-bottom: 30rpx;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 20rpx;
+}
+
+.project-item:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.project-info {
+  flex: 1;
+}
+
+.name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.role {
+  font-size: 28rpx;
+  color: #1890ff;
+  margin-bottom: 8rpx;
+}
+
+.period {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.project-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.project-detail.expanded {
+  max-height: 1000rpx;
+  margin-top: 20rpx;
+}
+
+.tech-stack {
+  margin-top: 20rpx;
+}
+
+.tech-label {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.tech-list {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 底部导航 */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  background-color: #fff;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+}
+
+.tab-item {
+  flex: 1;
+  padding: 20rpx 0;
+  text-align: center;
+  position: relative;
+}
+
+.tab-item.active {
+  color: #1890ff;
+}
+
+.tab-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 6rpx;
+  background-color: #1890ff;
+  border-radius: 0 0 6rpx 6rpx;
+}
+
+.tab-text {
+  font-size: 24rpx;
+  color: inherit;
+}

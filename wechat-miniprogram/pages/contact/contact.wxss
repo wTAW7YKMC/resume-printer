@@ -1,0 +1,198 @@
+/* pages/contact/contact.wxss */
+.page-container {
+  padding: 30rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  transition: all 0.3s ease;
+}
+
+.card:active {
+  transform: scale(0.98);
+  box-shadow: 0 1rpx 5rpx rgba(0, 0, 0, 0.1);
+}
+
+.contact-card {
+  /* 继承card样式 */
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.profile-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+  border: 2rpx solid #f0f0f0;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  color: #333;
+}
+
+.profile-title {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.contact-list {
+  margin-top: 20rpx;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+  transition: all 0.3s ease;
+}
+
+.contact-item:last-child {
+  border-bottom: none;
+}
+
+.contact-item:active {
+  background-color: #f9f9f9;
+}
+
+.contact-icon-wrapper {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+}
+
+.contact-icon-wrapper.phone {
+  background-color: #e6f7ff;
+}
+
+.contact-icon-wrapper.email {
+  background-color: #f6ffed;
+}
+
+.contact-icon-wrapper.other {
+  background-color: #f0f9f0;
+}
+
+.contact-icon {
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.contact-info {
+  flex: 1;
+}
+
+.contact-type {
+  font-size: 24rpx;
+  color: #888;
+  margin-bottom: 5rpx;
+}
+
+.contact-value {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.contact-action {
+  font-size: 26rpx;
+  color: #07c160;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  background-color: #f0f9f0;
+}
+
+.social-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 20rpx;
+}
+
+.social-item {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30rpx;
+  padding: 20rpx 10rpx;
+  border-radius: 8rpx;
+  transition: all 0.3s ease;
+}
+
+.social-item:active {
+  transform: scale(0.95);
+}
+
+.social-icon {
+  width: 60rpx;
+  height: 60rpx;
+  margin-bottom: 15rpx;
+}
+
+.social-name {
+  font-size: 26rpx;
+  color: #333;
+  text-align: center;
+}
+
+.message-form {
+  /* 继承card样式 */
+}
+
+.form-item {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.form-input, .form-textarea {
+  width: 100%;
+  padding: 20rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 6rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus, .form-textarea:focus {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2rpx rgba(24, 144, 255, 0.2);
+}
+
+.form-textarea {
+  height: 200rpx;
+}
+
+.submit-btn {
+  width: 100%;
+  margin-top: 20rpx;
+}

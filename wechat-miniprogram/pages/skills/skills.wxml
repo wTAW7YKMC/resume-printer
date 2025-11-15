@@ -1,0 +1,50 @@
+<!--skills.wxml-->
+<view class="container">
+  <view class="skills-container" wx:if="{{hasSkills}}">
+    <!-- 设计技能 -->
+    <view class="skill-category" wx:if="{{skillsData.design && skillsData.design.length > 0}}">
+      <view class="category-title">设计技能</view>
+      <view class="skill-list">
+        <view class="skill-item" wx:for="{{skillsData.design}}" wx:key="index">
+          <view class="skill-name">{{item.name}}</view>
+          <view class="skill-bar">
+            <view class="skill-progress" style="width: {{item.level}}%; background-color: {{item.color}}"></view>
+          </view>
+          <view class="skill-level">{{item.levelText}}</view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 开发技能 -->
+    <view class="skill-category" wx:if="{{skillsData.development && skillsData.development.length > 0}}">
+      <view class="category-title">开发技能</view>
+      <view class="skill-list">
+        <view class="skill-item" wx:for="{{skillsData.development}}" wx:key="index">
+          <view class="skill-name">{{item.name}}</view>
+          <view class="skill-bar">
+            <view class="skill-progress" style="width: {{item.level}}%; background-color: {{item.color}}"></view>
+          </view>
+          <view class="skill-level">{{item.levelText}}</view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 其他技能 -->
+    <view class="skill-category" wx:if="{{skillsData.other && skillsData.other.length > 0}}">
+      <view class="category-title">其他技能</view>
+      <view class="skill-list">
+        <view class="skill-item" wx:for="{{skillsData.other}}" wx:key="index">
+          <view class="skill-name">{{item.name}}</view>
+          <view class="skill-bar">
+            <view class="skill-progress" style="width: {{item.level}}%; background-color: {{item.color}}"></view>
+          </view>
+          <view class="skill-level">{{item.levelText}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="empty-state" wx:else>
+    <text>暂无技能信息</text>
+  </view>
+</view>
