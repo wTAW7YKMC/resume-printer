@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let isMuted = false;
     let currentSection = 'about';
     let touchNavigation = null;
+    let messageManager = null;
     
     // 初始化数据获取器和内容渲染器
     const dataFetcher = new DataFetcher({
@@ -77,6 +78,17 @@ document.addEventListener('DOMContentLoaded', function() {
         // 从本地存储恢复音效设置
         isMuted = localStorage.getItem('typewriter-muted') === 'true';
         updateSoundButton();
+        
+        // 初始化留言管理器
+        messageManager = new MessageManager({
+            apiBaseUrl: 'http://localhost:8080',
+            onSuccess: function(result) {
+                showAlert('留言发送成功！', 'success');
+            },
+            onError: function(error) {
+                showAlert('操作失败，请稍后重试。', 'error');
+            }
+        });
         
         // 初始化触摸导航
         const resumeSections = ['about', 'experience', 'education', 'skills', 'projects', 'contact'];
@@ -237,6 +249,33 @@ document.addEventListener('DOMContentLoaded', function() {
     // 显示内容
     function showContent(section) {
         if (!resumeData) return;
+        
+        // 如果是Contact板块，显示留言表单
+        if (section === 'contact') {
+            // 隐藏内容文本区域
+            contentText.style.display = 'none';
+            
+            // 显示留言表单
+            if (messageManager) {
+                messageManager.showContactForm();
+            }
+            return;
+        } else {
+            // 对于其他板块，显示内容文本区域
+            contentText.style.display = 'block';
+            
+            // 隐藏留言表单和留言列表
+            const contactFormContainer = document.getElementById('contact-form-container');
+            const messagesContainer = document.getElementById('messages-container');
+            
+            if (contactFormContainer) {
+                contactFormContainer.style.display = 'none';
+            }
+            
+            if (messagesContainer) {
+                messagesContainer.style.display = 'none';
+            }
+        }
         
         // 使用ContentRenderer格式化内容
         const content = contentRenderer.render(section, resumeData);

@@ -43,6 +43,55 @@
             <!-- 内容区域 -->
             <main id="content-area" class="content-area">
                 <div id="content-text"></div>
+                
+                <!-- 留言表单区域 - 初始隐藏 -->
+                <div id="contact-form-container" class="contact-form-container" style="display: none;">
+                    <div class="contact-form-header">
+                        <h3>给我留言</h3>
+                        <p>如果您有任何问题或想了解更多信息，请随时给我留言。</p>
+                    </div>
+                    
+                    <form id="message-form" class="message-form">
+                        <div class="form-group">
+                            <label for="name">姓名</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">邮箱</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">主题</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">留言内容</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" id="submit-btn" class="submit-btn">发送留言</button>
+                            <button type="button" id="view-messages-btn" class="view-messages-btn">查看留言</button>
+                        </div>
+                    </form>
+                    
+                    <div id="form-message" class="form-message"></div>
+                </div>
+                
+                <!-- 留言列表区域 - 初始隐藏 -->
+                <div id="messages-container" class="messages-container" style="display: none;">
+                    <div class="messages-header">
+                        <h3>留言列表</h3>
+                        <button id="back-to-form-btn" class="back-to-form-btn">返回留言表单</button>
+                    </div>
+                    
+                    <div id="messages-list" class="messages-list">
+                        <div class="loading">正在加载留言...</div>
+                    </div>
+                </div>
             </main>
 
             <!-- 控制区域 -->
@@ -76,6 +125,7 @@
     <script src="js/soundManager.js"></script>
     <script src="js/pdfExporter.js"></script>
     <script src="js/touchGestures.js"></script>
+    <script src="js/messageManager.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

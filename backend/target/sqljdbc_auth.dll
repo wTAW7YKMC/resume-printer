@@ -1,0 +1,4 @@
+# This is a placeholder for sqljdbc_auth.dll
+# Please download the x64 version of sqljdbc_auth.dll from Microsoft
+# And replace this file with the actual DLL
+# You can download it from: https://docs.microsoft.com/sql/connect/jdbc/download-microsoft-jdbc-driver-for-sql-server
