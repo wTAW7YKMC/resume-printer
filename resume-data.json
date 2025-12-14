@@ -5,10 +5,10 @@
     "lastUpdated": "2024-05-20"
   },
   "personalInfo": {
-    "name": "Becky",
-    "title": "Product Designer",
-    "tagline": "热衷于创建直观且愉悦的用户体验，专注于将复杂问题简化为优雅的设计解决方案。",
-    "location": "上海, 中国",
+    "name": "喻贝贝（Becky）",
+    "title": "智能经济专业学生",
+    "tagline": "对宏观经济、数据分析充满热情的经济学学习者，擅长将理论知识应用于实践，曾参与校园经济调研与金融模拟竞赛，期待在经济领域探索更多可能性。\n\n个人宣言：风萧萧兮易水寒",
+    "location": "武汉理工大学 经济学院",
     "email": "becky@example.com",
     "phone": "+86 138 0000 0000",
     "avatarUrl": "https://raw.githubusercontent.com/[your-username]/[your-repo]/main/assets/avatar.jpg",
@@ -32,50 +32,33 @@
   },
   "education": [
     {
-      "institution": "上海交通大学",
-      "degree": "设计学硕士",
-      "major": "交互设计",
-      "period": "2019 - 2022",
-      "location": "上海, 中国",
+      "institution": "武汉理工大学",
+      "degree": "经济学学士",
+      "major": "智能经济",
+      "period": "2020 - 2024",
+      "location": "武汉, 中国",
       "achievements": [
-        "优秀毕业生",
-        "2021年大学设计竞赛一等奖"
-      ]
-    },
-    {
-      "institution": "同济大学",
-      "degree": "设计学学士",
-      "major": "数字媒体艺术",
-      "period": "2015 - 2019",
-      "location": "上海, 中国",
-      "achievements": [
-        "连续三年获得一等奖学金",
-        "优秀学生干部"
+        "参与校园经济调研项目",
+        "参加金融模拟竞赛"
       ]
     }
   ],
   "workExperience": [
     {
-      "company": "科技创新有限公司",
-      "position": "高级产品设计师",
-      "period": "2022 - 至今",
-      "location": "上海, 中国",
-      "description": "负责公司核心移动应用的用户体验设计，主导多个重要产品的设计迭代。",
-      "highlights": [
-        "主导新手引导流程的重设计，用户留存率提高25%",
-        "与跨职能团队合作，推出3个主要产品更新"
-      ]
+      "company": "武汉理工大学经济学人协会",
+      "position": "办公室副部长",
+      "period": "荣誉：年度之星",
+      "location": "",
+      "description": "核心工作：\n策划并落地学术研讨、案例分享等活动，衔接专业知识与实践应用；\n负责活动流程协调、物料准备，责任心强、执行高效获评 "年度之星"。",
+      "highlights": []
     },
     {
-      "company": "互联网创业公司",
-      "position": "产品设计师",
-      "period": "2020 - 2022",
-      "location": "杭州, 中国",
-      "description": "参与初创公司产品从0到1的设计过程，负责UI/UX设计和用户研究。",
-      "highlights": [
-        "独立完成产品全流程设计，帮助用户增长200%",
-        "建立并优化设计系统，提高团队设计效率40%"
-      ]
+      "company": "武汉理工大学经济学院科学技术协会",
+      "position": "干事",
+      "period": "",
+      "location": "",
+      "description": "核心工作：\n参与统筹 "创新杯""品牌策划赛""能源经济大赛" 等科创赛事，负责宣传推广、师生对接、评审流程把控；",
+      "highlights": []
     }
   ],
   "skills": {
