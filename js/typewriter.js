@@ -45,8 +45,9 @@ class Typewriter {
      * @returns {Promise} 返回Promise对象
      */
     async type(text, onComplete = null) {
-        if (this.isTyping || this.isErasing) {
-            return;
+        // 如果已经在打字，先中断当前操作
+        if (this.isTyping) {
+            this.interrupt();
         }
         
         this.isTyping = true;
@@ -61,7 +62,8 @@ class Typewriter {
         
         // 清空元素内容，但保留光标
         const hasCursor = this.cursorElement !== null;
-        this.targetElement.textContent = '';
+        // 使用innerHTML而不是textContent，确保正确处理中文字符
+        this.targetElement.innerHTML = '';
         if (hasCursor) {
             this.targetElement.appendChild(this.cursorElement);
         }
@@ -69,11 +71,20 @@ class Typewriter {
         // 逐字显示文本
         const chars = text.split('');
         for (let i = 0; i < chars.length; i++) {
+            // 检查是否被中断
+            if (!this.isTyping) {
+                break;
+            }
+            
             // 在光标前插入字符
             if (hasCursor && this.cursorElement.parentNode === this.targetElement) {
-                this.targetElement.insertBefore(document.createTextNode(chars[i]), this.cursorElement);
+                // 使用innerHTML而不是textContent，确保正确处理中文字符
+                const currentHTML = this.targetElement.innerHTML.replace(this.cursorElement.outerHTML, '');
+                this.targetElement.innerHTML = currentHTML + chars[i] + this.cursorElement.outerHTML;
+                // 重新获取光标元素引用
+                this.cursorElement = this.targetElement.querySelector('.cursor');
             } else {
-                this.targetElement.textContent += chars[i];
+                this.targetElement.innerHTML += chars[i];
             }
             
             // 播放打字音效，传递打字速度作为音效持续时间
@@ -93,7 +104,7 @@ class Typewriter {
         this.isTyping = false;
         
         // 执行完成回调
-        if (onComplete) {
+        if (onComplete && this.isTyping === false) {
             onComplete();
         }
     }
@@ -104,8 +115,9 @@ class Typewriter {
      * @returns {Promise} 返回Promise对象
      */
     async erase(onComplete = null) {
-        if (this.isTyping || this.isErasing) {
-            return;
+        // 如果已经在擦除，先中断当前操作
+        if (this.isErasing) {
+            this.interrupt();
         }
         
         this.isErasing = true;
@@ -125,15 +137,15 @@ class Typewriter {
         }
         
         // 逐个删除字符
-        while (text.length > 0) {
+        while (text.length > 0 && this.isErasing) {
             text = text.slice(0, -1);
             
             // 更新元素内容
             if (this.cursorElement && this.cursorElement.parentNode === this.targetElement) {
-                this.targetElement.textContent = text;
+                this.targetElement.innerHTML = text;
                 this.targetElement.appendChild(this.cursorElement);
             } else {
-                this.targetElement.textContent = text;
+                this.targetElement.innerHTML = text;
             }
             
             // 播放擦除音效，传递擦除速度作为音效持续时间
@@ -148,7 +160,7 @@ class Typewriter {
         this.isErasing = false;
         
         // 执行完成回调
-        if (onComplete) {
+        if (onComplete && this.isErasing === false) {
             onComplete();
         }
     }
@@ -171,6 +183,14 @@ class Typewriter {
             isErasing: this.isErasing,
             currentText: this.currentText
         };
+    }
+    
+    /**
+     * 中断当前的打字或擦除效果
+     */
+    interrupt() {
+        this.isTyping = false;
+        this.isErasing = false;
     }
     
     /**

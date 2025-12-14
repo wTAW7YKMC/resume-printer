@@ -222,11 +222,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // 添加过渡效果
         contentText.style.opacity = '0.5';
         
-        // 清除当前内容并显示新内容
-        eraseContent(contentText, () => {
-            contentText.style.opacity = '1';
-            showContent(section);
-        });
+        // 中断当前正在进行的打字效果
+        titleTypewriter.interrupt();
+        contentTypewriter.interrupt();
+        
+        // 立即清除当前内容并显示新内容
+        // 使用innerHTML而不是textContent，确保正确处理中文字符
+        contentText.innerHTML = '';
+        contentText.style.opacity = '1';
+        showContent(section);
     }
     
     // 显示内容
@@ -394,19 +398,22 @@ document.addEventListener('DOMContentLoaded', function() {
             loadingIndicator.style.display = 'block';
             loadingIndicator.textContent = '正在刷新数据...';
             
+            // 中断当前正在进行的打字效果
+            titleTypewriter.interrupt();
+            contentTypewriter.interrupt();
+            
             // 强制刷新数据
             await loadResumeData(true);
             
-            // 重新显示当前部分内容
-            eraseContent(contentText, () => {
-                showContent(currentSection);
+            // 立即显示当前部分内容
+            contentText.innerHTML = '';
+            showContent(currentSection);
                 
-                // 显示刷新成功提示
-                showAlert('数据刷新成功！', 'success');
-                
-                // 隐藏加载指示器
-                loadingIndicator.style.display = 'none';
-            });
+            // 显示刷新成功提示
+            showAlert('数据刷新成功！', 'success');
+            
+            // 隐藏加载指示器
+            loadingIndicator.style.display = 'none';
         } catch (error) {
             console.error('Error refreshing data:', error);
             showAlert('数据刷新失败，请稍后重试。', 'error');
