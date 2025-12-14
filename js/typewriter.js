@@ -26,6 +26,10 @@ class Typewriter {
         
         // 光标元素（如果存在）
         this.cursorElement = null;
+        this.cursorChar = '|';
+        
+        // 中断标志
+        this.isInterrupted = false;
     }
     
     /**
@@ -48,9 +52,13 @@ class Typewriter {
         // 如果已经在打字，先中断当前操作
         if (this.isTyping) {
             this.interrupt();
+            // 短暂延迟，确保中断状态生效
+            await this.delay(10);
         }
         
         this.isTyping = true;
+        this.isErasing = false;
+        this.isInterrupted = false;
         this.currentText = text;
         this.onCompleteCallback = onComplete;
         
@@ -60,41 +68,28 @@ class Typewriter {
             return;
         }
         
-        // 清空元素内容，但保留光标
-        const hasCursor = this.cursorElement !== null;
-        // 使用innerHTML而不是textContent，确保正确处理中文字符
-        this.targetElement.innerHTML = '';
-        if (hasCursor) {
-            this.targetElement.appendChild(this.cursorElement);
-        }
+        // 清空元素内容
+        this.clearContent();
         
         // 逐字显示文本
-        const chars = text.split('');
+        let displayText = '';
+        const chars = this.splitIntoChars(text);
+        
         for (let i = 0; i < chars.length; i++) {
             // 检查是否被中断
-            if (!this.isTyping) {
+            if (this.isInterrupted) {
                 break;
             }
             
-            // 在光标前插入字符
-            if (hasCursor && this.cursorElement.parentNode === this.targetElement) {
-                // 使用innerHTML而不是textContent，确保正确处理中文字符
-                const currentHTML = this.targetElement.innerHTML.replace(this.cursorElement.outerHTML, '');
-                this.targetElement.innerHTML = currentHTML + chars[i] + this.cursorElement.outerHTML;
-                // 重新获取光标元素引用
-                this.cursorElement = this.targetElement.querySelector('.cursor');
-            } else {
-                this.targetElement.innerHTML += chars[i];
-            }
+            // 添加当前字符
+            displayText += chars[i];
             
-            // 播放打字音效，传递打字速度作为音效持续时间
+            // 更新显示
+            this.updateDisplay(displayText);
+            
+            // 播放打字音效
             if (this.playSound) {
                 this.soundCallback('type', this.typeSpeed);
-            }
-            
-            // 处理特殊字符效果（如换行）
-            if (chars[i] === '\n') {
-                // 可以在这里添加特殊换行效果
             }
             
             // 等待指定时间
@@ -104,7 +99,7 @@ class Typewriter {
         this.isTyping = false;
         
         // 执行完成回调
-        if (onComplete && this.isTyping === false) {
+        if (onComplete && !this.isInterrupted) {
             onComplete();
         }
     }
@@ -121,6 +116,8 @@ class Typewriter {
         }
         
         this.isErasing = true;
+        this.isTyping = false;
+        this.isInterrupted = false;
         this.onCompleteCallback = onComplete;
         
         if (!this.targetElement) {
@@ -129,26 +126,17 @@ class Typewriter {
             return;
         }
         
-        // 获取当前文本（不包括光标）
-        let text = this.targetElement.textContent;
-        if (this.cursorElement && this.cursorElement.parentNode === this.targetElement) {
-            const cursorText = this.cursorElement.textContent;
-            text = text.replace(cursorText, '');
-        }
+        // 获取当前显示的文本（不包括光标）
+        let displayText = this.getCurrentDisplayText();
         
         // 逐个删除字符
-        while (text.length > 0 && this.isErasing) {
-            text = text.slice(0, -1);
+        while (displayText.length > 0 && this.isErasing && !this.isInterrupted) {
+            displayText = displayText.slice(0, -1);
             
-            // 更新元素内容
-            if (this.cursorElement && this.cursorElement.parentNode === this.targetElement) {
-                this.targetElement.innerHTML = text;
-                this.targetElement.appendChild(this.cursorElement);
-            } else {
-                this.targetElement.innerHTML = text;
-            }
+            // 更新显示
+            this.updateDisplay(displayText);
             
-            // 播放擦除音效，传递擦除速度作为音效持续时间
+            // 播放擦除音效
             if (this.playSound) {
                 this.soundCallback('erase', this.eraseSpeed);
             }
@@ -160,9 +148,86 @@ class Typewriter {
         this.isErasing = false;
         
         // 执行完成回调
-        if (onComplete && this.isErasing === false) {
+        if (onComplete && !this.isInterrupted) {
             onComplete();
         }
+    }
+    
+    /**
+     * 中断当前的打字或擦除效果
+     */
+    interrupt() {
+        this.isInterrupted = true;
+        this.isTyping = false;
+        this.isErasing = false;
+        
+        // 不立即清空内容，保留当前显示状态
+        // 这样可以避免闪屏
+    }
+    
+    /**
+     * 清空元素内容
+     */
+    clearContent() {
+        if (!this.targetElement) return;
+        
+        if (this.cursorElement) {
+            // 如果有光标元素，只保留光标
+            this.targetElement.innerHTML = '';
+            this.targetElement.appendChild(this.cursorElement);
+        } else {
+            // 如果没有光标元素，直接清空
+            this.targetElement.innerHTML = '';
+        }
+    }
+    
+    /**
+     * 更新显示内容
+     * @param {string} text - 要显示的文本
+     */
+    updateDisplay(text) {
+        if (!this.targetElement) return;
+        
+        if (this.cursorElement) {
+            // 如果有光标元素，使用innerHTML一次性更新，减少DOM操作
+            // 转义HTML特殊字符，防止XSS攻击
+            const escapedText = text.replace(/&/g, '&amp;')
+                                   .replace(/</g, '&lt;')
+                                   .replace(/>/g, '&gt;');
+            this.targetElement.innerHTML = escapedText;
+            this.targetElement.appendChild(this.cursorElement);
+        } else {
+            // 如果没有光标元素，直接设置文本
+            this.targetElement.textContent = text;
+        }
+    }
+    
+    /**
+     * 获取当前显示的文本（不包括光标）
+     * @returns {string} 当前显示的文本
+     */
+    getCurrentDisplayText() {
+        if (!this.targetElement) return '';
+        
+        if (this.cursorElement) {
+            // 如果有光标元素，获取光标前的文本
+            const textNodes = Array.from(this.targetElement.childNodes)
+                .filter(node => node.nodeType === Node.TEXT_NODE);
+            return textNodes.map(node => node.textContent).join('');
+        } else {
+            // 如果没有光标元素，直接获取文本内容
+            return this.targetElement.textContent;
+        }
+    }
+    
+    /**
+     * 将文本分割成字符数组，正确处理中文字符
+     * @param {string} text - 要分割的文本
+     * @returns {Array} 字符数组
+     */
+    splitIntoChars(text) {
+        // 使用Array.from正确处理Unicode字符，包括中文字符
+        return Array.from(text);
     }
     
     /**
@@ -181,16 +246,9 @@ class Typewriter {
         return {
             isTyping: this.isTyping,
             isErasing: this.isErasing,
+            isInterrupted: this.isInterrupted,
             currentText: this.currentText
         };
-    }
-    
-    /**
-     * 中断当前的打字或擦除效果
-     */
-    interrupt() {
-        this.isTyping = false;
-        this.isErasing = false;
     }
     
     /**
@@ -204,124 +262,11 @@ class Typewriter {
     
     /**
      * 默认音效回调
-     * @param {string} action - 动作类型 ('type' 或 'erase')
+     * @param {string} action - 动作类型（'type'或'erase'）
+     * @param {number} speed - 速度（毫秒）
      */
-    defaultSoundCallback(action) {
-        try {
-            // 根据动作类型选择不同的音效
-            const soundFile = action === 'erase' ? 
-                'assets/sounds/typewriter-backspace.mp3' : 
-                'assets/sounds/typewriter.mp3';
-            
-            const audio = new Audio(soundFile);
-            audio.volume = 0.3;
-            audio.play().catch(e => {
-                // 静默处理错误，避免在控制台显示大量错误信息
-                // 在实际应用中，可以在这里添加备用音效或错误处理逻辑
-            });
-        } catch (error) {
-            // 静默处理错误
-        }
+    defaultSoundCallback(action, speed) {
+        // 默认不播放任何音效
+        // 可以被覆盖以实现自定义音效
     }
-}
-
-/**
- * 光标效果类
- * 提供闪烁光标效果
- */
-class CursorEffect {
-    /**
-     * 构造函数
-     * @param {HTMLElement} element - 光标元素
-     * @param {Object} options - 配置选项
-     * @param {string} options.blinkSpeed - 闪烁速度
-     * @param {string} options.cursorCharacter - 光标字符
-     */
-    constructor(element, options = {}) {
-        this.element = element;
-        this.blinkSpeed = options.blinkSpeed || '1s';
-        this.cursorCharacter = options.cursorCharacter || '|';
-        this.isActive = true;
-        
-        this.init();
-    }
-    
-    /**
-     * 初始化光标效果
-     */
-    init() {
-        if (!this.element) {
-            console.error('CursorEffect: No cursor element provided');
-            return;
-        }
-        
-        // 设置光标文本
-        this.element.textContent = this.cursorCharacter;
-        
-        // 应用CSS动画
-        this.element.style.animation = `cursor-blink ${this.blinkSpeed} step-end infinite`;
-        
-        // 添加CSS动画样式
-        this.addCursorStyles();
-    }
-    
-    /**
-     * 添加光标CSS样式
-     */
-    addCursorStyles() {
-        // 检查是否已添加样式
-        if (document.getElementById('cursor-styles')) {
-            return;
-        }
-        
-        const style = document.createElement('style');
-        style.id = 'cursor-styles';
-        style.textContent = `
-            @keyframes cursor-blink {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0; }
-            }
-        `;
-        
-        document.head.appendChild(style);
-    }
-    
-    /**
-     * 激活光标效果
-     */
-    activate() {
-        this.isActive = true;
-        if (this.element) {
-            this.element.style.animationPlayState = 'running';
-        }
-    }
-    
-    /**
-     * 暂停光标效果
-     */
-    pause() {
-        this.isActive = false;
-        if (this.element) {
-            this.element.style.animationPlayState = 'paused';
-        }
-    }
-    
-    /**
-     * 更新光标字符
-     * @param {string} character - 新的光标字符
-     */
-    updateCharacter(character) {
-        this.cursorCharacter = character;
-        if (this.element) {
-            this.element.textContent = character;
-        }
-    }
-}
-
-// 导出模块
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { Typewriter, CursorEffect };
-} else {
-    window.Typewriter = Typewriter;
-    window.CursorEffect = CursorEffect;
 }
