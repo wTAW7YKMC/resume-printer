@@ -478,273 +478,145 @@ body {
     }
 }
 
-/* 留言表单样式 */
-.contact-form-container {
-    background-color: #ffffff;
-    border: 1px solid #d4b89a;
-    border-radius: 5px;
-    padding: 20px;
+/* 留言功能样式 */
+.message-section {
     margin-top: 20px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-    font-family: 'Courier New', 'Courier Prime', monospace;
+    padding: 20px;
+    background-color: rgba(139, 69, 19, 0.05);
+    border: 1px solid rgba(139, 69, 19, 0.2);
+    border-radius: 5px;
 }
 
-.contact-form-header h3 {
+.message-section h2 {
     color: #8b4513;
-    font-size: 24px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    font-family: 'Special Elite', 'Courier New', monospace;
+    text-align: center;
+}
+
+.message-form-container {
+    margin-bottom: 30px;
+}
+
+.message-form .form-group {
+    margin-bottom: 15px;
+}
+
+.message-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #8b4513;
+    font-weight: bold;
     font-family: 'Special Elite', 'Courier New', monospace;
 }
 
-.contact-form-header p {
-    color: #666;
-    margin-bottom: 20px;
-    font-size: 16px;
-}
-
-.message-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.form-group label {
-    font-weight: bold;
-    color: #8b4513;
-    font-size: 16px;
-}
-
-.form-group input,
-.form-group textarea {
-    padding: 10px;
-    border: 2px solid #d4b89a;
-    border-radius: 5px;
+.message-form input, 
+.message-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #a67c52;
+    border-radius: 3px;
     font-family: 'Courier New', 'Courier Prime', monospace;
-    font-size: 16px;
-    background-color: #f9f6f0;
+    background-color: #f9f6ed;
     color: #333;
-    transition: all 0.2s ease;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #8b4513;
-    background-color: #ffffff;
-    box-shadow: 0 0 5px rgba(139, 69, 19, 0.3);
-}
-
-.form-group textarea {
+.message-form textarea {
     resize: vertical;
-    min-height: 120px;
+    min-height: 80px;
 }
 
 .form-actions {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     margin-top: 10px;
-    flex-wrap: wrap;
 }
 
-.submit-btn,
-.view-messages-btn,
-.back-to-form-btn {
+.submit-btn, .refresh-btn {
+    padding: 8px 16px;
+    border: 1px solid #a67c52;
+    border-radius: 3px;
     background-color: #e8dcc8;
-    border: 2px solid #a67c52;
     color: #333;
-    padding: 10px 20px;
-    font-family: 'Special Elite', 'Courier New', monospace;
-    font-size: 16px;
+    font-family: 'Courier New', 'Courier Prime', monospace;
     cursor: pointer;
     transition: all 0.2s ease;
-    border-radius: 5px;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
 }
 
-.submit-btn:hover,
-.view-messages-btn:hover,
-.back-to-form-btn:hover {
-    background-color: #d4b89a;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+.submit-btn:hover, .refresh-btn:hover {
+    background-color: #d4c5a9;
 }
 
-.submit-btn:active,
-.view-messages-btn:active,
-.back-to-form-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-}
-
-.form-message {
-    margin-top: 15px;
+.message-status {
+    margin-top: 10px;
     padding: 10px;
-    border-radius: 5px;
-    font-size: 16px;
-    display: none;
-}
-
-.form-message.success {
-    background-color: #a8d5a8;
-    color: #2d5016;
-    border: 1px solid #7bc47b;
-}
-
-.form-message.error {
-    background-color: #f5c6c6;
-    color: #5d1616;
-    border: 1px solid #e09999;
-}
-
-/* 留言列表样式 */
-.messages-container {
-    background-color: #ffffff;
-    border: 1px solid #d4b89a;
-    border-radius: 5px;
-    padding: 20px;
-    margin-top: 20px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+    text-align: center;
     font-family: 'Courier New', 'Courier Prime', monospace;
 }
 
-.messages-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 10px;
+.message-status.success {
+    background-color: rgba(168, 213, 168, 0.2);
+    border: 1px solid #a8d5a8;
+    color: #2d5016;
 }
 
-.messages-header h3 {
+.message-status.error {
+    background-color: rgba(245, 198, 198, 0.2);
+    border: 1px solid #f5c6c6;
+    color: #5d1616;
+}
+
+.message-list-container h3 {
     color: #8b4513;
-    font-size: 24px;
+    margin-bottom: 15px;
     font-family: 'Special Elite', 'Courier New', monospace;
 }
 
-.messages-list {
-    max-height: 400px;
+.message-list {
+    max-height: 300px;
     overflow-y: auto;
-    border: 1px solid #e8dcc8;
-    border-radius: 5px;
+    border: 1px solid rgba(139, 69, 19, 0.2);
+    border-radius: 3px;
     padding: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 .message-item {
-    background-color: #f9f6f0;
-    border: 1px solid #d4b89a;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 15px;
+    padding: 10px 0;
+    border-bottom: 1px dashed rgba(139, 69, 19, 0.2);
 }
 
 .message-item:last-child {
-    margin-bottom: 0;
+    border-bottom: none;
 }
 
 .message-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-    gap: 5px;
-}
-
-.message-author {
+    margin-bottom: 5px;
     font-weight: bold;
     color: #8b4513;
-    font-size: 16px;
 }
 
-.message-date {
+.message-name {
+    font-family: 'Special Elite', 'Courier New', monospace;
+}
+
+.message-time {
+    font-size: 0.8em;
     color: #666;
-    font-size: 14px;
-    font-style: italic;
-}
-
-.message-subject {
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 5px;
-    font-size: 16px;
 }
 
 .message-content {
+    margin-bottom: 5px;
+    line-height: 1.5;
     color: #333;
-    font-size: 15px;
-    white-space: pre-line;
-}
-
-.message-email {
-    color: #666;
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-.loading {
-    text-align: center;
-    color: #8b4513;
-    font-style: italic;
-    padding: 20px;
 }
 
 .no-messages {
     text-align: center;
-    color: #666;
+    color: #8b4513;
     font-style: italic;
     padding: 20px;
-}
-
-/* 响应式设计 - 留言表单 */
-@media (max-width: 768px) {
-    .contact-form-container,
-    .messages-container {
-        padding: 15px;
-    }
-    
-    .form-actions {
-        flex-direction: column;
-    }
-    
-    .submit-btn,
-    .view-messages-btn,
-    .back-to-form-btn {
-        width: 100%;
-    }
-    
-    .messages-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-
-@media (max-width: 480px) {
-    .contact-form-container,
-    .messages-container {
-        padding: 12px;
-    }
-    
-    .contact-form-header h3,
-    .messages-header h3 {
-        font-size: 20px;
-    }
-    
-    .form-group input,
-    .form-group textarea {
-        padding: 8px;
-        font-size: 14px;
-    }
-    
-    .submit-btn,
-    .view-messages-btn,
-    .back-to-form-btn {
-        padding: 8px 15px;
-        font-size: 14px;
-    }
 }

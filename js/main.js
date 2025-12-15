@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let isMuted = false;
     let currentSection = 'about';
     let touchNavigation = null;
-    let messageManager = null;
     
     // 初始化数据获取器和内容渲染器
     const dataFetcher = new DataFetcher({
@@ -42,6 +41,14 @@ document.addEventListener('DOMContentLoaded', function() {
         filename: 'Becky_Resume.pdf',
         title: 'Becky的个人简历'
     });
+    
+    // 初始化本地留言管理器（目前使用本地存储）
+    const messageManager = new LocalMessageManager();
+    
+    // 阿里云留言管理器（待服务器问题解决后启用）
+    // const messageManager = new MessageManager({
+    //     apiUrl: 'https://message-server-uutepmlola.cn-hangzhou.fcapp.run'
+    // });
     
     // 从本地存储恢复音效设置
     isMuted = !soundManager.enabled;
@@ -78,17 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // 从本地存储恢复音效设置
         isMuted = localStorage.getItem('typewriter-muted') === 'true';
         updateSoundButton();
-        
-        // 初始化留言管理器
-        messageManager = new MessageManager({
-            apiBaseUrl: 'http://localhost:8080',
-            onSuccess: function(result) {
-                showAlert('留言发送成功！', 'success');
-            },
-            onError: function(error) {
-                showAlert('操作失败，请稍后重试。', 'error');
-            }
-        });
         
         // 初始化触摸导航
         const resumeSections = ['about', 'experience', 'education', 'skills', 'projects', 'contact'];
@@ -248,40 +244,35 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 显示内容
     function showContent(section) {
-        if (!resumeData) return;
-        
-        // 如果是Contact板块，显示留言表单
+        // 处理contact部分 - 需要同时显示联系方式和留言表单
         if (section === 'contact') {
-            // 隐藏内容文本区域
-            contentText.style.display = 'none';
+            // 显示普通内容区域
+            contentText.style.display = 'block';
+            // 使用ContentRenderer格式化内容
+            if (!resumeData) return;
+            const content = contentRenderer.render(section, resumeData);
+            // 使用打字机效果显示内容
+            typeText(contentText, content, 50);
             
-            // 显示留言表单
-            if (messageManager) {
-                messageManager.showContactForm();
-            }
+            // 在显示完联系方式后显示留言区域
+            setTimeout(() => {
+                messageManager.showMessageSection();
+            }, 2000); // 2秒后显示留言区域
             return;
         } else {
-            // 对于其他板块，显示内容文本区域
+            // 显示普通内容区域
             contentText.style.display = 'block';
+            // 隐藏留言区域
+            messageManager.hideMessageSection();
             
-            // 隐藏留言表单和留言列表
-            const contactFormContainer = document.getElementById('contact-form-container');
-            const messagesContainer = document.getElementById('messages-container');
+            if (!resumeData) return;
             
-            if (contactFormContainer) {
-                contactFormContainer.style.display = 'none';
-            }
+            // 使用ContentRenderer格式化内容
+            const content = contentRenderer.render(section, resumeData);
             
-            if (messagesContainer) {
-                messagesContainer.style.display = 'none';
-            }
+            // 使用打字机效果显示内容
+            typeText(contentText, content, 50);
         }
-        
-        // 使用ContentRenderer格式化内容
-        const content = contentRenderer.render(section, resumeData);
-        
-        // 使用打字机效果显示内容
-        typeText(contentText, content, 50);
     }
     
     // 打字机效果 - 使用新的Typewriter类

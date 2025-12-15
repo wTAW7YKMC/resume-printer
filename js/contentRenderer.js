@@ -157,6 +157,10 @@ class ContentRenderer {
         content += `address:武汉市洪山区珞狮路雄楚大道武汉理工大学\n`;
         content += `github: https://github.com/wTAW7YKMC\n\n`;
         
+        // 添加留言表单提示
+        content += `=== 留言板 ===\n\n`;
+        content += `如果您有任何问题或想与我联系，请留下您的留言。\n\n`;
+        
         return content;
     }
     

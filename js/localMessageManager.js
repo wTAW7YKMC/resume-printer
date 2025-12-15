@@ -1,27 +1,18 @@
 /**
- * 留言管理模块
- * 负责处理留言表单提交、留言列表显示等
+ * 本地留言管理模块
+ * 作为临时解决方案，在本地存储留言数据
  */
-class MessageManager {
-    /**
-     * 构造函数
-     * @param {Object} options - 配置选项
-     * @param {string} options.apiUrl - API基础URL
-     * @param {string} options.messageSectionId - 留言区域元素ID
-     * @param {string} options.messageFormId - 留言表单元素ID
-     * @param {string} options.messageListId - 留言列表元素ID
-     * @param {string} options.messageStatusId - 留言状态提示元素ID
-     */
+class LocalMessageManager {
     constructor(options = {}) {
-        // 阿里云服务器地址
-        this.apiUrl = options.apiUrl || 'https://message-server-uutepmlola.cn-hangzhou.fcapp.run';
-        
         // 元素ID
         this.messageSectionId = options.messageSectionId || 'message-section';
         this.messageFormId = options.messageFormId || 'message-form';
         this.messageListId = options.messageListId || 'message-list';
         this.messageStatusId = options.messageStatusId || 'message-status';
         this.refreshBtnId = options.refreshBtnId || 'refresh-messages';
+        
+        // 本地存储键名
+        this.storageKey = 'resume_messages';
         
         // 缓存DOM元素
         this.messageSection = null;
@@ -83,7 +74,7 @@ class MessageManager {
     /**
      * 提交留言
      */
-    async submitMessage() {
+    submitMessage() {
         // 获取表单数据
         const name = document.getElementById('message-name').value.trim();
         const email = document.getElementById('message-email').value.trim();
@@ -98,81 +89,82 @@ class MessageManager {
         // 显示提交状态
         this.showStatus('正在提交留言...', 'info');
         
+        // 创建留言对象
+        const message = {
+            id: Date.now().toString(),
+            name: name,
+            email: email,
+            content: content,
+            createTime: new Date().toLocaleString()
+        };
+        
+        // 获取现有留言
+        let messages = this.getMessages();
+        
+        // 添加新留言到数组开头
+        messages.unshift(message);
+        
+        // 限制留言数量
+        if (messages.length > 50) {
+            messages = messages.slice(0, 50);
+        }
+        
+        // 保存到本地存储
+        localStorage.setItem(this.storageKey, JSON.stringify(messages));
+        
+        // 显示成功状态
+        this.showStatus('留言提交成功！', 'success');
+        
+        // 清空表单
+        this.messageForm.reset();
+        
+        // 刷新留言列表
+        this.loadMessages();
+    }
+    
+    /**
+     * 从本地存储加载留言列表
+     */
+    loadMessages() {
+        // 显示加载状态
+        this.showStatus('正在加载留言列表...', 'info');
+        
+        // 从本地存储获取留言
+        const messages = this.getMessages();
+        
+        // 延迟一点时间，模拟网络请求
+        setTimeout(() => {
+            this.displayMessages(messages);
+            this.showStatus('', 'info'); // 清除状态
+        }, 300);
+    }
+    
+    /**
+     * 从本地存储获取留言列表
+     */
+    getMessages() {
         try {
-            // 发送POST请求到阿里云服务器
-            // 创建GMT日期头
-            const date = new Date().toUTCString();
-            
-            const response = await fetch(`${this.apiUrl}/api/resume/message/add`, {
-                method: 'POST',
-                headers: {
-                    'Date': date,
-                    'Content-Type': 'application/json',
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                    'Accept': 'application/json',
-                    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-                    'Connection': 'keep-alive'
-                },
-                body: JSON.stringify({ name, email, content })
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok && data.code === 200) {
-                // 提交成功
-                this.showStatus(data.message || '留言提交成功！', 'success');
-                // 清空表单
-                this.messageForm.reset();
-                // 刷新留言列表
-                this.loadMessages();
-            } else {
-                // 提交失败
-                this.showStatus(data.message || '提交失败，请稍后再试', 'error');
-            }
+            const storedMessages = localStorage.getItem(this.storageKey);
+            return storedMessages ? JSON.parse(storedMessages) : this.getDefaultMessages();
         } catch (error) {
-            console.error('提交留言失败:', error);
-            this.showStatus('网络错误，无法连接到服务器', 'error');
+            console.error('获取留言失败:', error);
+            return this.getDefaultMessages();
         }
     }
     
     /**
-     * 加载留言列表
+     * 获取默认留言列表
      */
-    async loadMessages() {
-        // 显示加载状态
-        this.showStatus('正在加载留言列表...', 'info');
-        
-        try {
-            // 从阿里云服务器获取留言列表
-            // 创建GMT日期头
-            const date = new Date().toUTCString();
-            
-            const response = await fetch(`${this.apiUrl}/api/resume/message/list`, {
-                method: 'GET',
-                headers: {
-                    'Date': date,
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                    'Accept': 'application/json',
-                    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-                    'Connection': 'keep-alive'
-                }
-            });
-            const data = await response.json();
-            
-            if (response.ok && data.code === 200) {
-                // 加载成功
-                this.displayMessages(data.data || []);
-                this.showStatus('', 'info'); // 清除状态
-            } else {
-                // 加载失败
-                this.showStatus(data.message || '加载留言失败', 'error');
-                this.displayMessages([]); // 清空留言列表
+    getDefaultMessages() {
+        return [
+            {
+                id: '1',
+                name: '系统管理员',
+                email: 'admin@resume.com',
+                content: '欢迎使用留言板！请留下您的宝贵意见。',
+                createTime: new Date().toLocaleString()
             }
-        } catch (error) {
-            console.error('加载留言列表失败:', error);
-            this.showStatus('无法连接到服务器，请检查网络连接', 'error');
-            this.displayMessages([]); // 清空留言列表
-        }
+        ];
     }
     
     /**
@@ -247,7 +239,7 @@ class MessageManager {
 
 // 导出模块
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = MessageManager;
+    module.exports = LocalMessageManager;
 } else {
-    window.MessageManager = MessageManager;
+    window.LocalMessageManager = LocalMessageManager;
 }
