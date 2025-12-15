@@ -244,34 +244,29 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 显示内容
     function showContent(section) {
-        // 处理contact部分 - 需要同时显示联系方式和留言表单
+        // 显示普通内容区域
+        contentText.style.display = 'block';
+        
+        // 如果不是contact部分，隐藏留言区域
+        if (section !== 'contact') {
+            messageManager.hideMessageSection();
+        }
+        
+        if (!resumeData) return;
+        
+        // 使用ContentRenderer格式化内容
+        const content = contentRenderer.render(section, resumeData);
+        
+        // 使用打字机效果显示内容
+        typeText(contentText, content, 50);
+        
+        // 如果是contact部分，在显示完联系方式后显示留言区域
         if (section === 'contact') {
-            // 显示普通内容区域
-            contentText.style.display = 'block';
-            // 使用ContentRenderer格式化内容
-            if (!resumeData) return;
-            const content = contentRenderer.render(section, resumeData);
-            // 使用打字机效果显示内容
-            typeText(contentText, content, 50);
-            
-            // 在显示完联系方式后显示留言区域
+            // 获取打字机完成的时间（约内容长度 * 打字速度）
+            const typingTime = content.length * 50; // 50ms每个字符
             setTimeout(() => {
                 messageManager.showMessageSection();
-            }, 2000); // 2秒后显示留言区域
-            return;
-        } else {
-            // 显示普通内容区域
-            contentText.style.display = 'block';
-            // 隐藏留言区域
-            messageManager.hideMessageSection();
-            
-            if (!resumeData) return;
-            
-            // 使用ContentRenderer格式化内容
-            const content = contentRenderer.render(section, resumeData);
-            
-            // 使用打字机效果显示内容
-            typeText(contentText, content, 50);
+            }, Math.max(typingTime, 2000)); // 至少等待2秒
         }
     }
     

@@ -151,7 +151,8 @@ class ContentRenderer {
      */
     renderContact(personalInfo) {
         // 按照用户指定的格式渲染Contact部分
-        let content = `email：may_seventeen17@126.com\n`;
+        let content = `联系方式\n\n`;
+        content += `email：may_seventeen17@126.com\n`;
         content += `telephone：19571319571\n`;
         content += `wechat:19571319571\n`;
         content += `address:武汉市洪山区珞狮路雄楚大道武汉理工大学\n`;
@@ -161,6 +162,12 @@ class ContentRenderer {
         content += `=== 留言板 ===\n\n`;
         content += `如果您有任何问题或想与我联系，请留下您的留言。\n\n`;
         
+        // 确保内容不为空
+        if (!content || content.trim() === '') {
+            content = '联系方式\n\n正在加载...';
+        }
+        
+        console.log('renderContact content:', content); // 添加调试日志
         return content;
     }
     
