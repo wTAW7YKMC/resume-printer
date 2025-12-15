@@ -182,7 +182,11 @@ document.addEventListener('DOMContentLoaded', function() {
             loadingIndicator.style.display = 'none';
             
             // 显示主标题
-            typeText(titleText, "Hi, I'm Becky!", 120);
+            titleText.innerHTML = ""; // 先清空内容
+            titleTypewriter.interrupt(); // 中断之前的打字效果
+            setTimeout(() => {
+                typeText(titleText, "Hi, I'm Becky!", 120);
+            }, 500); // 延迟500ms后显示标题
             
             // 更新最后更新时间
             if (resumeData.meta && resumeData.meta.lastUpdated) {
@@ -232,7 +236,8 @@ document.addEventListener('DOMContentLoaded', function() {
         contentText.style.opacity = '0.5';
         
         // 中断当前正在进行的打字效果
-        titleTypewriter.interrupt();
+        // 不再中断标题的打字效果，除非是页面加载时的初始状态
+        // titleTypewriter.interrupt();
         contentTypewriter.interrupt();
         
         // 短暂延迟后显示新内容
@@ -425,7 +430,8 @@ document.addEventListener('DOMContentLoaded', function() {
             loadingIndicator.textContent = '正在刷新数据...';
             
             // 中断当前正在进行的打字效果
-            titleTypewriter.interrupt();
+            // 不再中断标题的打字效果，除非是页面加载时的初始状态
+            // titleTypewriter.interrupt();
             contentTypewriter.interrupt();
             
             // 强制刷新数据
