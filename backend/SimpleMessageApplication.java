@@ -16,14 +16,15 @@ import java.util.regex.*;
 public class SimpleMessageApplication {
     private static final int PORT = 9000;
     private static final String MESSAGES_FILE = "messages.json";
+    // 内存存储留言列表，用于阿里云函数计算环境
+    private static List<Message> memoryMessages = null;
     
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
         
         // 创建上下文，处理不同的API路径
         server.createContext("/", new HomeHandler());
-        server.createContext("/api/resume/message/list", new MessageListHandler());
-        server.createContext("/api/resume/message/add", new MessageHandler());
+        server.createContext("/messages", new MessageApiHandler()); // 处理GET和POST请求
         
         server.setExecutor(null);
         server.start();
@@ -42,32 +43,27 @@ public class SimpleMessageApplication {
         }
     }
     
-    // 获取留言列表处理器
-    static class MessageListHandler implements HttpHandler {
+    // 留言API处理器 - 处理GET和POST请求
+    static class MessageApiHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            // 设置CORS头
+            exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+            exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type");
+            
+            // 处理OPTIONS预检请求
+            if ("OPTIONS".equals(exchange.getRequestMethod())) {
+                exchange.sendResponseHeaders(200, -1);
+                return;
+            }
+            
             if ("GET".equals(exchange.getRequestMethod())) {
-                // 设置响应头
-                exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
-                exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
-                
-                try {
-                    List<Message> messages = loadMessages();
-                    String response = "{\"code\":200,\"message\":\"获取成功\",\"data\":" + messagesToJson(messages) + "}";
-                    
-                    exchange.sendResponseHeaders(200, response.getBytes("UTF-8").length);
-                    try (OutputStream os = exchange.getResponseBody()) {
-                        os.write(response.getBytes("UTF-8"));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    String response = "{\"code\":500,\"message\":\"服务器错误\",\"error\":\"" + e.getMessage().replace("\"", "\\\"") + "\"}";
-                    
-                    exchange.sendResponseHeaders(500, response.getBytes("UTF-8").length);
-                    try (OutputStream os = exchange.getResponseBody()) {
-                        os.write(response.getBytes("UTF-8"));
-                    }
-                }
+                // 处理获取留言列表请求
+                handleGetMessages(exchange);
+            } else if ("POST".equals(exchange.getRequestMethod())) {
+                // 处理添加留言请求
+                handleAddMessage(exchange);
             } else {
                 exchange.sendResponseHeaders(405, 0); // Method Not Allowed
                 try (OutputStream os = exchange.getResponseBody()) {
@@ -75,75 +71,86 @@ public class SimpleMessageApplication {
                 }
             }
         }
-    }
-    
-    // 添加留言处理器
-    static class MessageHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            if ("POST".equals(exchange.getRequestMethod())) {
-                try {
-                    // 读取请求体
-                    StringBuilder requestBodyBuilder = new StringBuilder();
-                    try (BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(exchange.getRequestBody(), "UTF-8"))) {
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            requestBodyBuilder.append(line).append("\n");
-                        }
-                    }
-                    String requestBody = requestBodyBuilder.toString();
-                    
-                    // 解析请求JSON
-                    Map<String, String> requestMap = parseJsonToMap(requestBody);
-                    
-                    // 获取参数
-                    String name = requestMap.get("name");
-                    String email = requestMap.get("email");
-                    String content = requestMap.get("content");
-                    
-                    // 参数验证
-                    if (name == null || name.trim().isEmpty() || 
-                        email == null || email.trim().isEmpty() || 
-                        content == null || content.trim().isEmpty()) {
-                        sendJsonResponse(exchange, 400, "{\"code\":400,\"message\":\"参数不能为空\"}");
-                        return;
-                    }
-                    
-                    // 创建留言对象
-                    Message message = new Message();
-                    message.setId(String.valueOf(System.currentTimeMillis()));
-                    message.setName(name.trim());
-                    message.setEmail(email.trim());
-                    message.setContent(content.trim());
-                    message.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                    
-                    // 读取现有留言
-                    List<Message> messages = loadMessages();
-                    
-                    // 添加新留言
-                    messages.add(0, message);  // 添加到列表开头
-                    
-                    // 限制留言数量
-                    if (messages.size() > 100) {
-                        messages = messages.subList(0, 100);
-                    }
-                    
-                    // 保存留言
-                    saveMessages(messages);
-                    
-                    // 返回成功响应
-                    sendJsonResponse(exchange, 200, "{\"code\":200,\"message\":\"留言成功\"}");
-                    
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    sendJsonResponse(exchange, 500, "{\"code\":500,\"message\":\"服务器错误\",\"error\":\"" + e.getMessage().replace("\"", "\\\"") + "\"}");
-                }
-            } else {
-                exchange.sendResponseHeaders(405, 0); // Method Not Allowed
+        
+        private void handleGetMessages(HttpExchange exchange) throws IOException {
+            exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
+            
+            try {
+                List<Message> messages = loadMessages();
+                String response = "{\"code\":200,\"message\":\"获取成功\",\"data\":" + messagesToJson(messages) + "}";
+                
+                exchange.sendResponseHeaders(200, response.getBytes("UTF-8").length);
                 try (OutputStream os = exchange.getResponseBody()) {
-                    os.write(new byte[0]);
+                    os.write(response.getBytes("UTF-8"));
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                String response = "{\"code\":500,\"message\":\"服务器错误\",\"error\":\"" + e.getMessage().replace("\"", "\\\"") + "\"}";
+                
+                exchange.sendResponseHeaders(500, response.getBytes("UTF-8").length);
+                try (OutputStream os = exchange.getResponseBody()) {
+                    os.write(response.getBytes("UTF-8"));
+                }
+            }
+        }
+        
+        private void handleAddMessage(HttpExchange exchange) throws IOException {
+            try {
+                // 读取请求体
+                StringBuilder requestBodyBuilder = new StringBuilder();
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(exchange.getRequestBody(), "UTF-8"))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        requestBodyBuilder.append(line).append("\n");
+                    }
+                }
+                String requestBody = requestBodyBuilder.toString();
+                
+                // 解析请求JSON
+                Map<String, String> requestMap = parseJsonToMap(requestBody);
+                
+                // 获取参数
+                String name = requestMap.get("name");
+                String email = requestMap.get("email");
+                String content = requestMap.get("content");
+                
+                // 参数验证
+                if (name == null || name.trim().isEmpty() || 
+                    email == null || email.trim().isEmpty() || 
+                    content == null || content.trim().isEmpty()) {
+                    sendJsonResponse(exchange, 400, "{\"code\":400,\"message\":\"参数不能为空\"}");
+                    return;
+                }
+                
+                // 创建留言对象
+                Message message = new Message();
+                message.setId(String.valueOf(System.currentTimeMillis()));
+                message.setName(name.trim());
+                message.setEmail(email.trim());
+                message.setContent(content.trim());
+                message.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                
+                // 读取现有留言
+                List<Message> messages = loadMessages();
+                
+                // 添加新留言
+                messages.add(0, message);  // 添加到列表开头
+                
+                // 限制留言数量
+                if (messages.size() > 100) {
+                    messages = messages.subList(0, 100);
+                }
+                
+                // 保存留言
+                saveMessages(messages);
+                
+                // 返回成功响应
+                sendJsonResponse(exchange, 200, "{\"code\":200,\"message\":\"留言成功\"}");
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                sendJsonResponse(exchange, 500, "{\"code\":500,\"message\":\"服务器错误\",\"error\":\"" + e.getMessage().replace("\"", "\\\"") + "\"}");
             }
         }
     }
@@ -160,34 +167,50 @@ public class SimpleMessageApplication {
     
     // 加载留言列表
     private static List<Message> loadMessages() {
-        try {
-            if (!Files.exists(Paths.get(MESSAGES_FILE))) {
-                // 创建初始留言文件
-                List<Message> initialMessages = new ArrayList<>();
-                Message defaultMessage = new Message();
-                defaultMessage.setId("1");
-                defaultMessage.setName("系统");
-                defaultMessage.setEmail("system@resume.com");
-                defaultMessage.setContent("欢迎使用留言板");
-                defaultMessage.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                initialMessages.add(defaultMessage);
-                saveMessages(initialMessages);
-                return initialMessages;
-            }
-            
-            String content = new String(Files.readAllBytes(Paths.get(MESSAGES_FILE)), "UTF-8");
-            return jsonToMessages(content);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+        // 如果内存中已有数据，直接返回
+        if (memoryMessages != null) {
+            return memoryMessages;
         }
+        
+        try {
+            // 尝试从文件加载
+            if (Files.exists(Paths.get(MESSAGES_FILE))) {
+                String content = new String(Files.readAllBytes(Paths.get(MESSAGES_FILE)), "UTF-8");
+                memoryMessages = jsonToMessages(content);
+                return memoryMessages;
+            }
+        } catch (Exception e) {
+            // 文件读取失败，继续使用内存初始化
+            System.err.println("无法从文件加载留言，将使用内存初始化: " + e.getMessage());
+        }
+        
+        // 初始化内存中的默认留言
+        memoryMessages = new ArrayList<>();
+        Message defaultMessage = new Message();
+        defaultMessage.setId("1");
+        defaultMessage.setName("系统");
+        defaultMessage.setEmail("system@resume.com");
+        defaultMessage.setContent("欢迎使用留言板");
+        defaultMessage.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        memoryMessages.add(defaultMessage);
+        
+        return memoryMessages;
     }
     
     // 保存留言列表
     private static void saveMessages(List<Message> messages) throws IOException {
-        String json = messagesToJson(messages);
-        Files.write(Paths.get(MESSAGES_FILE), json.getBytes("UTF-8"), 
-                   StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        // 更新内存中的留言列表
+        memoryMessages = new ArrayList<>(messages);
+        
+        // 尝试保存到文件（本地环境使用）
+        try {
+            String json = messagesToJson(messages);
+            Files.write(Paths.get(MESSAGES_FILE), json.getBytes("UTF-8"), 
+                       StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (Exception e) {
+            // 文件写入失败，但不影响内存存储
+            System.err.println("无法保存留言到文件，但数据已保存在内存中: " + e.getMessage());
+        }
     }
     
     // 将留言列表转换为JSON字符串

@@ -13,7 +13,7 @@ REM 创建输出目录
 if not exist target\classes-java8 mkdir target\classes-java8
 
 REM 编译Java源代码，指定目标版本为Java 8
-javac -d target\classes-java8 -cp "gson-2.9.0.jar" --release 8 JsonMessageApplication.java
+javac -d target\classes-java8 -cp "gson-2.9.0.jar" --release 8 SimpleMessageApplication.java
 
 if %ERRORLEVEL% neq 0 (
     echo 编译失败！请检查Java 8是否正确安装。
@@ -27,7 +27,7 @@ echo 正在创建可执行JAR文件...
 
 REM 创建MANIFEST.MF文件
 echo Manifest-Version: 1.0 > target\MANIFEST-Java8.MF
-echo Main-Class: JsonMessageApplication >> target\MANIFEST-Java8.MF
+echo Main-Class: com.resume.message.SimpleMessageApplication >> target\MANIFEST-Java8.MF
 echo Class-Path: gson-2.9.0.jar >> target\MANIFEST-Java8.MF
 
 REM 复制gson库到target目录

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API测试</title>
+</head>
+<body>
+    <h1>API测试</h1>
+    <div id="result">正在加载...</div>
+    
+    <script>
+        fetch('https://message-server-uutepmlola.cn-hangzhou.fcapp.run/api/resume/message/list')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = '错误: ' + error.message;
+            });
+    </script>
+</body>
+</html>
