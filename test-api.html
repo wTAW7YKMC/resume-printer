@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>API测试</title>
+</head>
+<body>
+    <h1>API测试</h1>
+    
+    <h2>测试连接</h2>
+    <button onclick="testConnection()">测试连接</button>
+    <div id="connection-result"></div>
+    
+    <h2>获取留言列表</h2>
+    <button onclick="testGetMessages()">获取留言列表</button>
+    <div id="messages-result"></div>
+    
+    <h2>提交留言</h2>
+    <input type="text" id="test-name" placeholder="姓名"><br>
+    <input type="email" id="test-email" placeholder="邮箱"><br>
+    <textarea id="test-content" placeholder="留言内容"></textarea><br>
+    <button onclick="testSubmitMessage()">提交留言</button>
+    <div id="submit-result"></div>
+    
+    <script>
+        const API_URL = 'https://message-server-uutepmlola.cn-hangzhou.fcapp.run';
+        
+        async function testConnection() {
+            const resultDiv = document.getElementById('connection-result');
+            try {
+                const response = await fetch(`${API_URL}/`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'text/plain',
+                    }
+                });
+                const text = await response.text();
+                resultDiv.innerHTML = `<p>响应码: ${response.status}</p><p>响应内容: ${text}</p>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<p>错误: ${error.message}</p>`;
+            }
+        }
+        
+        async function testGetMessages() {
+            const resultDiv = document.getElementById('messages-result');
+            try {
+                const response = await fetch(`${API_URL}/api/resume/message/list`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    }
+                });
+                const data = await response.json();
+                resultDiv.innerHTML = `<p>响应码: ${response.status}</p><pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<p>错误: ${error.message}</p>`;
+            }
+        }
+        
+        async function testSubmitMessage() {
+            const name = document.getElementById('test-name').value;
+            const email = document.getElementById('test-email').value;
+            const content = document.getElementById('test-content').value;
+            
+            if (!name || !email || !content) {
+                document.getElementById('submit-result').innerHTML = '<p>请填写所有字段</p>';
+                return;
+            }
+            
+            const resultDiv = document.getElementById('submit-result');
+            try {
+                const response = await fetch(`${API_URL}/api/resume/message/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, content })
+                });
+                const data = await response.json();
+                resultDiv.innerHTML = `<p>响应码: ${response.status}</p><pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<p>错误: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

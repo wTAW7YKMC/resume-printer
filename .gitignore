@@ -1,0 +1,37 @@
+# 编译输出目录
+target/
+classes/
+*.class
+
+# IDE文件
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 依赖JAR文件
+*.jar
+!gson-2.9.0.jar
+
+# 构建输出
+*.zip
+*.tar.gz
+
+# 临时文件
+*.tmp
+*.temp
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+
+# 数据库文件
+*.db
+*.sqlite
+
+# 部署临时文件
+deploy/*.jar
+deploy/*.zip
