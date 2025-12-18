@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Becky's Resume - 欢迎</title>
+    <link rel="stylesheet" href="css/splash-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="splash-container">
+        <!-- 打字机机身装饰 -->
+        <div class="typewriter-body">
+            <div class="typewriter-roller"></div>
+            <div class="typewriter-keys">
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+            </div>
+        </div>
+
+        <!-- 纸张区域 -->
+        <div class="paper-container">
+            <!-- 主标题区域 -->
+            <header class="header">
+                <h1 id="main-title" class="main-title">
+                    <span id="title-text"></span><span class="cursor">|</span>
+                </h1>
+                <div class="subtitle" id="subtitle"></div>
+            </header>
+
+            <!-- 简介区域 -->
+            <main class="intro-content">
+                <div id="intro-text" class="intro-text"></div>
+                
+                <!-- 装饰性分隔线 -->
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-symbol">✦</div>
+                    <div class="divider-line"></div>
+                </div>
+
+                <!-- 进入按钮 -->
+                <div class="enter-container">
+                    <button id="enter-btn" class="enter-btn">
+                        <span class="btn-text">explore</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                    <p class="hint">或按任意键继续</p>
+                </div>
+            </main>
+
+            <!-- 页脚信息 -->
+            <footer class="splash-footer">
+                <div class="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <p class="footer-text">正在准备简历内容...</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- 背景装饰 -->
+    <div class="background-elements">
+        <div class="floating-element elem1"></div>
+        <div class="floating-element elem2"></div>
+        <div class="floating-element elem3"></div>
+    </div>
+
+    <!-- JavaScript 文件 -->
+    <script src="js/splash.js"></script>
+</body>
+</html>

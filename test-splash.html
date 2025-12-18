@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试开屏页面</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #8B4513;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            border: none;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background-color: #A0522D;
+        }
+        .test-description {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .test-case {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-left: 3px solid #8B4513;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>开屏页面功能测试</h1>
+        
+        <div class="test-description">
+            <p>此页面用于测试开屏页面的各种功能。请点击下面的按钮进行测试：</p>
+        </div>
+        
+        <div class="test-case">
+            <h3>测试1: 直接访问开屏页面</h3>
+            <p>点击下面的按钮直接打开开屏页面</p>
+            <button class="test-button" onclick="window.open('splash.html', '_blank')">打开开屏页面</button>
+        </div>
+        
+        <div class="test-case">
+            <h3>测试2: 访问主页并返回开屏页面</h3>
+            <p>点击下面的按钮打开主页，然后点击"开屏页面"按钮返回</p>
+            <button class="test-button" onclick="window.open('index.html', '_blank')">打开主页</button>
+        </div>
+        
+        <div class="test-case">
+            <h3>测试3: 通过URL参数访问开屏页面</h3>
+            <p>点击下面的按钮打开主页并自动跳转到开屏页面</p>
+            <button class="test-button" onclick="window.open('index.html?showSplash=true', '_blank')">主页→开屏页面</button>
+        </div>
+        
+        <div class="test-case">
+            <h3>测试4: 刷新开屏页面</h3>
+            <p>点击下面的按钮打开开屏页面，然后尝试刷新页面</p>
+            <button class="test-button" onclick="window.open('splash.html', '_blank')">打开开屏页面</button>
+        </div>
+        
+        <div class="test-description">
+            <h3>预期结果：</h3>
+            <ul>
+                <li>测试1: 应该直接显示开屏页面</li>
+                <li>测试2: 应该先显示主页，点击"开屏页面"按钮后返回开屏页面</li>
+                <li>测试3: 应该先显示主页，然后自动跳转到开屏页面</li>
+                <li>测试4: 刷新后应该仍然显示开屏页面</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,3 +1,21 @@
+// 导航到开屏页面
+function navigateToSplash() {
+    console.log('navigateToSplash函数被调用');
+    // 播放打字机音效
+    soundManager.playTypingSound();
+    
+    // 添加淡出效果
+    document.body.style.transition = 'opacity 0.5s ease-out';
+    document.body.style.opacity = '0';
+    
+    // 延迟跳转，等待淡出效果完成
+    setTimeout(() => {
+        console.log('准备跳转到开屏页面');
+        // 直接跳转到开屏页面，不添加任何参数
+        window.location.href = 'splash.html';
+    }, 500);
+}
+
 // 主要应用入口文件
 document.addEventListener('DOMContentLoaded', function() {
     // 获取DOM元素
@@ -86,6 +104,9 @@ document.addEventListener('DOMContentLoaded', function() {
         isMuted = localStorage.getItem('typewriter-muted') === 'true';
         updateSoundButton();
         
+        // 检查是否从开屏页面跳转而来
+        const fromSplash = sessionStorage.getItem('fromSplash') === 'true';
+        
         // 初始化触摸导航
         const resumeSections = ['about', 'experience', 'education', 'skills', 'projects', 'contact'];
         touchNavigation = new TouchNavigation(
@@ -170,13 +191,43 @@ document.addEventListener('DOMContentLoaded', function() {
             // 显示加载指示器
             loadingIndicator.style.display = 'block';
             
+            // 检查是否从开屏页面跳转而来
+            const fromSplash = sessionStorage.getItem('fromSplash') === 'true';
+            
+            // 检查URL参数中是否有showSplash=true
+            const urlParams = new URLSearchParams(window.location.search);
+            const showSplash = urlParams.get('showSplash') === 'true';
+            
+            // 如果URL参数中有showSplash=true，则跳转到开屏页面
+            if (showSplash) {
+                setTimeout(() => {
+                    window.location.href = 'splash.html';
+                }, 1000);
+                return;
+            }
+            
             // 如果强制刷新，清除缓存
             if (forceRefresh) {
                 dataFetcher.clearCache();
             }
             
-            // 使用DataFetcher加载简历数据
-            resumeData = await dataFetcher.loadData();
+            // 如果从开屏页面跳转而来，尝试使用预加载的数据
+            if (fromSplash && !forceRefresh) {
+                try {
+                    const preloadedData = sessionStorage.getItem('resumeData');
+                    if (preloadedData) {
+                        resumeData = JSON.parse(preloadedData);
+                        console.log('使用预加载的简历数据');
+                    }
+                } catch (e) {
+                    console.log('预加载数据解析失败，重新获取:', e);
+                }
+            }
+            
+            // 如果没有预加载数据，则正常加载
+            if (!resumeData) {
+                resumeData = await dataFetcher.loadData();
+            }
             
             // 隐藏加载指示器
             loadingIndicator.style.display = 'none';
@@ -184,9 +235,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // 显示主标题
             titleText.innerHTML = ""; // 先清空内容
             titleTypewriter.interrupt(); // 中断之前的打字效果
-            setTimeout(() => {
-                typeText(titleText, "Hi, I'm Becky!", 120);
-            }, 500); // 延迟500ms后显示标题
+            
+            // 如果从开屏页面跳转而来，直接显示内容，不延迟
+            if (fromSplash) {
+                typeText(titleText, "Hi, I'm Becky!", 80);
+                // 清除标记，避免刷新页面时重复使用
+                sessionStorage.removeItem('fromSplash');
+            } else {
+                // 正常访问，延迟显示标题
+                setTimeout(() => {
+                    typeText(titleText, "Hi, I'm Becky!", 120);
+                }, 500);
+            }
             
             // 更新最后更新时间
             if (resumeData.meta && resumeData.meta.lastUpdated) {
@@ -194,10 +254,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // 显示默认内容
+            const delay = fromSplash ? 500 : 2000;
             setTimeout(() => {
                 navigation.style.opacity = '1';
                 showContent(currentSection);
-            }, 2000);
+            }, delay);
         } catch (error) {
             console.error('Error loading resume data:', error);
             
