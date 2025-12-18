@@ -9,16 +9,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
     <script>
-        // 检查URL参数，如果没有showSplash=false，则重定向到开屏页面
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const skipSplash = urlParams.get('showSplash') === 'false';
-            
-            if (!skipSplash) {
-                window.location.href = 'splash.html';
-            }
-        };
-    </script>
+            // 页面加载完成后的初始化
+            window.onload = function() {
+                // 不再自动重定向到开屏页面，直接显示主页面内容
+                console.log("主页面已加载");
+            };
+        </script>
 </head>
 <body>
     <div class="container">
