@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导出功能测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-content {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        .export-buttons {
+            margin: 20px 0;
+        }
+        .export-btn {
+            margin: 5px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .export-btn:hover {
+            background-color: #45a049;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+    </style>
+</head>
+<body>
+    <h1>导出功能测试页面</h1>
+    
+    <div class="test-content" id="test-content">
+        <h2>测试内容</h2>
+        <p>这是一个用于测试导出功能的简单页面。</p>
+        <p>我们将测试以下导出格式：</p>
+        <ul>
+            <li>PDF导出</li>
+            <li>HTML导出</li>
+            <li>文本导出</li>
+        </ul>
+        <p>注意：Word导出功能已被移除。</p>
+    </div>
+    
+    <div class="export-buttons">
+        <button id="export-pdf" class="export-btn">导出为PDF</button>
+        <button id="export-html" class="export-btn">导出为HTML</button>
+        <button id="export-txt" class="export-btn">导出为文本</button>
+    </div>
+    
+    <div id="status" class="status" style="display: none;"></div>
+
+    <!-- PDF 导出所需库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- 导出器 -->
+    <script src="js/enhancedExporter.js"></script>
+    
+    <script>
+        // 初始化导出器
+        const exporter = new EnhancedExporter({
+            filename: 'test_export',
+            title: '导出功能测试'
+        });
+        
+        // 获取DOM元素
+        const testContent = document.getElementById('test-content');
+        const statusDiv = document.getElementById('status');
+        
+        // 显示状态信息
+        function showStatus(message, isError = false) {
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+            statusDiv.className = isError ? 'status error' : 'status success';
+            
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 3000);
+        }
+        
+        // 导出按钮事件处理
+        document.getElementById('export-pdf').addEventListener('click', () => {
+            exporter.exportCurrentContent(testContent, 'pdf', 
+                () => showStatus('PDF导出成功！'), 
+                (error) => showStatus(`PDF导出失败: ${error.message}`, true)
+            );
+        });
+        
+        document.getElementById('export-html').addEventListener('click', () => {
+            exporter.exportCurrentContent(testContent, 'html', 
+                () => showStatus('HTML导出成功！'), 
+                (error) => showStatus(`HTML导出失败: ${error.message}`, true)
+            );
+        });
+        
+        document.getElementById('export-txt').addEventListener('click', () => {
+            exporter.exportCurrentContent(testContent, 'txt', 
+                () => showStatus('文本导出成功！'), 
+                (error) => showStatus(`文本导出失败: ${error.message}`, true)
+            );
+        });
+        
+        // 检查支持的导出格式
+        const supportedFormats = exporter.getSupportedFormats();
+        console.log('支持的导出格式:', supportedFormats);
+        
+        // 显示支持的格式
+        const formatInfo = document.createElement('p');
+        formatInfo.textContent = `当前支持的导出格式: ${supportedFormats.join(', ')}`;
+        document.body.insertBefore(formatInfo, document.querySelector('.export-buttons'));
+    </script>
+</body>
+</html>

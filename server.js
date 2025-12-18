@@ -3,8 +3,27 @@ const fs = require('fs');
 const path = require('path');
 
 const server = http.createServer((req, res) => {
-  let filePath = '.' + req.url;
-  if (filePath === './') filePath = './index.html';
+    // 解析URL，分离路径和查询参数
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    let filePath = '.' + url.pathname;
+    
+    // 默认路径处理
+    if (filePath === './') {
+        filePath = './index.html';
+    }
+    
+    // 处理带查询参数的情况
+    if (filePath.includes('?')) {
+        filePath = filePath.split('?')[0];
+    }
+    
+    // 确保文件路径存在
+    if (!fs.existsSync(filePath)) {
+        // 如果是index.html但不存在，尝试提供splash.html
+        if (filePath.endsWith('index.html') && fs.existsSync('./splash.html')) {
+            filePath = './splash.html';
+        }
+    }
   
   const extname = path.extname(filePath).toLowerCase();
   const mimeTypes = {

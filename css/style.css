@@ -60,15 +60,6 @@ body {
     filter: contrast(105%) brightness(95%);
 }
 
-/* 加载指示器 */
-.loading-indicator {
-    text-align: center;
-    font-size: 18px;
-    color: #8b4513;
-    margin: 20px 0;
-    display: block;
-}
-
 /* 头部区域 */
 .header {
     margin-bottom: 30px;
@@ -619,4 +610,50 @@ body {
     color: #8b4513;
     font-style: italic;
     padding: 20px;
+}
+
+/* 导出选项样式 */
+.export-buttons {
+    position: relative;
+    display: inline-block;
+}
+
+.export-options {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background-color: #f5f1e6;
+    border: 1px solid #a67c52;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    padding: 5px;
+    margin-bottom: 5px;
+    min-width: 120px;
+}
+
+.export-option {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Courier New', 'Courier Prime', monospace;
+    font-size: 14px;
+    color: #333;
+    transition: background-color 0.2s ease;
+}
+
+.export-option:hover {
+    background-color: #e8dcc8;
+}
+
+.export-option:first-child {
+    border-radius: 3px 3px 0 0;
+}
+
+.export-option:last-child {
+    border-radius: 0 0 3px 3px;
 }

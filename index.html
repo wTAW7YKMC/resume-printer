@@ -29,11 +29,6 @@
 
         <!-- 纸张区域 -->
         <div class="paper-container">
-            <!-- 加载指示器 -->
-            <div id="loading-indicator" class="loading-indicator">
-                Loading resume data...
-            </div>
-
             <!-- 主标题区域 -->
             <header class="header">
                 <h1 id="main-title" class="main-title">
@@ -95,8 +90,22 @@
             <footer class="controls">
                 <div class="control-group">
                     <button id="sound-toggle" class="control-btn">🔊</button>
-                    <button id="pdf-export-current" class="control-btn">导出当前</button>
-                    <button id="pdf-export-full" class="control-btn">导出完整</button>
+                    <div class="export-buttons">
+                        <button id="export-current" class="control-btn">导出当前</button>
+                        <div id="export-options-current" class="export-options" style="display: none;">
+                            <button data-format="pdf" class="export-option">PDF</button>
+                            <button data-format="html" class="export-option">HTML</button>
+                            <button data-format="txt" class="export-option">文本</button>
+                        </div>
+                    </div>
+                    <div class="export-buttons">
+                        <button id="export-full" class="control-btn">导出完整</button>
+                        <div id="export-options-full" class="export-options" style="display: none;">
+                            <button data-format="pdf" class="export-option">PDF</button>
+                            <button data-format="html" class="export-option">HTML</button>
+                            <button data-format="txt" class="export-option">文本</button>
+                        </div>
+                    </div>
                     <button id="force-refresh" class="control-btn">刷新数据</button>
                 </div>
                 <div class="control-info">
@@ -121,6 +130,7 @@
     <script src="js/contentRenderer.js"></script>
     <script src="js/soundManager.js"></script>
     <script src="js/pdfExporter.js"></script>
+    <script src="js/enhancedExporter.js"></script>
     <script src="js/touchGestures.js"></script>
     <script src="js/messageManager.js"></script>
     <script src="js/localMessageManager.js"></script>

@@ -19,13 +19,14 @@ function navigateToSplash() {
 // 主要应用入口文件
 document.addEventListener('DOMContentLoaded', function() {
     // 获取DOM元素
-    const loadingIndicator = document.getElementById('loading-indicator');
     const titleText = document.getElementById('title-text');
     const contentText = document.getElementById('content-text');
     const navigation = document.getElementById('navigation');
     const soundToggle = document.getElementById('sound-toggle');
-    const pdfExportCurrent = document.getElementById('pdf-export-current');
-    const pdfExportFull = document.getElementById('pdf-export-full');
+    const exportCurrent = document.getElementById('export-current');
+    const exportFull = document.getElementById('export-full');
+    const exportOptionsCurrent = document.getElementById('export-options-current');
+    const exportOptionsFull = document.getElementById('export-options-full');
     const forceRefresh = document.getElementById('force-refresh');
     const lastUpdated = document.getElementById('last-updated');
     const navButtons = document.querySelectorAll('.nav-btn');
@@ -57,6 +58,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // 初始化PDF导出器
     const pdfExporter = new PdfExporter({
         filename: 'Becky_Resume.pdf',
+        title: 'Becky的个人简历'
+    });
+    
+    // 初始化增强导出器
+    const enhancedExporter = new EnhancedExporter({
+        filename: 'Becky_Resume',
         title: 'Becky的个人简历'
     });
     
@@ -157,23 +164,75 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        // PDF导出当前内容事件
-        if (pdfExportCurrent) {
-            pdfExportCurrent.addEventListener('click', function() {
+        // 导出当前内容事件
+        if (exportCurrent) {
+            exportCurrent.addEventListener('click', function() {
                 // 播放点击音效
                 soundManager.playClickSound();
-                exportCurrentContent();
+                
+                // 显示导出选项
+                if (exportOptionsCurrent) {
+                    exportOptionsCurrent.style.display = exportOptionsCurrent.style.display === 'block' ? 'none' : 'block';
+                    // 隐藏完整导出选项
+                    if (exportOptionsFull) {
+                        exportOptionsFull.style.display = 'none';
+                    }
+                }
             });
         }
         
-        // PDF导出完整简历事件
-        if (pdfExportFull) {
-            pdfExportFull.addEventListener('click', function() {
+        // 导出完整简历事件
+        if (exportFull) {
+            exportFull.addEventListener('click', function() {
                 // 播放点击音效
                 soundManager.playClickSound();
-                exportFullResume();
+                
+                // 显示导出选项
+                if (exportOptionsFull) {
+                    exportOptionsFull.style.display = exportOptionsFull.style.display === 'block' ? 'none' : 'block';
+                    // 隐藏当前导出选项
+                    if (exportOptionsCurrent) {
+                        exportOptionsCurrent.style.display = 'none';
+                    }
+                }
             });
         }
+        
+        // 导出选项点击事件
+        const exportOptionButtons = document.querySelectorAll('.export-option');
+        exportOptionButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const format = this.getAttribute('data-format');
+                const isCurrentExport = this.closest('#export-options-current') !== null;
+                
+                // 隐藏所有导出选项
+                if (exportOptionsCurrent) {
+                    exportOptionsCurrent.style.display = 'none';
+                }
+                if (exportOptionsFull) {
+                    exportOptionsFull.style.display = 'none';
+                }
+                
+                // 执行导出
+                if (isCurrentExport) {
+                    exportCurrentContent(format);
+                } else {
+                    exportFullResume(format);
+                }
+            });
+        });
+        
+        // 点击其他地方关闭导出选项
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.export-buttons')) {
+                if (exportOptionsCurrent) {
+                    exportOptionsCurrent.style.display = 'none';
+                }
+                if (exportOptionsFull) {
+                    exportOptionsFull.style.display = 'none';
+                }
+            }
+        });
         
         // 强制刷新数据事件
         if (forceRefresh) {
@@ -188,9 +247,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // 加载简历数据
     async function loadResumeData(forceRefresh = false) {
         try {
-            // 显示加载指示器
-            loadingIndicator.style.display = 'block';
-            
             // 检查是否从开屏页面跳转而来
             const fromSplash = sessionStorage.getItem('fromSplash') === 'true';
             
@@ -229,18 +285,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 resumeData = await dataFetcher.loadData();
             }
             
-            // 隐藏加载指示器
-            loadingIndicator.style.display = 'none';
-            
             // 显示主标题
             titleText.innerHTML = ""; // 先清空内容
             titleTypewriter.interrupt(); // 中断之前的打字效果
             
             // 如果从开屏页面跳转而来，直接显示内容，不延迟
             if (fromSplash) {
-                typeText(titleText, "Hi, I'm Becky!", 80);
+                // 直接显示标题，不使用打字机效果，提高速度
+                titleText.innerHTML = "Hi, I'm Becky!";
                 // 清除标记，避免刷新页面时重复使用
                 sessionStorage.removeItem('fromSplash');
+                
+                // 立即显示内容，不等待
+                setTimeout(() => {
+                    // 确保导航按钮已正确设置
+                    navButtons.forEach(button => {
+                        button.classList.remove('active');
+                        if (button.getAttribute('data-section') === 'about') {
+                            button.classList.add('active');
+                        }
+                    });
+                    
+                    // 直接显示内容，不使用过渡效果
+                    contentText.style.transition = 'none';
+                    contentText.style.opacity = '1';
+                    showContent('about');
+                }, 50); // 减少等待时间
             } else {
                 // 正常访问，延迟显示标题
                 setTimeout(() => {
@@ -261,9 +331,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }, delay);
         } catch (error) {
             console.error('Error loading resume data:', error);
-            
-            // 显示错误信息
-            loadingIndicator.textContent = '加载简历数据失败，请检查网络连接并刷新页面重试。';
             
             // 可以在这里添加重试按钮或其他错误处理逻辑
         }
@@ -379,65 +446,84 @@ document.addEventListener('DOMContentLoaded', function() {
         soundToggle.textContent = isMuted ? '🔇' : '🔊';
     }
     
-    // 导出当前内容为PDF
-    function exportCurrentContent() {
-        // 显示导出中状态
-        pdfExportCurrent.textContent = '导出中...';
-        pdfExportCurrent.disabled = true;
-        
-        // 导出当前显示的内容
-        pdfExporter.exportCurrentContent(
-            contentText,
-            // 成功回调
-            () => {
-                // 恢复按钮状态
-                pdfExportCurrent.textContent = '导出当前';
-                pdfExportCurrent.disabled = false;
+    // 导出当前内容
+    function exportCurrentContent(format = 'pdf') {
+        // 确保内容已经完全渲染
+        if (contentTypewriter.isTyping) {
+            // 如果正在打字，等待完成
+            showAlert('正在等待内容加载完成，请稍候...', 'info');
+            
+            // 设置一个临时回调来处理导出
+            const originalCallback = contentTypewriter.onCompleteCallback;
+            const tempCallback = () => {
+                // 调用原始回调（如果有）
+                if (originalCallback) {
+                    originalCallback();
+                }
                 
-                // 显示导出成功提示
-                showAlert('当前内容导出成功！', 'success');
-            },
-            // 错误回调
-            (error) => {
-                // 恢复按钮状态
-                pdfExportCurrent.textContent = '导出当前';
-                pdfExportCurrent.disabled = false;
-                
-                // 显示错误提示
-                showAlert('导出失败，请稍后重试。', 'error');
-                console.error('PDF导出失败:', error);
-            }
-        );
+                // 导出当前显示的内容
+                enhancedExporter.exportCurrentContent(
+                    document.getElementById('content-area'),
+                    format,
+                    // 成功回调
+                    () => {
+                        // 显示导出成功提示
+                        showAlert(`当前内容已成功导出为${enhancedExporter.getFormatName(format)}！`, 'success');
+                    },
+                    // 错误回调
+                    (error) => {
+                        // 显示错误提示
+                        showAlert('导出失败，请稍后重试。', 'error');
+                        console.error(`${format}导出失败:`, error);
+                    }
+                );
+            };
+            
+            // 保存当前文本内容
+            const currentText = contentTypewriter.currentText;
+            
+            // 设置新的回调
+            contentTypewriter.onCompleteCallback = tempCallback;
+            
+            // 重新开始打字效果，确保回调会被调用
+            contentTypewriter.type(currentText, tempCallback);
+        } else {
+            // 导出当前显示的内容
+            enhancedExporter.exportCurrentContent(
+                document.getElementById('content-area'),
+                format,
+                // 成功回调
+                () => {
+                    // 显示导出成功提示
+                    showAlert(`当前内容已成功导出为${enhancedExporter.getFormatName(format)}！`, 'success');
+                },
+                // 错误回调
+                (error) => {
+                    // 显示错误提示
+                    showAlert('导出失败，请稍后重试。', 'error');
+                    console.error(`${format}导出失败:`, error);
+                }
+            );
+        }
     }
     
-    // 导出完整简历为PDF
-    function exportFullResume() {
-        // 显示导出中状态
-        pdfExportFull.textContent = '导出中...';
-        pdfExportFull.disabled = true;
-        
+    // 导出完整简历
+    function exportFullResume(format = 'pdf') {
         // 导出完整简历内容
-        pdfExporter.exportFullResume(
+        enhancedExporter.exportFullResume(
             resumeData,
             contentRenderer,
+            format,
             // 成功回调
             () => {
-                // 恢复按钮状态
-                pdfExportFull.textContent = '导出完整';
-                pdfExportFull.disabled = false;
-                
                 // 显示导出成功提示
-                showAlert('完整简历导出成功！', 'success');
+                showAlert(`完整简历已成功导出为${enhancedExporter.getFormatName(format)}！`, 'success');
             },
             // 错误回调
             (error) => {
-                // 恢复按钮状态
-                pdfExportFull.textContent = '导出完整';
-                pdfExportFull.disabled = false;
-                
                 // 显示错误提示
                 showAlert('导出失败，请稍后重试。', 'error');
-                console.error('完整PDF导出失败:', error);
+                console.error(`完整${format}导出失败:`, error);
             }
         );
     }
@@ -486,10 +572,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // 强制刷新数据
     async function forceRefreshData() {
         try {
-            // 显示加载指示器
-            loadingIndicator.style.display = 'block';
-            loadingIndicator.textContent = '正在刷新数据...';
-            
             // 中断当前正在进行的打字效果
             // 不再中断标题的打字效果，除非是页面加载时的初始状态
             // titleTypewriter.interrupt();
@@ -503,13 +585,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
             // 显示刷新成功提示
             showAlert('数据刷新成功！', 'success');
-            
-            // 隐藏加载指示器
-            loadingIndicator.style.display = 'none';
         } catch (error) {
             console.error('Error refreshing data:', error);
             showAlert('数据刷新失败，请稍后重试。', 'error');
-            loadingIndicator.style.display = 'none';
         }
     }
     

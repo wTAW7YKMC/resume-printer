@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 初始化开屏页面
     function initSplashPage() {
+        // 立即开始预加载，不等待打字机效果
+        preloadMainPage();
+        
         // 开始打字机效果
         typeText(titleText, typeWriterConfig.title, 0, () => {
             // 标题打完后，显示副标题
@@ -46,9 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 添加键盘事件
         document.addEventListener('keydown', handleKeyPress);
-        
-        // 预加载主页面资源
-        preloadMainPage();
     }
     
     // 打字机效果
@@ -110,18 +110,28 @@ document.addEventListener('DOMContentLoaded', function() {
     sessionStorage.setItem('fromSplash', 'true');
     
     // 添加淡出效果
-    document.body.style.transition = 'opacity 0.5s ease-out';
+    document.body.style.transition = 'opacity 0.3s ease-out';
     document.body.style.opacity = '0';
     
     // 延迟跳转，等待淡出效果完成
     setTimeout(() => {
         window.location.href = 'index.html?showSplash=false';
-    }, 500);
+    }, 300);
 }
     
     // 预加载主页面资源
     function preloadMainPage() {
-        // 创建隐藏的链接元素预加载CSS
+        // 预加载关键JavaScript文件
+        const criticalJs = ['js/typewriter.js', 'js/dataFetcher.js', 'js/contentRenderer.js'];
+        criticalJs.forEach(src => {
+            const script = document.createElement('link');
+            script.rel = 'preload';
+            script.as = 'script';
+            script.href = src;
+            document.head.appendChild(script);
+        });
+        
+        // 预加载CSS文件
         const mainCssLink = document.createElement('link');
         mainCssLink.rel = 'preload';
         mainCssLink.as = 'style';
@@ -150,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 存储在会话存储中，以便快速访问
                 try {
                     sessionStorage.setItem('resumeData', JSON.stringify(data));
+                    console.log('简历数据预加载完成');
                 } catch (e) {
                     // 忽略存储错误
                 }
