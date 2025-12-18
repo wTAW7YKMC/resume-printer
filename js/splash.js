@@ -106,18 +106,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 导航到主页
     function navigateToMain() {
-        // 设置从开屏页面跳转的标记
-        sessionStorage.setItem('fromSplash', 'true');
-        
-        // 添加淡出效果
-        document.body.style.transition = 'opacity 0.5s ease-out';
-        document.body.style.opacity = '0';
-        
-        // 延迟跳转，等待淡出效果完成
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 500);
-    }
+    // 设置从开屏页面跳转的标记
+    sessionStorage.setItem('fromSplash', 'true');
+    
+    // 添加淡出效果
+    document.body.style.transition = 'opacity 0.5s ease-out';
+    document.body.style.opacity = '0';
+    
+    // 延迟跳转，等待淡出效果完成
+    setTimeout(() => {
+        window.location.href = 'index.html?showSplash=false';
+    }, 500);
+}
     
     // 预加载主页面资源
     function preloadMainPage() {
