@@ -246,6 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 加载简历数据
     async function loadResumeData(forceRefresh = false) {
+        console.log('loadResumeData: Starting to load resume data');
         try {
             // 检查是否从开屏页面跳转而来
             const fromSplash = sessionStorage.getItem('fromSplash') === 'true';
@@ -282,7 +283,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // 如果没有预加载数据，则正常加载
             if (!resumeData) {
+                console.log('loadResumeData: No preloaded data, loading from network');
                 resumeData = await dataFetcher.loadData();
+                console.log('loadResumeData: Data loaded successfully');
+            } else {
+                console.log('loadResumeData: Using preloaded data');
             }
             
             // 显示主标题

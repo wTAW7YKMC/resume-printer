@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据加载测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .log {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <h1>数据加载测试</h1>
+    <button id="testDirectFetch">直接测试 fetch</button>
+    <button id="testDataFetcher">测试 DataFetcher</button>
+    <button id="clearCache">清除缓存</button>
+    <div id="logs"></div>
+
+    <script src="js/dataFetcher.js?v=20251219"></script>
+    <script>
+        const logs = document.getElementById('logs');
+        
+        function addLog(message, isError = false) {
+            const log = document.createElement('div');
+            log.className = isError ? 'log error' : 'log';
+            log.textContent = new Date().toLocaleTimeString() + ': ' + message;
+            logs.appendChild(log);
+            logs.scrollTop = logs.scrollHeight;
+        }
+        
+        // 直接测试 fetch
+        document.getElementById('testDirectFetch').addEventListener('click', async () => {
+            addLog('开始直接测试 fetch...');
+            try {
+                const response = await fetch('resume-data.json');
+                addLog(`响应状态: ${response.status} ${response.statusText}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                addLog(`数据加载成功，包含 ${Object.keys(data).length} 个顶级字段`, false);
+                addLog(`数据预览: ${JSON.stringify(data).substring(0, 200)}...`, false);
+            } catch (error) {
+                addLog(`错误: ${error.message}`, true);
+            }
+        });
+        
+        // 测试 DataFetcher
+        document.getElementById('testDataFetcher').addEventListener('click', async () => {
+            addLog('开始测试 DataFetcher...');
+            try {
+                const dataFetcher = new DataFetcher({
+                    dataSource: 'resume-data.json',
+                    cacheExpiry: 24 * 60 * 60 * 1000, // 24小时
+                    cacheStrategy: 'network-first',
+                    useLocalFallback: true
+                });
+                
+                const data = await dataFetcher.loadData(true); // 强制刷新
+                addLog(`DataFetcher 加载成功，包含 ${Object.keys(data).length} 个顶级字段`, false);
+                addLog(`数据预览: ${JSON.stringify(data).substring(0, 200)}...`, false);
+            } catch (error) {
+                addLog(`DataFetcher 错误: ${error.message}`, true);
+            }
+        });
+        
+        // 清除缓存
+        document.getElementById('clearCache').addEventListener('click', () => {
+            localStorage.clear();
+            addLog('本地存储已清除');
+        });
+        
+        // 页面加载时自动运行测试
+        window.addEventListener('load', () => {
+            addLog('页面加载完成，准备测试数据加载...');
+            document.getElementById('testDirectFetch').click();
+        });
+    </script>
+</body>
+</html>

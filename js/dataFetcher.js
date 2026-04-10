@@ -139,17 +139,22 @@ class DataFetcher {
      * @returns {Promise<Object>} 返回包含数据的Promise
      */
     async loadFromNetwork() {
+        console.log(`DataFetcher: Loading from network: ${this.dataSource}`);
+        
         const response = await fetch(this.dataSource, {
             method: 'GET',
             headers: this.requestHeaders,
             cache: 'no-cache'
         });
         
+        console.log(`DataFetcher: Response status: ${response.status}`);
+        
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
         }
         
         const data = await response.json();
+        console.log(`DataFetcher: Data loaded successfully`);
         
         // 验证数据结构
         if (!this.validateDataStructure(data)) {

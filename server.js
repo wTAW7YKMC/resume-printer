@@ -3,9 +3,20 @@ const fs = require('fs');
 const path = require('path');
 
 const server = http.createServer((req, res) => {
+    // 记录请求日志
+    console.log(`Request: ${req.method} ${req.url}`);
+    console.log(`Headers:`, req.headers);
+    
     // 解析URL，分离路径和查询参数
     const url = new URL(req.url, `http://${req.headers.host}`);
     let filePath = '.' + url.pathname;
+    
+    // 特殊处理IDE的vite客户端请求
+    if (url.pathname === '/@vite/client') {
+        res.writeHead(200, { 'Content-Type': 'application/javascript' });
+        res.end('// Vite client stub for IDE compatibility');
+        return;
+    }
     
     // 默认路径处理
     if (filePath === './') {

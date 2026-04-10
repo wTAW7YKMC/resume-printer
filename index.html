@@ -4,22 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Becky's Resume</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=20250410">
     <!-- 异步加载Google Fonts，避免阻塞页面渲染 -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap"></noscript>
     <script>
-        // 检查URL参数，如果没有showSplash=false，则重定向到开屏页面
+        // 检查URL参数，如果没有showSplash=false，则跳转到开屏页面
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const skipSplash = urlParams.get('showSplash') === 'false';
             
+            // 如果没有跳过开屏的参数，则跳转到开屏页面
             if (!skipSplash) {
-                // 添加小延迟，确保页面完全加载
                 setTimeout(function() {
-                    // 添加时间戳避免缓存问题
-                    const timestamp = new Date().getTime();
-                    window.location.href = 'splash.html?v=' + timestamp;
+                    window.location.href = 'splash.html';
                 }, 100);
             }
         };
@@ -130,15 +128,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <!-- JavaScript 文件 -->
-    <script src="js/typewriter.js"></script>
-    <script src="js/dataFetcher.js"></script>
-    <script src="js/contentRenderer.js"></script>
-    <script src="js/soundManager.js"></script>
-    <script src="js/pdfExporter.js"></script>
-    <script src="js/enhancedExporter.js"></script>
-    <script src="js/touchGestures.js"></script>
-    <script src="js/messageManager.js"></script>
-    <script src="js/localMessageManager.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/typewriter.js?v=20250410"></script>
+    <script src="js/dataFetcher.js?v=20250410"></script>
+    <script src="js/contentRenderer.js?v=20250410"></script>
+    <script src="js/soundManager.js?v=20250410"></script>
+    <script src="js/pdfExporter.js?v=20250410"></script>
+    <script src="js/enhancedExporter.js?v=20250410"></script>
+    <script src="js/touchGestures.js?v=20250410"></script>
+    <script src="js/messageManager.js?v=20250410"></script>
+    <script src="js/localMessageManager.js?v=20250410"></script>
+    <script src="js/main.js?v=20250410"></script>
 </body>
 </html>

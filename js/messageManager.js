@@ -13,8 +13,8 @@ class MessageManager {
      * @param {string} options.messageStatusId - 留言状态提示元素ID
      */
     constructor(options = {}) {
-        // 阿里云服务器地址
-        this.apiUrl = options.apiUrl || 'https://message-server-uutepmlola.cn-hangzhou.fcapp.run';
+        // 本地服务器地址（作为默认值，实际使用LocalMessageManager）
+        this.apiUrl = options.apiUrl || 'http://localhost:8080';
         
         // 元素ID
         this.messageSectionId = options.messageSectionId || 'message-section';
