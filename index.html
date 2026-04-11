@@ -93,10 +93,24 @@
                 </div>
             </main>
 
+            <!-- DeepSeek AI助手区域 -->
+            <div id="ai-assistant-panel" class="ai-assistant-panel">
+                <div class="ai-panel-header">
+                    <h3>🤖 DeepSeek AI 助手</h3>
+                    <button id="ai-close-btn" class="ai-close-btn">✕</button>
+                </div>
+                <div id="ai-chat-container" class="ai-chat-container"></div>
+                <div class="ai-input-area">
+                    <input type="text" id="ai-user-input" placeholder="输入你的问题..." />
+                    <button id="ai-send-btn" class="ai-send-btn">发送</button>
+                </div>
+            </div>
+
             <!-- 控制区域 -->
             <footer class="controls">
                 <div class="control-group">
                     <button id="sound-toggle" class="control-btn">🔊</button>
+                    <button id="ai-toggle-btn" class="control-btn ai-toggle-btn">🤖 AI助手</button>
                     <div class="export-buttons">
                         <button id="export-current" class="control-btn">导出当前</button>
                         <div id="export-options-current" class="export-options" style="display: none;">
@@ -141,6 +155,7 @@
     <script src="js/touchGestures.js?v=20250410"></script>
     <script src="js/messageManager.js?v=20250410"></script>
     <script src="js/localMessageManager.js?v=20250410"></script>
+    <script src="js/deepseek.js?v=20250410"></script>
     <script src="js/main.js?v=20250410"></script>
 </body>
 </html>
