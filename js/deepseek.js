@@ -1,7 +1,7 @@
 // DeepSeek AI助手 - 集成到个人简历网站
 (function() {
     // DeepSeek API配置
-    const DEEPSEEK_API_KEY = 'YOUR_DEEPSEEK_API_KEY'; // 替换为你的DeepSeek API Key
+    const DEEPSEEK_API_KEY = 'sk-pyqoijjcftrgokxzrotgdlkgctqeqpsrfwtonkfbtpvjbqaq';
     const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
     
     // DOM元素
