@@ -129,6 +129,28 @@ body {
     font-weight: bold;
 }
 
+/* Projects导航栏突出显示 */
+.nav-btn.projects-highlight {
+    font-size: 18px;
+    padding: 12px 24px;
+    font-weight: bold;
+    background-color: #f0e6d6;
+    border-color: #8b4513;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+}
+
+.nav-btn.projects-highlight:hover {
+    background-color: #e8dcc8;
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 6px 12px rgba(139, 69, 19, 0.4);
+}
+
+.nav-btn.projects-highlight.active {
+    background-color: #d4b89a;
+    font-weight: bold;
+}
+
 /* 内容区域 */
 .content-area {
     background-color: #ffffff;
@@ -313,6 +335,16 @@ body {
         max-width: 250px;
     }
     
+    .nav-btn.projects-highlight {
+        font-size: 16px;
+        padding: 10px 20px;
+        transform: scale(1.02);
+    }
+    
+    .nav-btn.projects-highlight:hover {
+        transform: scale(1.03) translateY(-2px);
+    }
+    
     .content-area {
         padding: 15px;
         min-height: 280px;
@@ -357,6 +389,16 @@ body {
         max-width: 100%;
         font-size: 14px;
         padding: 8px 12px;
+    }
+    
+    .nav-btn.projects-highlight {
+        font-size: 15px;
+        padding: 9px 16px;
+        transform: scale(1.01);
+    }
+    
+    .nav-btn.projects-highlight:hover {
+        transform: scale(1.02) translateY(-1px);
     }
     
     .content-area {
