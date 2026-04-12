@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Becky's Projects - 作品集</title>
+    <link rel="stylesheet" href="css/style.css?v=20250410">
+    <!-- 异步加载Google Fonts，避免阻塞页面渲染 -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap"></noscript>
+</head>
+<body class="projects-page">
+    <div class="container">
+        <!-- 打字机机身装饰 -->
+        <div class="typewriter-body">
+            <div class="typewriter-roller"></div>
+        </div>
+
+        <!-- 纸张区域 -->
+        <div class="paper-container">
+            <!-- 头部区域 -->
+            <header class="header">
+                <h1 class="main-title">
+                    <span id="title-text">My Projects</span><span class="cursor">|</span>
+                </h1>
+                <p class="page-subtitle">探索我的创意项目与实践成果</p>
+                
+                <!-- 返回主页按钮 -->
+                <div class="back-to-home">
+                    <a href="index.html?showSplash=false" class="back-btn">← 返回主页</a>
+                </div>
+            </header>
+
+            <!-- 作品集内容区域 -->
+            <main class="projects-main">
+                <div class="projects-container">
+                    <!-- 筛选器 -->
+                    <div class="projects-filters">
+                        <button class="filter-btn active" data-filter="all">全部项目</button>
+                        <button class="filter-btn" data-filter="设计">设计项目</button>
+                        <button class="filter-btn" data-filter="开发">开发项目</button>
+                        <button class="filter-btn" data-filter="数据分析">数据分析</button>
+                        <button class="filter-btn" data-filter="创业">创业项目</button>
+                    </div>
+
+                    <!-- 项目网格 -->
+                    <div class="projects-grid" id="projects-grid">
+                        <!-- 项目内容将通过JavaScript动态加载 -->
+                    </div>
+
+                    <!-- 加载状态 -->
+                    <div class="loading-state" id="loading-state">
+                        <div class="loading-spinner"></div>
+                        <p>正在加载作品集...</p>
+                    </div>
+
+                    <!-- 空状态 -->
+                    <div class="empty-state" id="empty-state" style="display: none;">
+                        <p>暂无项目数据</p>
+                    </div>
+                </div>
+            </main>
+
+            <!-- 页脚 -->
+            <footer class="projects-footer">
+                <p>© 2025 Becky's Portfolio. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- JavaScript 文件 -->
+    <script src="js/typewriter.js?v=20250410"></script>
+    <script src="js/dataFetcher.js?v=20250410"></script>
+    <script src="js/soundManager.js?v=20250410"></script>
+    <script src="js/projectsManager.js?v=20250410"></script>
+    
+    <!-- 作品集页面专用脚本 -->
+    <script>
+        // 页面过渡效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有页面跳转链接添加平滑过渡
+            const pageLinks = document.querySelectorAll('a[href]');
+            
+            pageLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // 只处理内部链接
+                    const href = this.getAttribute('href');
+                    if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:')) {
+                        e.preventDefault();
+                        
+                        // 添加页面过渡效果
+                        document.body.classList.add('page-transition');
+                        
+                        // 延迟跳转，等待动画完成
+                        setTimeout(() => {
+                            window.location.href = href;
+                        }, 400);
+                    }
+                });
+            });
+        });
+
+        // 作品集页面专用脚本
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化音效管理器
+            const soundManager = new SoundManager({
+                enabled: true,
+                volume: 0.3,
+                soundPath: 'assets/sounds/',
+                useWebAudioAsDefault: true
+            });
+
+            // 初始化数据获取器
+            const dataFetcher = new DataFetcher({
+                dataSource: 'resume-data.json',
+                cacheExpiry: 24 * 60 * 60 * 1000,
+                cacheStrategy: 'cache-first',
+                useLocalFallback: true
+            });
+
+            // 初始化作品集管理器
+            const projectsManager = new ProjectsManager({
+                soundManager: soundManager
+            });
+
+            // 初始化打字机效果
+            const titleTypewriter = new Typewriter({
+                typeSpeed: 150,
+                eraseSpeed: 80,
+                playSound: soundManager.enabled,
+                soundCallback: (action, speed) => {
+                    if (action === 'type') {
+                        soundManager.playTypingSound({ duration: speed });
+                    }
+                }
+            });
+
+            // 设置标题打字机
+            const titleText = document.getElementById('title-text');
+            titleTypewriter.setElement(titleText);
+
+            // 加载并显示作品集
+            async function loadAndDisplayProjects() {
+                const loadingState = document.getElementById('loading-state');
+                const emptyState = document.getElementById('empty-state');
+                const projectsGrid = document.getElementById('projects-grid');
+
+                try {
+                    // 显示加载状态
+                    loadingState.style.display = 'block';
+                    projectsGrid.style.display = 'none';
+                    emptyState.style.display = 'none';
+
+                    // 加载简历数据
+                    const resumeData = await dataFetcher.loadData();
+                    
+                    if (resumeData && resumeData.projects && resumeData.projects.length > 0) {
+                        // 渲染作品集
+                        const projectsHTML = projectsManager.renderProjects(resumeData.projects);
+                        projectsGrid.innerHTML = projectsHTML;
+                        
+                        // 隐藏加载状态，显示作品集
+                        loadingState.style.display = 'none';
+                        projectsGrid.style.display = 'grid';
+                        
+                        // 初始化交互功能
+                        setTimeout(() => {
+                            projectsManager.init();
+                        }, 100);
+                    } else {
+                        // 显示空状态
+                        loadingState.style.display = 'none';
+                        emptyState.style.display = 'block';
+                    }
+                } catch (error) {
+                    console.error('Error loading projects:', error);
+                    loadingState.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    emptyState.innerHTML = '<p>加载失败，请刷新页面重试</p>';
+                }
+            }
+
+            // 页面加载完成后显示标题并加载作品集
+            setTimeout(() => {
+                // 显示标题
+                titleTypewriter.type("My Projects");
+                
+                // 添加页面内容入场动画
+                const header = document.querySelector('.header');
+                const main = document.querySelector('.projects-main');
+                const footer = document.querySelector('.projects-footer');
+                
+                if (header) header.classList.add('page-slide-in-right');
+                if (main) main.classList.add('page-slide-in-left');
+                if (footer) footer.classList.add('page-slide-in-right');
+                
+                // 加载作品集
+                loadAndDisplayProjects();
+            }, 500);
+
+            // 绑定返回按钮音效
+            const backBtn = document.querySelector('.back-btn');
+            if (backBtn) {
+                backBtn.addEventListener('click', function(e) {
+                    soundManager.playClickSound();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

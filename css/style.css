@@ -12,7 +12,95 @@ body {
     color: #212121;
     line-height: 1.6;
     overflow-x: hidden;
+    opacity: 0;
+    animation: fadeIn 0.6s ease-in-out forwards;
 }
+
+/* 页面淡入动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 页面淡出动画 */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+/* 页面过渡类 */
+.page-transition {
+    animation: fadeOut 0.4s ease-in-out forwards;
+}
+
+/* 加载动画 */
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.page-slide-in-right {
+     animation: slideInFromRight 0.5s ease-out forwards;
+ }
+ 
+ .page-slide-in-left {
+     animation: slideInFromLeft 0.5s ease-out forwards;
+ }
+ 
+ /* 动画延迟 */
+ .header {
+     animation-delay: 0.2s;
+ }
+ 
+ .projects-main {
+     animation-delay: 0.4s;
+ }
+ 
+ .projects-footer {
+     animation-delay: 0.6s;
+ }
+ 
+ /* 初始隐藏动画元素 - 仅针对作品集页面 */
+ .projects-page .header,
+ .projects-page .projects-main,
+ .projects-page .projects-footer {
+     opacity: 0;
+     transform: translateX(50px);
+ }
+ 
+ .page-slide-in-left {
+     opacity: 0;
+     transform: translateX(-50px);
+ }
 
 /* 容器样式 */
 .container {
@@ -111,6 +199,9 @@ body {
     border-radius: 5px;
     position: relative;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
 .nav-btn:hover {
@@ -511,12 +602,444 @@ body {
     }
 }
 
-/* 留言功能样式 */
-.message-section {
+/* 作品集样式 */
+.portfolio-section {
+    margin-top: 30px;
+    padding: 25px;
+    background-color: rgba(139, 69, 19, 0.03);
+    border: 1px solid rgba(139, 69, 19, 0.15);
+    border-radius: 8px;
+}
+
+.portfolio-section h2 {
+    color: #8b4513;
+    margin-bottom: 25px;
+    font-family: 'Special Elite', 'Courier New', monospace;
+    text-align: center;
+    font-size: 28px;
+    border-bottom: 2px solid #d4b89a;
+    padding-bottom: 10px;
+}
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
     margin-top: 20px;
+}
+
+.portfolio-item {
+    background-color: #f9f6ed;
+    border: 1px solid #d4b89a;
+    border-radius: 8px;
     padding: 20px;
-    background-color: rgba(139, 69, 19, 0.05);
-    border: 1px solid rgba(139, 69, 19, 0.2);
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.portfolio-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-color: #8b4513;
+}
+
+.portfolio-item h3 {
+    color: #8b4513;
+    font-family: 'Special Elite', 'Courier New', monospace;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.portfolio-item p {
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.portfolio-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.portfolio-tag {
+    background-color: #e8dcc8;
+    color: #8b4513;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.portfolio-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.portfolio-link {
+    padding: 8px 16px;
+    background-color: #8b4513;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    font-family: 'Courier New', 'Courier Prime', monospace;
+}
+
+.portfolio-link:hover {
+    background-color: #6d360f;
+    transform: translateY(-2px);
+}
+
+.portfolio-link.secondary {
+    background-color: #d4b89a;
+    color: #333;
+}
+
+.portfolio-link.secondary:hover {
+     background-color: #c4a989;
+ }
+ 
+ /* 作品集卡片样式 */
+ .projects-container {
+     margin-top: 20px;
+ }
+ 
+ .projects-header {
+     text-align: center;
+     margin-bottom: 30px;
+ }
+ 
+ .projects-title {
+     font-family: 'Special Elite', 'Courier New', monospace;
+     color: #8b4513;
+     font-size: 32px;
+     margin-bottom: 10px;
+ }
+ 
+ .projects-intro {
+     color: #666;
+     font-size: 16px;
+     margin-bottom: 20px;
+ }
+ 
+ .projects-filters {
+     display: flex;
+     justify-content: center;
+     gap: 15px;
+     margin-top: 20px;
+     flex-wrap: wrap;
+ }
+ 
+ .filter-btn {
+     background-color: #e8dcc8;
+     border: 2px solid #a67c52;
+     color: #333;
+     padding: 8px 16px;
+     font-family: 'Courier New', monospace;
+     font-size: 14px;
+     cursor: pointer;
+     border-radius: 20px;
+     transition: all 0.3s ease;
+ }
+ 
+ .filter-btn:hover {
+     background-color: #d4b89a;
+     transform: translateY(-2px);
+ }
+ 
+ .filter-btn.active {
+     background-color: #8b4513;
+     color: white;
+     border-color: #8b4513;
+ }
+ 
+ .projects-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+     gap: 25px;
+     margin-top: 20px;
+ }
+ 
+ .project-card {
+     perspective: 1000px;
+     height: 280px;
+     cursor: pointer;
+ }
+ 
+ .project-card-inner {
+     position: relative;
+     width: 100%;
+     height: 100%;
+     transition: transform 0.6s;
+     transform-style: preserve-3d;
+ }
+ 
+ .project-card.flipped .project-card-inner {
+     transform: rotateY(180deg);
+ }
+ 
+ .project-card-front,
+ .project-card-back {
+     position: absolute;
+     width: 100%;
+     height: 100%;
+     backface-visibility: hidden;
+     border-radius: 8px;
+     padding: 20px;
+     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .project-card-front {
+     background-color: #f9f6ed;
+     border: 1px solid #d4b89a;
+     display: flex;
+     flex-direction: column;
+ }
+ 
+ .project-card-back {
+     background-color: #8b4513;
+     color: white;
+     transform: rotateY(180deg);
+     overflow-y: auto;
+ }
+ 
+ .project-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: flex-start;
+     margin-bottom: 10px;
+ }
+ 
+ .project-name {
+     font-family: 'Special Elite', 'Courier New', monospace;
+     color: #8b4513;
+     font-size: 20px;
+     margin: 0;
+     flex: 1;
+ }
+ 
+ .project-period {
+     background-color: #8b4513;
+     color: white;
+     padding: 4px 8px;
+     border-radius: 12px;
+     font-size: 12px;
+     font-weight: bold;
+ }
+ 
+ .project-role {
+     color: #666;
+     font-size: 14px;
+     margin-bottom: 15px;
+     font-style: italic;
+ }
+ 
+ .project-description {
+     color: #333;
+     font-size: 14px;
+     line-height: 1.5;
+     margin-bottom: 15px;
+     flex: 1;
+ }
+ 
+ .project-technologies {
+     margin-top: auto;
+ }
+ 
+ .tech-label {
+     font-weight: bold;
+     color: #8b4513;
+     font-size: 12px;
+ }
+ 
+ .tech-list {
+     color: #666;
+     font-size: 12px;
+ }
+ 
+ .project-flip-hint {
+     text-align: right;
+     color: #8b4513;
+     font-size: 12px;
+     margin-top: 10px;
+     font-style: italic;
+ }
+ 
+ .project-details h4 {
+     color: #f0e6d6;
+     margin-bottom: 10px;
+     font-family: 'Special Elite', 'Courier New', monospace;
+ }
+ 
+ .project-outcomes {
+     background-color: rgba(255, 255, 255, 0.1);
+     padding: 10px;
+     border-radius: 5px;
+     margin-bottom: 15px;
+     font-size: 14px;
+     line-height: 1.4;
+ }
+ 
+ .project-highlights ul {
+     list-style: none;
+     padding-left: 0;
+ }
+ 
+ .project-highlights li {
+     position: relative;
+     padding-left: 20px;
+     margin-bottom: 8px;
+     font-size: 14px;
+ }
+ 
+ .project-highlights li:before {
+     content: "★";
+     position: absolute;
+     left: 0;
+     color: #f0e6d6;
+ }
+ 
+ .project-flip-back {
+     text-align: left;
+     color: #f0e6d6;
+     font-size: 12px;
+     margin-top: 15px;
+     font-style: italic;
+     cursor: pointer;
+ }
+ 
+ .no-projects {
+     text-align: center;
+     color: #666;
+     font-size: 16px;
+     padding: 40px;
+ }
+ 
+ /* 独立作品集页面样式 */
+ .page-subtitle {
+     text-align: center;
+     color: #666;
+     font-size: 18px;
+     margin-top: 10px;
+     font-style: italic;
+ }
+ 
+ .back-to-home {
+     text-align: center;
+     margin: 20px 0;
+ }
+ 
+ .back-btn {
+     display: inline-block;
+     background-color: #e8dcc8;
+     border: 2px solid #a67c52;
+     color: #333;
+     padding: 10px 20px;
+     text-decoration: none;
+     font-family: 'Courier New', monospace;
+     font-size: 14px;
+     border-radius: 5px;
+     transition: all 0.3s ease;
+ }
+ 
+ .back-btn:hover {
+     background-color: #d4b89a;
+     transform: translateY(-2px);
+     text-decoration: none;
+ }
+ 
+ .projects-main {
+     margin-top: 30px;
+ }
+ 
+ .loading-state {
+     text-align: center;
+     padding: 60px 20px;
+     color: #666;
+ }
+ 
+ .loading-spinner {
+     width: 40px;
+     height: 40px;
+     border: 4px solid #e8dcc8;
+     border-top: 4px solid #8b4513;
+     border-radius: 50%;
+     animation: spin 1s linear infinite;
+     margin: 0 auto 20px;
+ }
+ 
+ @keyframes spin {
+     0% { transform: rotate(0deg); }
+     100% { transform: rotate(360deg); }
+ }
+ 
+ .empty-state {
+     text-align: center;
+     padding: 60px 20px;
+     color: #666;
+     font-size: 16px;
+ }
+ 
+ .projects-footer {
+     text-align: center;
+     margin-top: 40px;
+     padding-top: 20px;
+     border-top: 1px solid #d4b89a;
+     color: #666;
+     font-size: 14px;
+ }
+ 
+ /* 响应式设计 */
+ @media (max-width: 768px) {
+     .projects-grid {
+         grid-template-columns: 1fr;
+         gap: 20px;
+     }
+     
+     .project-card {
+         height: 250px;
+     }
+     
+     .projects-filters {
+         gap: 10px;
+     }
+     
+     .filter-btn {
+         padding: 6px 12px;
+         font-size: 13px;
+     }
+ }
+ 
+ @media (max-width: 480px) {
+     .projects-title {
+         font-size: 24px;
+     }
+     
+     .project-card {
+         height: 220px;
+     }
+     
+     .project-card-front,
+     .project-card-back {
+         padding: 15px;
+     }
+     
+     .project-name {
+         font-size: 18px;
+     }
+ }
+ 
+ /* 留言功能样式 */
+ .message-section {
+     margin-top: 20px;
+     padding: 20px;
+     background-color: rgba(139, 69, 19, 0.05);
+     border: 1px solid rgba(139, 69, 19, 0.2);
     border-radius: 5px;
 }
 

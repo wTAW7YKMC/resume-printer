@@ -392,6 +392,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (!resumeData) return;
         
+        // 特殊处理作品集部分
+        if (section === 'projects') {
+            showProjectsContent();
+            return;
+        }
+        
         // 使用ContentRenderer格式化内容
         const content = contentRenderer.render(section, resumeData);
         
@@ -406,6 +412,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 messageManager.showMessageSection();
             }, Math.max(typingTime, 2000)); // 至少等待2秒
         }
+    }
+    
+    // 显示作品集内容
+    function showProjectsContent() {
+        if (!resumeData.projects) return;
+        
+        // 创建作品集管理器实例
+        const projectsManager = new ProjectsManager({
+            soundManager: soundManager,
+            typewriter: contentTypewriter
+        });
+        
+        // 渲染作品集内容
+        const projectsHTML = projectsManager.renderProjects(resumeData.projects);
+        
+        // 直接显示HTML内容，不使用打字机效果
+        contentText.innerHTML = projectsHTML;
+        
+        // 初始化作品集交互功能
+        setTimeout(() => {
+            projectsManager.init();
+        }, 100);
     }
     
     // 打字机效果 - 使用新的Typewriter类

@@ -25,6 +25,30 @@
                 console.log('跳过开屏页面，直接显示主页');
             }
         })();
+
+        // 页面过渡效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有页面跳转链接添加平滑过渡
+            const pageLinks = document.querySelectorAll('a[href]');
+            
+            pageLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // 只处理内部链接
+                    const href = this.getAttribute('href');
+                    if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:')) {
+                        e.preventDefault();
+                        
+                        // 添加页面过渡效果
+                        document.body.classList.add('page-transition');
+                        
+                        // 延迟跳转，等待动画完成
+                        setTimeout(() => {
+                            window.location.href = href;
+                        }, 400);
+                    }
+                });
+            });
+        });
     </script>
 </head>
 <body>
@@ -47,7 +71,7 @@
             <nav id="navigation" class="navigation">
                 <button class="nav-btn active" data-section="about">About</button>
                 <button class="nav-btn" data-section="experience">Experience</button>
-                <button class="nav-btn projects-highlight" data-section="projects">Projects</button>
+                <a href="projects.html" class="nav-btn projects-highlight">Projects</a>
                 <button class="nav-btn" data-section="skills">Skills</button>
                 <button class="nav-btn" data-section="contact">Contact</button>
             </nav>
@@ -155,6 +179,7 @@
     <script src="js/messageManager.js?v=20250410"></script>
     <script src="js/localMessageManager.js?v=20250410"></script>
     <script src="js/deepseek.js?v=20250410"></script>
+    <script src="js/projectsManager.js?v=20250410"></script>
     <script src="js/main.js?v=20250410"></script>
 </body>
 </html>
