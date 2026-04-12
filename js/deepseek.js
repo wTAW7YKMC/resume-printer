@@ -1,8 +1,8 @@
 // DeepSeek AI助手 - 集成到个人简历网站
 (function() {
-    // DeepSeek API配置
-    const DEEPSEEK_API_KEY = 'sk-pyqoijjcftrgokxzrotgdlkgctqeqpsrfwtonkfbtpvjbqaq';
-    const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
+    // 硅基流动 API配置（通过硅基流动调用DeepSeek）
+    const SILICONFLOW_API_KEY = 'sk-pyqoijjcftrgokxzrotgdlkgctqeqpsrfwtonkfbtpvjbqaq';
+    const SILICONFLOW_API_URL = 'https://api.siliconflow.cn/v1/chat/completions';
     
     // DOM元素
     let chatContainer = null;
@@ -84,7 +84,7 @@
         
         const typingId = addMessage('正在思考...', 'ai', true);
         
-        callDeepSeekAPI(message, typingId);
+        callSiliconFlowAPI(message, typingId);
     }
     
     // 添加消息到聊天容器
@@ -105,17 +105,17 @@
         return isTyping ? 'typingIndicator' : null;
     }
     
-    // 调用DeepSeek API
-    async function callDeepSeekAPI(userMessage, typingId) {
+    // 调用硅基流动 API（代理DeepSeek）
+    async function callSiliconFlowAPI(userMessage, typingId) {
         try {
-            const response = await fetch(DEEPSEEK_API_URL, {
+            const response = await fetch(SILICONFLOW_API_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+                    'Authorization': `Bearer ${SILICONFLOW_API_KEY}`
                 },
                 body: JSON.stringify({
-                    model: 'deepseek-chat',
+                    model: 'deepseek-ai/DeepSeek-V3',
                     messages: [
                         {
                             role: 'system',
