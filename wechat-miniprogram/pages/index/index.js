@@ -4,7 +4,7 @@ Page({
     typedText: '',
     fullText: "Hi, I'm Becky!",
     isTyping: true,
-    currentSection: 'personal', // 当前显示的部分：personal, work, education, skills
+    currentSection: 'personal', // 当前显示的部分：personal, work, skills
     sectionContent: {}, // 存储各板块的打字机内容
     isSectionTyping: false // 标记板块内容是否正在打字
   },
@@ -111,17 +111,6 @@ Page({
     } else if (section === 'work' && resumeData && resumeData.workExperience) {
       resumeData.workExperience.forEach((item, index) => {
         content += `${item.company}\n${item.position} (${item.startDate} - ${item.endDate})\n${item.description}\n\n`
-      })
-      
-      // 添加联系方式
-      const contactItems = resumeData.personalInfo.contact.filter(item => item.type === 'email' || item.type === 'phone')
-      contactItems.forEach(item => {
-        const label = item.type === 'email' ? 'Email:' : 'Phone:'
-        content += `${label} ${item.value}\n`
-      })
-    } else if (section === 'education' && resumeData && resumeData.education) {
-      resumeData.education.forEach((item, index) => {
-        content += `${item.school} - ${item.major}\n${item.degree} (${item.period})\n${item.description}\n\n`
       })
       
       // 添加联系方式

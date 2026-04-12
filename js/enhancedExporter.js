@@ -86,7 +86,7 @@ class EnhancedExporter {
             
             // 渲染所有内容
             this.updateLoadingProgress(40, '正在渲染所有内容...');
-            const sections = ['about', 'experience', 'education', 'skills', 'projects', 'contact'];
+            const sections = ['about', 'experience', 'skills', 'projects', 'contact'];
             sections.forEach(section => {
                 const sectionContent = contentRenderer.render(section, data);
                 const sectionDiv = document.createElement('div');
@@ -267,7 +267,7 @@ class EnhancedExporter {
         try {
             // 渲染所有内容
             this.updateLoadingProgress(70, '正在读取所有内容...');
-            const sections = ['about', 'experience', 'education', 'skills', 'projects', 'contact'];
+            const sections = ['about', 'experience', 'skills', 'projects', 'contact'];
             let fullContent = `<h1>${this.title}</h1>`;
             
             sections.forEach(section => {
@@ -378,7 +378,7 @@ class EnhancedExporter {
             
             // 渲染所有内容
             this.updateLoadingProgress(70, '正在读取所有内容...');
-            const sections = ['about', 'experience', 'education', 'skills', 'projects', 'contact'];
+            const sections = ['about', 'experience', 'skills', 'projects', 'contact'];
             let fullContent = `${this.title}\n${'='.repeat(this.title.length)}\n\n`;
             
             sections.forEach(section => {
@@ -506,7 +506,7 @@ class EnhancedExporter {
         const titles = {
             about: '个人简介',
             experience: '工作经历',
-            education: '教育经历',
+
             skills: '专业技能',
             projects: '项目经历',
             contact: '联系方式'

@@ -30,8 +30,6 @@ class ContentRenderer {
                 return this.renderAbout(data.personalInfo);
             case 'experience':
                 return this.renderExperience(data.workExperience);
-            case 'education':
-                return this.renderEducation(data.education);
             case 'skills':
                 return this.renderSkills(data.skills);
             case 'projects':
@@ -80,20 +78,6 @@ class ContentRenderer {
         content += `职位：干事\n`;
         content += `核心工作：\n`;
         content += `参与统筹 "创新杯""品牌策划赛""能源经济大赛" 等科创赛事，负责宣传推广、师生对接、评审流程把控；\n\n`;
-        
-        return content;
-    }
-    
-    /**
-     * 渲染教育经历部分
-     * @param {Array} education - 教育经历数组
-     * @returns {string} 格式化后的内容
-     */
-    renderEducation(education) {
-        // 按照用户指定的格式渲染Education部分
-        let content = `武汉理工大学 ｜ 经济学院 ｜ 经济学专业 ｜ 2024.09 - 至今\n`;
-        content += `- 核心课程：微观经济学、宏观经济学、统计学、货币金融学；\n`;
-        content += `- 成绩：专业前30%\n\n`;
         
         return content;
     }

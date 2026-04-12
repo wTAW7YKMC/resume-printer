@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const fromSplash = sessionStorage.getItem('fromSplash') === 'true';
         
         // 初始化触摸导航
-        const resumeSections = ['about', 'experience', 'education', 'skills', 'projects', 'contact'];
+        const resumeSections = ['about', 'experience', 'skills', 'projects', 'contact'];
         touchNavigation = new TouchNavigation(
             document.querySelector('.paper-container'),
             resumeSections,
