@@ -205,20 +205,7 @@ class ProjectsManager {
         }
         
         let html = `
-            <div class="projects-container">
-                <div class="projects-header">
-                    <h2 class="projects-title">我的作品集</h2>
-                    <p class="projects-intro">探索我的创意项目与实践成果</p>
-                    
-                    <div class="projects-filters">
-                        <button class="filter-btn active" data-filter="all">全部</button>
-                        <button class="filter-btn" data-filter="Figma">设计</button>
-                        <button class="filter-btn" data-filter="React">开发</button>
-                        <button class="filter-btn" data-filter="数据分析">分析</button>
-                    </div>
-                </div>
-                
-                <div class="projects-grid">
+            <div class="projects-grid">
         `;
         
         projects.forEach((project, index) => {
@@ -226,7 +213,6 @@ class ProjectsManager {
         });
         
         html += `
-                </div>
             </div>
         `;
         
