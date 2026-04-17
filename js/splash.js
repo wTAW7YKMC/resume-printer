@@ -104,18 +104,18 @@ document.addEventListener('DOMContentLoaded', function() {
         navigateToMain();
     }
     
-    // 导航到主页
+    // 导航到登录页面
     function navigateToMain() {
     // 设置从开屏页面跳转的标记
     sessionStorage.setItem('fromSplash', 'true');
-    
+
     // 添加淡出效果
     document.body.style.transition = 'opacity 0.3s ease-out';
     document.body.style.opacity = '0';
-    
+
     // 延迟跳转，等待淡出效果完成
     setTimeout(() => {
-        window.location.href = 'index.html?showSplash=false';
+        window.location.href = 'login.html';
     }, 300);
 }
     
