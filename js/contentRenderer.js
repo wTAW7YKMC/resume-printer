@@ -50,15 +50,37 @@ class ContentRenderer {
         if (!personalInfo) {
             return '个人信息不可用';
         }
-        
-        // 按照用户指定的格式渲染About部分
-        let content = `姓名： 喻贝贝（Becky）\n\n`;
-        content += `院校：武汉理工大学\n\n`;
-        content += `学院：经济学院\n\n`;
-        content += `专业：智能经济\n\n`;
-        content += `个人标签：对宏观经济、数据分析充满热情的经济学学习者，擅长将理论知识应用于实践，曾参与校园经济调研与金融模拟竞赛，期待在经济领域探索更多可能性。\n\n`;
-        content += `个人宣言：风萧萧兮易水寒\n\n`;
-        
+
+        // 使用云端数据库的动态数据
+        let content = '';
+
+        if (personalInfo.name) {
+            content += `姓名：${personalInfo.name}\n\n`;
+        }
+
+        if (personalInfo.title) {
+            content += `职位/身份：${personalInfo.title}\n\n`;
+        }
+
+        if (personalInfo.location) {
+            const locParts = personalInfo.location.split(' ');
+            if (locParts.length >= 1) content += `院校：${locParts[0]}\n\n`;
+            if (locParts.length >= 2) content += `学院：${locParts.slice(1).join(' ')}\n\n`;
+        }
+
+        if (personalInfo.tagline) {
+            content += `个人标签：${personalInfo.tagline}\n\n`;
+        } else {
+            content += `个人标签：暂无简介\n\n`;
+        }
+
+        if (personalInfo.email || personalInfo.phone) {
+            content += `联系方式：`;
+            if (personalInfo.email) content += `${personalInfo.email}`;
+            if (personalInfo.phone) content += ` | ${personalInfo.phone}`;
+            content += '\n\n';
+        }
+
         return content;
     }
     

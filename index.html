@@ -171,7 +171,23 @@
     <!-- JavaScript 文件 -->
     <script src="js/typewriter.js?v=20250410"></script>
     <script src="js/dataFetcher.js?v=20250410"></script>
-    <script src="js/contentRenderer.js?v=20250410"></script>
+
+    <!-- Supabase 云数据库配置（自动加载） -->
+    <script>
+        // 自动设置 Supabase 云数据库配置
+        (function() {
+            if (!localStorage.getItem('supabase_url')) {
+                localStorage.setItem('supabase_url', 'https://crqwokrpcwvvsibcukkh.supabase.co');
+            }
+            if (!localStorage.getItem('supabase_key')) {
+                localStorage.setItem('supabase_key', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNycXdva3JwY3d2dnNpYmN1a2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1ODEyNjAsImV4cCI6MjA5MjE1NzI2MH0.J-SsRlUXHrmfxasPlkFl70IXf-BXs_f5XvaeQEGNe8g');
+            }
+            console.log('✅ Supabase 云数据库配置已就绪');
+        })();
+    </script>
+    <script src="js/supabase-client.js?v=20250419"></script>
+    <script src="js/supabase-dataLoader.js?v=20250419"></script>
+    <script src="js/contentRenderer.js?v=20250419b"></script>
     <script src="js/soundManager.js?v=20250410"></script>
     <script src="js/pdfExporter.js?v=20250410"></script>
     <script src="js/enhancedExporter.js?v=20250410"></script>
@@ -180,6 +196,6 @@
     <script src="js/localMessageManager.js?v=20250410"></script>
     <script src="js/deepseek.js?v=20250410"></script>
     <script src="js/projectsManager.js?v=20250410"></script>
-    <script src="js/main.js?v=20250410"></script>
+    <script src="js/main.js?v=20250419b"></script>
 </body>
 </html>

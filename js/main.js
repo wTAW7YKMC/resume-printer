@@ -1,3 +1,64 @@
+// ========== Supabase 云数据库直连器 ==========
+const SUPABASE_CLOUD_URL = 'https://crqwokrpcwvvsibcukkh.supabase.co';
+const SUPABASE_CLOUD_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNycXdva3JwY3d2dnNpYmN1a2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1ODEyNjAsImV4cCI6MjA5MjE1NzI2MH0.J-SsRlUXHrmfxasPlkFl70IXf-BXs_f5XvaeQEGNe8g';
+
+async function loadFromSupabaseCloud() {
+    const base = SUPABASE_CLOUD_URL + '/rest/v1';
+    const headers = {
+        'apikey': SUPABASE_CLOUD_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_CLOUD_KEY,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        console.log('☁️ 正在从 Supabase 云数据库加载数据...');
+
+        // 并行获取所有数据
+        const [piRes, eduRes, workRes, projRes, skillsRes] = await Promise.all([
+            fetch(base + '/personal_info?limit=1&order=created_at.desc', { headers }),
+            fetch(base + '/education?order=sort_order.asc,created_at.asc', { headers }),
+            fetch(base + '/work_experience?order=sort_order.asc,created_at.asc', { headers }),
+            fetch(base + '/projects?order=sort_order.asc,created_at.asc', { headers }),
+            fetch(base + '/skills?order=category,sort_order.asc,created_at.asc', { headers })
+        ]);
+
+        // 解析 JSON
+        const personalInfoArr = await piRes.json();
+        const education = await eduRes.json();
+        const workExperience = await workRes.json();
+        const projects = await projRes.json();
+        const allSkills = await skillsRes.json();
+
+        // 处理个人信息
+        const personalInfo = personalInfoArr && personalInfoArr.length > 0 ? personalInfoArr[0] : null;
+
+        // 处理技能分组
+        const skills = { design: [], development: [], other: [] };
+        if (allSkills && Array.isArray(allSkills)) {
+            allSkills.forEach(function(s) {
+                if (skills[s.category]) skills[s.category].push(s);
+            });
+        }
+
+        console.log('✅ 云数据库加载成功！');
+
+        return {
+            code: 200,
+            message: 'success',
+            data: {
+                personalInfo: personalInfo,
+                education: education || [],
+                workExperience: workExperience || [],
+                projects: projects || [],
+                skills: skills
+            }
+        };
+    } catch (error) {
+        console.error('❌ 云数据库加载失败:', error.message);
+        return null;
+    }
+}
+
 // 导航到开屏页面
 function navigateToSplash() {
     console.log('navigateToSplash函数被调用');
@@ -36,14 +97,31 @@ document.addEventListener('DOMContentLoaded', function() {
     let isMuted = false;
     let currentSection = 'about';
     let touchNavigation = null;
-    
-    // 初始化数据获取器和内容渲染器
-    const dataFetcher = new DataFetcher({
-        dataSource: 'resume-data.json',
-        cacheExpiry: 24 * 60 * 60 * 1000, // 24小时
-        cacheStrategy: 'cache-first',
-        useLocalFallback: true
-    });
+
+    // 智能数据获取器：优先使用 Supabase 云数据库
+    let dataFetcher;
+
+    // Supabase 云数据库配置（直接写入）
+    const SUPABASE_URL = 'https://crqwokrpcwvvsibcukkh.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNycXdva3JwY3d2dnNpYmN1a2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1ODEyNjAsImV4cCI6MjA5MjE1NzI2MH0.J-SsRlUXHrmfxasPlkFl70IXf-BXs_f5XvaeQEGNe8g';
+
+    if (typeof window.SupabaseDataLoader !== 'undefined') {
+        console.log('🌩️ 使用 Supabase 云数据库');
+        dataFetcher = new window.SupabaseDataLoader({
+            url: SUPABASE_URL,
+            anonKey: SUPABASE_KEY,
+            fallbackToJSON: true
+        });
+    } else {
+        console.log('💻 使用本地数据源（SupabaseDataLoader未加载）');
+        dataFetcher = new DataFetcher({
+            dataSource: 'http://localhost:3001/api/resume',
+            cacheExpiry: 24 * 60 * 60 * 1000,
+            cacheStrategy: 'network-first',
+            useLocalFallback: true,
+            isApiMode: true
+        });
+    }
     
     const contentRenderer = new ContentRenderer();
     
@@ -281,10 +359,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             
-            // 如果没有预加载数据，则正常加载
+            // 如果没有预加载数据，则正常加载（优先使用云数据库）
             if (!resumeData) {
-                console.log('loadResumeData: No preloaded data, loading from network');
-                resumeData = await dataFetcher.loadData();
+                console.log('loadResumeData: No preloaded data, loading from cloud database...');
+
+                // 优先从 Supabase 云数据库加载
+                var cloudResult = await loadFromSupabaseCloud();
+
+                if (cloudResult && cloudResult.code === 200 && cloudResult.data) {
+                    resumeData = cloudResult.data;
+                    console.log('loadResumeData: 云数据库数据加载成功！');
+                    console.log('📦 从云端获取的个人信息:', JSON.stringify(resumeData.personalInfo, null, 2));
+                    console.log('📦 从云端获取的教育经历数量:', resumeData.education ? resumeData.education.length : 0);
+                } else {
+                    // 云数据库失败，回退到本地数据源
+                    console.log('loadResumeData: 云数据库失败，回退到本地数据源');
+                    resumeData = await dataFetcher.loadData();
+                }
+
                 console.log('loadResumeData: Data loaded successfully');
             } else {
                 console.log('loadResumeData: Using preloaded data');
