@@ -1,0 +1,15 @@
+/* pages/simple/simple.wxss */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f5f1e6; /* 添加浅色背景 */
+}
+
+text {
+  font-size: 24px;
+  color: #333;
+  font-weight: bold; /* 加粗文本以提高可见性 */
+}

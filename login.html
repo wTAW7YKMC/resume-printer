@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Becky's Resume - 登录</title>
+    <link rel="stylesheet" href="css/login-style.css?v=20250417">
+    <!-- 异步加载Google Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap"></noscript>
+</head>
+<body>
+    <div class="login-container">
+        <!-- 打字机机身装饰 -->
+        <div class="typewriter-body">
+            <div class="typewriter-roller"></div>
+            <div class="typewriter-keys">
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+            </div>
+        </div>
+
+        <!-- 纸张区域 -->
+        <div class="paper-container">
+            <!-- 标题区域 -->
+            <header class="header">
+                <h1 id="main-title" class="main-title">
+                    <span id="title-text">Welcome Back</span><span class="cursor">|</span>
+                </h1>
+                <p class="subtitle">请选择您的登录方式</p>
+            </header>
+
+            <!-- 登录表单区域 -->
+            <main class="login-content">
+                <!-- 手机号登录表单 -->
+                <div id="phone-login" class="login-form active">
+                    <form id="phone-form" class="form-container">
+                        <div class="input-group">
+                            <label for="phone-input" class="input-label">手机号码</label>
+                            <input type="tel" id="phone-input" class="input-field" placeholder="请输入手机号码" maxlength="11" autocomplete="tel">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="code-input" class="input-label">验证码</label>
+                            <div class="code-input-wrapper">
+                                <input type="text" id="code-input" class="input-field code-field" placeholder="请输入验证码" maxlength="6" autocomplete="one-time-code">
+                                <button type="button" id="send-code-btn" class="send-code-btn">获取验证码</button>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="phone-submit" class="submit-btn">
+                            <span class="btn-text">登 录</span>
+                            <span class="btn-arrow">→</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 装饰性分隔线 -->
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-symbol">✦</div>
+                    <div class="divider-line"></div>
+                </div>
+
+                <!-- 游客登录按钮 -->
+                <div class="guest-login-section">
+                    <button id="guest-login-btn" class="guest-btn">
+                        <span class="btn-icon">👤</span>
+                        <span class="btn-text">游客访问</span>
+                        <span class="btn-hint">无需注册</span>
+                    </button>
+                    <p class="guest-hint">以游客身份浏览简历内容</p>
+                </div>
+            </main>
+
+            <!-- 页脚信息 -->
+            <footer class="login-footer">
+                <p class="footer-text">登录即表示同意我们的服务条款</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- 背景装饰 -->
+    <div class="background-elements">
+        <div class="floating-element elem1"></div>
+        <div class="floating-element elem2"></div>
+        <div class="floating-element elem3"></div>
+    </div>
+
+    <!-- JavaScript 文件 -->
+    <script src="js/login.js?v=20250417"></script>
+</body>
+</html>

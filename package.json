@@ -1,0 +1,1 @@
+{"name": "resume-printer", "version": "1.0.0", "description": "复古打字机风格个人简历网站 - 带数据库后端", "main": "server.js", "scripts": {"start": "node server.js", "dev": "node api-server.js"}, "keywords": ["resume", "portfolio", "typewriter"], "author": "Becky", "license": "MIT", "dependencies": {"express": "^4.18.2", "sqlite3": "^5.1.6", "cors": "^2.8.5", "body-parser": "^1.20.2"}}

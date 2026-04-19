@@ -1,0 +1,12 @@
+<!-- 解决中文乱码问题的模板 -->
+<template name="fix-encoding">
+  <view class="fix-encoding-container">
+    <text class="fix-encoding-text">{{content}}</text>
+  </view>
+</template>
+
+<!-- 使用说明：
+1. 在需要显示中文的页面中引入此模板
+2. 使用方式：<template is="fix-encoding" data="{{content: '你的中文内容'}}"></template>
+3. 确保在对应的WXSS文件中引入fix-encoding.wxss样式
+-->

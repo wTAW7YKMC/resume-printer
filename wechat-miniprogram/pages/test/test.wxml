@@ -1,0 +1,30 @@
+<!--pages/test/test.wxml-->
+<view class="container">
+  <view class="title">数据测试页面</view>
+  
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+  
+  <view wx:if="{{error}}" class="error">
+    <text>错误: {{error}}</text>
+  </view>
+  
+  <view wx:if="{{!loading && !error}}" class="content">
+    <view class="section">
+      <text class="section-title">个人信息:</text>
+      <text>{{resumeData.personalInfo.name}}</text>
+      <text>{{resumeData.personalInfo.title}}</text>
+    </view>
+    
+    <view class="section">
+      <text class="section-title">技能数据:</text>
+      <text wx:for="{{resumeData.skills}}" wx:key="category">
+        {{item.category}}: {{item.items.length}}项技能
+      </text>
+    </view>
+    
+    <view class="section">
+      <text class="section-title">工作经历:</text>
+      <text>{{resumeData.workExperience.length}}项工作经历</text>
+    </view>
+  </view>
+</view>

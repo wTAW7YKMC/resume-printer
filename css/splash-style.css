@@ -1,0 +1,396 @@
+/* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 基础样式 */
+body {
+    font-family: 'Courier New', 'Courier Prime', monospace;
+    background-color: #3e2723;
+    color: #212121;
+    line-height: 1.6;
+    overflow-x: hidden;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 开屏页面容器 */
+.splash-container {
+    max-width: 800px;
+    width: 90%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+    animation: fadeIn 1.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 打字机机身装饰 */
+.typewriter-body {
+    background-color: #3e2723;
+    height: 40px;
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    margin-bottom: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 打字机滚筒 */
+.typewriter-roller {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    width: 10px;
+    height: 10px;
+    background-color: #555;
+    border-radius: 50%;
+    animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 打字机按键 */
+.typewriter-keys {
+    display: flex;
+    gap: 5px;
+    margin-left: auto;
+    margin-right: 15px;
+}
+
+.key {
+    width: 12px;
+    height: 12px;
+    background-color: #8b7355;
+    border-radius: 2px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+    animation: keyPress 3s ease-in-out infinite;
+}
+
+.key:nth-child(2) { animation-delay: 0.2s; }
+.key:nth-child(3) { animation-delay: 0.4s; }
+.key:nth-child(4) { animation-delay: 0.6s; }
+.key:nth-child(5) { animation-delay: 0.8s; }
+.key:nth-child(6) { animation-delay: 1s; }
+.key:nth-child(7) { animation-delay: 1.2s; }
+.key:nth-child(8) { animation-delay: 1.4s; }
+.key:nth-child(9) { animation-delay: 1.6s; }
+.key:nth-child(10) { animation-delay: 1.8s; }
+
+@keyframes keyPress {
+    0%, 90%, 100% { transform: translateY(0); }
+    95% { transform: translateY(2px); background-color: #a68b5b; }
+}
+
+/* 纸张容器 */
+.paper-container {
+    background-color: #f5f1e6; /* 米黄色打字纸 */
+    position: relative;
+    padding: 60px 40px;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    min-height: 500px;
+    
+    /* 添加纸张纹理 */
+    background-image: linear-gradient(rgba(139, 69, 19, 0.1) 1px, transparent 1px);
+    background-size: 100% 24px;
+    
+    /* 添加噪点效果 */
+    filter: contrast(105%) brightness(95%);
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 头部区域 */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* 主标题 */
+.main-title {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: 42px;
+    color: #8b4513;
+    margin-bottom: 15px;
+    display: inline-block;
+    position: relative;
+}
+
+/* 副标题 */
+.subtitle {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: 18px;
+    color: #a67c52;
+    margin-top: 10px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 2s forwards;
+}
+
+/* 光标效果 */
+.cursor {
+    animation: blink 1s step-end infinite;
+    color: #8b4513;
+    font-weight: bold;
+    margin-left: 2px;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* 简介内容区域 */
+.intro-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.intro-text {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #5d4037;
+    margin-bottom: 40px;
+    max-width: 600px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 3s forwards;
+}
+
+/* 装饰性分隔线 */
+.divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+    width: 100%;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 3.5s forwards;
+}
+
+.divider-line {
+    height: 1px;
+    background-color: #d4b89a;
+    flex: 1;
+    max-width: 150px;
+}
+
+.divider-symbol {
+    color: #a67c52;
+    font-size: 16px;
+    margin: 0 15px;
+}
+
+/* 进入按钮容器 */
+.enter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 4s forwards;
+}
+
+/* 进入按钮 */
+.enter-btn {
+    background-color: #e8dcc8;
+    border: 2px solid #a67c52;
+    color: #333;
+    padding: 12px 30px;
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.enter-btn:hover {
+    background-color: #d4b89a;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.enter-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-arrow {
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.enter-btn:hover .btn-arrow {
+    transform: translateX(5px);
+}
+
+.hint {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #a67c52;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+/* 页脚 */
+.splash-footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #a67c52;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 加载点动画 */
+.loading-dots {
+    display: flex;
+    gap: 5px;
+}
+
+.loading-dots span {
+    width: 8px;
+    height: 8px;
+    background-color: #a67c52;
+    border-radius: 50%;
+    animation: loadingDot 1.5s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(2) { animation-delay: 0.3s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes loadingDot {
+    0%, 60%, 100% { transform: scale(1); opacity: 0.7; }
+    30% { transform: scale(1.3); opacity: 1; }
+}
+
+/* 背景装饰元素 */
+.background-elements {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.floating-element {
+    position: absolute;
+    background-color: rgba(212, 184, 154, 0.1);
+    border-radius: 50%;
+}
+
+.elem1 {
+    width: 200px;
+    height: 200px;
+    top: 10%;
+    left: 10%;
+    animation: float 15s ease-in-out infinite;
+}
+
+.elem2 {
+    width: 150px;
+    height: 150px;
+    bottom: 15%;
+    right: 10%;
+    animation: float 12s ease-in-out infinite reverse;
+}
+
+.elem3 {
+    width: 100px;
+    height: 100px;
+    top: 60%;
+    left: 15%;
+    animation: float 18s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .splash-container {
+        width: 95%;
+        margin: 20px auto;
+    }
+    
+    .paper-container {
+        padding: 40px 20px;
+        min-height: 450px;
+    }
+    
+    .main-title {
+        font-size: 32px;
+    }
+    
+    .subtitle {
+        font-size: 16px;
+    }
+    
+    .intro-text {
+        font-size: 16px;
+    }
+    
+    .enter-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+    
+    .typewriter-keys {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 28px;
+    }
+    
+    .subtitle {
+        font-size: 14px;
+    }
+    
+    .intro-text {
+        font-size: 14px;
+    }
+    
+    .enter-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+    .divider-line {
+        max-width: 100px;
+    }
+}

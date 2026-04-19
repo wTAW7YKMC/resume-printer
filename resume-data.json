@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "siteTitle": "Becky's Resume",
+    "siteDescription": "Personal resume of Becky, an Intelligent Economics student passionate about macroeconomics and data analysis.",
+    "lastUpdated": "2025.12.14"
+  },
+  "personalInfo": {
+    "name": "喻贝贝（Becky）",
+    "title": "智能经济专业学生",
+    "tagline": "对宏观经济、数据分析充满热情的经济学学习者，擅长将理论知识应用于实践，曾参与校园经济调研与金融模拟竞赛，期待在经济领域探索更多可能性。\n\n个人宣言：风萧萧兮易水寒",
+    "location": "武汉理工大学 经济学院",
+    "email": "becky@example.com",
+    "phone": "+86 138 0000 0000",
+    "avatarUrl": "https://raw.githubusercontent.com/[your-username]/[your-repo]/main/assets/avatar.jpg",
+    "socialLinks": [
+      {
+        "platform": "GitHub",
+        "url": "https://github.com/becky",
+        "icon": "github-icon.svg"
+      },
+      {
+        "platform": "LinkedIn",
+        "url": "https://linkedin.com/in/becky",
+        "icon": "linkedin-icon.svg"
+      },
+      {
+        "platform": "Dribbble",
+        "url": "https://dribbble.com/becky",
+        "icon": "dribbble-icon.svg"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "武汉理工大学",
+      "degree": "经济学学士",
+      "major": "智能经济",
+      "period": "2020 - 2024",
+      "location": "武汉, 中国",
+      "achievements": [
+        "参与校园经济调研项目",
+        "参加金融模拟竞赛"
+      ]
+    }
+  ],
+  "workExperience": [
+    {
+      "company": "武汉理工大学经济学人协会",
+      "position": "办公室副部长",
+      "period": "荣誉：年度之星",
+      "location": "",
+      "description": "核心工作：\n策划并落地学术研讨、案例分享等活动，衔接专业知识与实践应用；\n负责活动流程协调、物料准备，责任心强、执行高效获评 \"年度之星\"。",
+      "highlights": []
+    },
+    {
+      "company": "武汉理工大学经济学院科学技术协会",
+      "position": "干事",
+      "period": "",
+      "location": "",
+      "description": "核心工作：\n参与统筹 \"创新杯\"\"品牌策划赛\"\"能源经济大赛\" 等科创赛事，负责宣传推广、师生对接、评审流程把控；",
+      "highlights": []
+    }
+  ],
+  "skills": {
+    "design": [
+      {"name": "UI/UX设计", "proficiency": 5},
+      {"name": "Figma", "proficiency": 5},
+      {"name": "Sketch", "proficiency": 4},
+      {"name": "用户研究", "proficiency": 4},
+      {"name": "原型设计", "proficiency": 5}
+    ],
+    "development": [
+      {"name": "HTML/CSS", "proficiency": 3},
+      {"name": "JavaScript", "proficiency": 3},
+      {"name": "React", "proficiency": 2}
+    ],
+    "other": [
+      {"name": "项目管理", "proficiency": 4},
+      {"name": "数据分析", "proficiency": 3},
+      {"name": "设计思维", "proficiency": 5}
+    ]
+  },
+  "projects": [
+    {
+      "name": "健康管理App",
+      "role": "主导设计师",
+      "period": "2023",
+      "description": "一款帮助用户跟踪日常健康活动的移动应用，通过数据可视化帮助用户了解自己的健康状况。",
+      "technologies": ["Figma", "React Native", "数据可视化"],
+      "outcomes": ["上线首月在iOS和Android平台获得1万+下载量", "App Store获得4.8星好评", "被知名健康媒体报道"]
+    },
+    {
+      "name": "智能家居控制平台",
+      "role": "产品设计师",
+      "period": "2022",
+      "description": "为智能家居设备打造的统一控制平台，支持多种设备类型的连接和管理。",
+      "technologies": ["Figma", "用户体验研究", "交互设计"],
+      "outcomes": ["简化了80%的设备配置流程", "用户满意度提升45%", "减少客户支持请求60%"]
+    },
+    {
+      "name": "氢动氨能创业项目",
+      "role": "核心成员",
+      "period": "2024-12",
+      "description": "经济学院创新杯创业类项目，结合智能经济思维优化项目逻辑框架，输出完整创业方案。",
+      "technologies": ["PowerPoint", "创业策划", "数据分析"],
+      "outcomes": ["校级优秀奖", "项目PPT设计与创业策划书撰写", "可行性分析与创意打磨"]
+    },
+    {
+      "name": "乐享余年养老项目",
+      "role": "核心成员",
+      "period": "2025-3",
+      "description": "基于武汉市情的老年公寓市场分析与城市嵌入式养老研究，运用市场分析方法整理调研数据。",
+      "technologies": ["实地调研", "数据分析", "PPT优化"],
+      "outcomes": ["校级铜奖", "武汉养老机构访谈与数据采集", "可视化报告输出"]
+    },
+    {
+      "name": "数字园区数字孪生",
+      "role": "产品策划",
+      "period": "2025-6",
+      "description": "车路云未来学习项目，运用Axure梳理产品需求，撰写基础策划方案，定义数字园区功能模块。",
+      "technologies": ["Axure", "产品策划", "智能经济"],
+      "outcomes": ["产品需求梳理", "功能模块定义", "实践经验积累"]
+    },
+    {
+      "name": "校园经济调研平台",
+      "role": "数据分析师",
+      "period": "2024",
+      "description": "为校园经济调研项目开发的数据分析平台，支持问卷收集、数据分析和可视化展示。",
+      "technologies": ["Excel", "数据分析", "可视化"],
+      "outcomes": ["提升调研效率50%", "数据准确性提高30%", "获得学院优秀项目奖"]
+    }
+  ]
+}

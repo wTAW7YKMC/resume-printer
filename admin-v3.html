@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简历数据管理系统</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { color: white; text-align: center; margin-bottom: 10px; font-size: 2.2em; }
+        .subtitle { text-align: center; color: rgba(255,255,255,0.9); margin-bottom: 25px; }
+
+        .config-section {
+            background: white; border-radius: 12px; padding: 25px;
+            margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .config-section h3 { color: #333; margin-bottom: 15px; }
+
+        input[type="text"], input[type="password"], select, textarea {
+            width: 100%; padding: 12px; border: 2px solid #e0e0e0;
+            border-radius: 8px; font-size: 14px; margin-bottom: 10px;
+            font-family: inherit;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; }
+
+        button {
+            padding: 12px 24px; border: none; border-radius: 8px;
+            cursor: pointer; font-size: 16px; font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+        .btn-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        .btn-danger { background: #ff6b6b; color: white; padding: 8px 16px; font-size: 14px; }
+        .btn-warning { background: #f093fb; color: white; padding: 8px 16px; font-size: 14px; }
+
+        .api-status {
+            background: #f8f9fa; border-left: 4px solid #667eea;
+            padding: 15px 20px; border-radius: 6px; margin-top: 15px;
+            display: none;
+        }
+        .status-dot { width: 12px; height: 12px; border-radius: 50%; background: #ccc; display: inline-block; margin-right: 10px; }
+        .status-dot.on { background: #38ef7d; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn {
+            padding: 12px 24px; background: rgba(255,255,255,0.9); border: none;
+            border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;
+            transition: all 0.3s ease; color: #333;
+        }
+        .tab-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .tab-btn.active { background: white; color: #667eea; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .tab-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .tab-content {
+            display: none; background: white; border-radius: 12px;
+            padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .tab-content.active { display: block; }
+
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: #555; font-size: 14px; }
+        textarea { resize: vertical; min-height: 80px; }
+
+        .form-group { margin-bottom: 18px; }
+        .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+
+        .data-list { margin-top: 25px; }
+        .data-item {
+            background: #f8f9fa; border-left: 4px solid #667eea;
+            padding: 18px; margin-bottom: 12px; border-radius: 8px;
+            display: flex; justify-content: space-between; align-items: flex-start;
+            transition: all 0.3s ease;
+        }
+        .data-item:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: translateX(5px); }
+        .data-item h3 { color: #333; margin-bottom: 6px; font-size: 17px; }
+        .data-item p { color: #666; font-size: 14px; line-height: 1.5; white-space: pre-line; }
+        .item-actions { display: flex; gap: 8px; flex-shrink: 0; margin-left: 15px; }
+
+        .status-msg {
+            padding: 12px 16px; border-radius: 8px; margin-bottom: 18px;
+            display: none; animation: slideIn 0.3s ease;
+        }
+        .status-msg.ok { background: #d4edda; color: #155724; display: block !important; border: 1px solid #c3e6cb; }
+        .status-msg.err { background: #f8d7da; color: #721c24; display: block !important; border: 1px solid #f5c6cb; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 15px; }
+        small { color: #888; font-size: 12px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>☁️ 简历数据管理系统</h1>
+    <p class="subtitle">基于 Supabase 云数据库 · 数据实时同步到云端</p>
+
+    <!-- 配置区域 -->
+    <div class="config-section" id="config-box">
+        <h3>🔗 第一步：配置连接</h3>
+        <div class="row">
+            <div>
+                <label>Project URL</label>
+                <input type="text" id="cfg-url" placeholder="https://xxxxx.supabase.co"
+                       value="https://crqwokrpcwvvsibcukkh.supabase.co">
+                <small>在 Supabase Dashboard → Settings → API</small>
+            </div>
+            <div>
+                <label>anon public key</label>
+                <input type="text" id="cfg-key" placeholder="eyJhbGci..."
+                       value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNycXdva3JwY3d2dnNpYmN1a2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1ODEyNjAsImV4cCI6MjA5MjE1NzI2MH0.J-SsRlUXHrmfxasPlkFl70IXf-BXs_f5XvaeQEGNe8g">
+                <small>同上位置的 anon public key</small>
+            </div>
+        </div>
+        <div style="margin-top:15px;">
+            <button class="btn-primary" id="btn-connect">🔌 连接数据库</button>
+            <button class="btn-success" id="btn-test" style="margin-left:10px;">🧪 测试连接</button>
+        </div>
+        <div class="api-status" id="conn-status">
+            <div><span class="status-dot" id="st-dot"></span><span id="st-text">未连接</span></div>
+        </div>
+    </div>
+
+    <!-- 标签页 -->
+    <div class="tabs" id="tabs-area">
+        <button class="tab-btn active" data-tab="personal" disabled>👤 个人信息</button>
+        <button class="tab-btn" data-tab="edu" disabled>🎓 教育经历</button>
+        <button class="tab-btn" data-tab="work" disabled>💼 工作经历</button>
+        <button class="tab-btn" data-tab="proj" disabled>🚀 项目经验</button>
+        <button class="tab-btn" data-tab="skill" disabled>⭐ 技能列表</button>
+    </div>
+
+    <!-- 个人信息 -->
+    <div id="tab-personal" class="tab-content active">
+        <h2>个人信息</h2>
+        <div class="status-msg" id="msg-personal"></div>
+        <input type="hidden" id="p-id">
+        <div class="row"><div class="form-group">
+            <label>姓名 *</label><input type="text" id="p-name" required placeholder="张三">
+        </div><div class="form-group">
+            <label>职位</label><input type="text" id="p-title" placeholder="前端工程师">
+        </div></div>
+        <div class="form-group">
+            <label>简介</label><textarea id="p-tagline" placeholder="简短介绍..."></textarea>
+        </div>
+        <div class="row"><div class="form-group">
+            <label>所在地</label><input type="text" id="p-location" placeholder="北京">
+        </div><div class="form-group">
+            <label>邮箱 *</label><input type="email" id="p-email" required placeholder="a@b.com">
+        </div></div>
+        <div class="form-group">
+            <label>电话</label><input type="tel" id="p-phone" placeholder="+86 138...">
+        </div>
+        <button class="btn-primary" style="width:100%" id="btn-save-p">💾 保存个人信息</button>
+    </div>
+
+    <!-- 教育经历 -->
+    <div id="tab-edu" class="tab-content">
+        <h2>教育经历</h2>
+        <div class="status-msg" id="msg-edu"></div>
+        <input type="hidden" id="e-id">
+        <div class="row"><div class="form-group">
+            <label>学校 *</label><input type="text" id="e-inst" required placeholder="北京大学">
+        </div><div class="form-group">
+            <label>学历</label><input type="text" id="e-deg" placeholder="学士/硕士">
+        </div></div>
+        <div class="row"><div class="form-group">
+            <label>专业</label><input type="text" id="e-major" placeholder="计算机">
+        </div><div class="form-group">
+            <label>时间</label><input type="text" id="e-period" placeholder="2018-2022">
+        </div></div>
+        <div class="btn-row">
+            <button class="btn-primary" id="btn-add-e">➕ 添加</button>
+            <button class="btn-warning" id="btn-e-upd" style="display:none">✏️ 更新</button>
+            <button class="btn-danger" id="btn-e-can" style="display:none">取消</button>
+        </div>
+        <div class="data-list" id="list-edu"></div>
+    </div>
+
+    <!-- 工作经历 -->
+    <div id="tab-work" class="tab-content">
+        <h2>工作经历</h2>
+        <div class="status-msg" id="msg-work"></div>
+        <input type="hidden" id="w-id">
+        <div class="row"><div class="form-group">
+            <label>公司 *</label><input type="text" id="w-comp" required placeholder="阿里巴巴">
+        </div><div class="form-group">
+            <label>职位</label><input type="text" id="w-pos" placeholder="高级前端">
+        </div><div class="form-group">
+            <label>时间</label><input type="text" id="w-period" placeholder="2022-至今">
+        </div></div>
+        <div class="form-group">
+            <label>描述</label><textarea id="w-desc" placeholder="工作内容..."></textarea>
+        </div>
+        <div class="btn-row">
+            <button class="btn-primary" id="btn-add-w">➕ 添加</button>
+            <button class="btn-warning" id="btn-w-upd" style="display:none">✏️ 更新</button>
+            <button class="btn-danger" id="btn-w-can" style="display:none">取消</button>
+        </div>
+        <div class="data-list" id="list-work"></div>
+    </div>
+
+    <!-- 项目 -->
+    <div id="tab-proj" class="tab-content">
+        <h2>项目经验</h2>
+        <div class="status-msg" id="msg-proj"></div>
+        <input type="hidden" id="pr-id">
+        <div class="row"><div class="form-group">
+            <label>项目名 *</label><input type="text" id="pr-name" required placeholder="电商平台">
+        </div><div class="form-group">
+            <label>角色</label><input type="text" id="pr-role" placeholder="前端负责人">
+        </div><div class="form-group">
+            <label>时间</label><input type="text" id="pr-period" placeholder="2023.01-06">
+        </div></div>
+        <div class="form-group">
+            <label>描述</label><textarea id="pr-desc" placeholder="项目介绍..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>技术栈（逗号分隔）</label><input type="text" id="pr-tech" placeholder="React, Node.js">
+        </div>
+        <div class="btn-row">
+            <button class="btn-primary" id="btn-add-pr">➕ 添加</button>
+            <button class="btn-warning" id="btn-pr-upd" style="display:none">✏️ 更新</button>
+            <button class="btn-danger" id="btn-pr-can" style="display:none">取消</button>
+        </div>
+        <div class="data-list" id="list-proj"></div>
+    </div>
+
+    <!-- 技能 -->
+    <div id="tab-skill" class="tab-content">
+        <h2>技能管理</h2>
+        <div class="status-msg" id="msg-skill"></div>
+        <input type="hidden" id="sk-id">
+        <div class="row"><div class="form-group">
+            <label>分类</label>
+            <select id="sk-cat">
+                <option value="design">设计</option>
+                <option value="development" selected>开发</option>
+                <option value="other">其他</option>
+            </select>
+        </div><div class="form-group">
+            <label>技能名 *</label><input type="text" id="sk-name" required placeholder="JavaScript">
+        </div><div class="form-group">
+            <label>熟练度 (1-5)</label><input type="number" id="sk-prof" min="1" max="5" value="3">
+        </div></div>
+        <div class="btn-row">
+            <button class="btn-primary" id="btn-add-sk">➕ 添加</button>
+            <button class="btn-warning" id="btn-sk-upd" style="display:none">✏️ 更新</button>
+            <button class="btn-danger" id="btn-sk-can" style="display:none">取消</button>
+        </div>
+        <div class="data-list" id="list-skill"></div>
+    </div>
+</div>
+
+<script>
+(function() {
+
+// ========== Supabase 客户端 ==========
+function SDB(url, key) {
+    this.url = url;
+    this.key = key;
+    this.base = url + '/rest/v1';
+}
+
+SDB.prototype.hdr = function() {
+    return {
+        'apikey': this.key,
+        'Authorization': 'Bearer ' + this.key,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+    };
+};
+
+SDB.prototype.req = async function(ep, opts) {
+    opts = opts || {};
+    var r = await fetch(this.base + ep, Object.assign({}, opts, {
+        headers: Object.assign({}, this.hdr(), opts.headers || {})
+    }));
+    if (!r.ok) {
+        var e = await r.json();
+        throw new Error(e.message || 'HTTP ' + r.status);
+    }
+    if (opts.method === 'DELETE') return {};
+    return await r.json();
+};
+
+SDB.prototype.getPI = async function() {
+    var d = await this.req('/personal_info?limit=1');
+    return d && d.length ? d[0] : null;
+};
+SDB.prototype.updPI = async function(id, o) {
+    o.updated_at = new Date().toISOString();
+    var d = await this.req('/personal_info?id=eq.' + id, { method: 'PATCH', body: JSON.stringify(o) });
+    return d && d.length ? d[0] : null;
+};
+
+SDB.prototype.getEdu = async function() {
+    return await this.req('/education?order=sort_order.asc,created_at.asc');
+};
+SDB.prototype.addEdu = async function(o) {
+    var d = await this.req('/education', { method: 'POST', body: JSON.stringify(o) });
+    return d && d.length ? d[0] : null;
+};
+SDB.prototype.updEdu = async function(id, o) {
+    o.updated_at = new Date().toISOString();
+    var d = await this.req('/education?id=eq.' + id, { method: 'PATCH', body: JSON.stringify(o) });
+    return d && d.length ? d[0] : null;
+};
+SDB.prototype.delEdu = async function(id) {
+    return await this.req('/education?id=eq.' + id, { method: 'DELETE' });
+};
+
+SDB.prototype.getWork = async function() {
+    return await this.req('/work_experience?order=sort_order.asc,created_at.asc');
+};
+SDB.prototype.addWork = async function(o) {
+    var d = await this.req('/work_experience', { method: 'POST', body: JSON.stringify(o) });
+    return d && d.length ? d[0] : null;
+};
+SDB.prototype.updWork = async function(id, o) {
+    o.updated_at = new Date().toISOString();
+    var d = await this.req('/work_experience?id=eq.' + id, { method: 'PATCH', body: JSON.stringify(o) });
+    return d && d.length ? d[0] : null;
+};
+SDB.prototype.delWork = async function(id) {
+    return await this.req('/work_experience?id=eq.' + id, { method: 'DELETE' });
+};
+
+SDB.prototype.getProj = async function() {
+    return await this.req('/projects?order=sort_order.asc,created_at.asc');
+};
+SDB.prototype.addProj = async function(o) {
+    var d = await this.req('/projects', { method: 'POST', body: JSON.stringify(o) });
+    return d && d.length ? d[0] : null;
+};
+SDB.prototype.updProj = async function(id, o) {
+    o.updated_at = new Date().toISOString();
+    var d = await this.req('/projects?id=eq.' + id, { method: 'PATCH', body: JSON.stringify(o) });
+    return d && d.length ? d[0] : null;
+};
+SDB.prototype.delProj = async function(id) {
+    return await this.req('/projects?id=eq.' + id, { method: 'DELETE' });
+};
+
+SDB.prototype.getSkills = async function() {
+    var all = await this.req('/skills?order=category,sort_order.asc,created_at.asc');
+    var g = { design: [], development: [], other: [] };
+    for (var i = 0; i < all.length; i++) {
+        if (g[all[i].category]) g[all[i].category].push(all[i]);
+    }
+    return g;
+};
+SDB.prototype.addSkill = async function(o) {
+    var d = await this.req('/skills', { method: 'POST', body: JSON.stringify(o) });
+    return d && d.length ? d[0] : null;
+};
+SDB.prototype.updSkill = async function(id, o) {
+    o.updated_at = new Date().toISOString();
+    var d = await this.req('/skills?id=eq.' + id, { method: 'PATCH', body: JSON.stringify(o) });
+    return d && d.length ? d[0] : null;
+};
+SDB.prototype.delSkill = async function(id) {
+    return await this.req('/skills?id=eq.' + id, { method: 'DELETE' });
+};
+
+
+// ========== 全局变量 ==========
+var db = null;
+
+function gid(id) { return document.getElementById(id); }
+
+
+// ========== 消息显示 ==========
+function showMsg(id, text, ok) {
+    var el = gid(id);
+    el.textContent = text;
+    el.className = 'status-msg ' + (ok ? 'ok' : 'err');
+}
+
+function showConn(ok, text) {
+    gid('conn-status').style.display = 'block';
+    gid('st-dot').className = 'status-dot ' + (ok ? 'on' : '');
+    gid('st-text').textContent = text;
+    if (ok) {
+        var tabs = document.querySelectorAll('.tab-btn');
+        for (var i = 0; i < tabs.length; i++) tabs[i].disabled = false;
+        loadPersonal();
+    }
+}
+
+
+// ========== 连接功能 ==========
+async function doConnect() {
+    var url = gid('cfg-url').value.trim();
+    var key = gid('cfg-key').value.trim();
+
+    if (!url || !key) {
+        alert('请填写完整的 URL 和 Key');
+        return;
+    }
+
+    try {
+        db = new SDB(url, key);
+        localStorage.setItem('supabase_url', url);
+        localStorage.setItem('supabase_key', key);
+
+        // 测试连接
+        await db.getPI();
+        showConn(true, '已连接到云端数据库 - 数据可正常读写');
+        showMsg('msg-personal', '连接成功！配置已保存。现在可以管理你的简历数据了。', true);
+    } catch (err) {
+        showConn(false, '连接失败: ' + err.message);
+        alert('连接失败: ' + err.message);
+    }
+}
+
+async function doTest() {
+    var url = gid('cfg-url').value.trim();
+    var key = gid('cfg-key').value.trim();
+    if (!url || !key) { alert('请填写完整'); return; }
+    try {
+        var t = new SDB(url, key);
+        await t.getPI();
+        alert('测试成功！数据库连接正常。');
+    } catch (err) {
+        alert('测试失败: ' + err.message);
+    }
+}
+
+
+// ========== 标签切换 ==========
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+
+    gid('tab-' + tabName).classList.add('active');
+
+    var btns = document.querySelectorAll('.tab-btn[data-tab="' + tabName + '"]');
+    for (var i = 0; i < btns.length; i++) btns[i].classList.add('active');
+
+    switch (tabName) {
+        case 'personal': loadPersonal(); break;
+        case 'edu': loadEdu(); break;
+        case 'work': loadWork(); break;
+        case 'proj': loadProj(); break;
+        case 'skill': loadSkill(); break;
+    }
+}
+
+
+// ========== 个人信息 ==========
+async function loadPersonal() {
+    if (!db) return;
+    try {
+        var pi = await db.getPI();
+        if (pi) {
+            gid('p-id').value = pi.id || '';
+            gid('p-name').value = pi.name || '';
+            gid('p-title').value = pi.title || '';
+            gid('p-tagline').value = pi.tagline || '';
+            gid('p-location').value = pi.location || '';
+            gid('p-email').value = pi.email || '';
+            gid('p-phone').value = pi.phone || '';
+        }
+    } catch (err) { console.error(err); }
+}
+
+async function savePersonal() {
+    if (!db) { alert('请先连接数据库'); return; }
+    var id = gid('p-id').value;
+    var obj = {
+        name: gid('p-name').value,
+        title: gid('p-title').value,
+        tagline: gid('p-tagline').value,
+        location: gid('p-location').value,
+        email: gid('p-email').value,
+        phone: gid('p-phone').value
+    };
+
+    try {
+        if (id) {
+            await db.updPI(id, obj);
+            showMsg('msg-personal', '更新成功！', true);
+        } else {
+            showMsg('msg-personal', '错误：找不到记录ID', false);
+        }
+    } catch (err) {
+        showMsg('msg-personal', '保存失败: ' + err.message, false);
+    }
+}
+
+
+// ========== 教育经历 ==========
+var editingEduId = null;
+
+async function loadEdu() {
+    if (!db) return;
+    try {
+        var items = await db.getEdu();
+        renderList('list-edu', items.map(function(i) {
+            return {
+                id: i.id,
+                title: i.institution + (i.degree ? ' - ' + i.degree : ''),
+                sub: [i.major, i.period, i.location].filter(Boolean).join(' | ')
+            };
+        }), 'edu');
+    } catch (err) { console.error(err); }
+}
+
+async function addEdu() {
+    if (!db) return;
+    try {
+        await db.addEdu({
+            institution: gid('e-inst').value,
+            degree: gid('e-deg').value,
+            major: gid('e-major').value,
+            period: gid('e-period').value,
+            location: '',
+            achievements: []
+        });
+        showMsg('msg-edu', '添加成功！', true);
+        clearFields(['e-inst', 'e-deg', 'e-major', 'e-period']);
+        resetEditState('e');
+        loadEdu();
+    } catch (err) {
+        showMsg('msg-edu', '添加失败: ' + err.message, false);
+    }
+}
+
+async function updEdu() {
+    if (!db || !editingEduId) return;
+    try {
+        await db.updEdu(editingEduId, {
+            institution: gid('e-inst').value,
+            degree: gid('e-deg').value,
+            major: gid('e-major').value,
+            period: gid('e-period').value,
+            location: ''
+        });
+        showMsg('msg-edu', '更新成功！', true);
+        resetEditState('e');
+        loadEdu();
+    } catch (err) {
+        showMsg('msg-edu', '更新失败: ' + err.message, false);
+    }
+}
+
+window.editEduItem = function(id) {
+    db.getEdu().then(function(items) {
+        var item = items.find(function(x) { return x.id === id; });
+        if (item) {
+            editingEduId = item.id;
+            gid('e-inst').value = item.institution || '';
+            gid('e-deg').value = item.degree || '';
+            gid('e-major').value = item.major || '';
+            gid('e-period').value = item.period || '';
+            enterEditMode('e');
+        }
+    });
+};
+
+window.deleteEduItem = async function(id) {
+    if (!confirm('确定删除这条教育经历？')) return;
+    try {
+        await db.delEdu(id);
+        showMsg('msg-edu', '删除成功！', true);
+        loadEdu();
+    } catch (err) {
+        showMsg('msg-edu', '删除失败: ' + err.message, false);
+    }
+};
+
+function cancelEdu() {
+    resetEditState('e');
+    clearFields(['e-inst', 'e-deg', 'e-major', 'e-period']);
+}
+
+
+// ========== 工作经历 ==========
+var editingWorkId = null;
+
+async function loadWork() {
+    if (!db) return;
+    try {
+        var items = await db.getWork();
+        renderList('list-work', items.map(function(i) {
+            return {
+                id: i.id,
+                title: i.company + (i.position ? ' - ' + i.position : ''),
+                sub: [i.period, i.location].filter(Boolean).join(' | ') +
+                     (i.description ? '\n' + i.description.substring(0, 100) : '')
+            };
+        }), 'work');
+    } catch (err) { console.error(err); }
+}
+
+async function addWork() {
+    if (!db) return;
+    try {
+        await db.addWork({
+            company: gid('w-comp').value,
+            position: gid('w-pos').value,
+            period: gid('w-period').value,
+            location: '',
+            description: gid('w-desc').value,
+            highlights: []
+        });
+        showMsg('msg-work', '添加成功！', true);
+        clearFields(['w-comp', 'w-pos', 'w-period', 'w-desc']);
+        resetEditState('w');
+        loadWork();
+    } catch (err) {
+        showMsg('msg-work', '添加失败: ' + err.message, false);
+    }
+}
+
+async function updWork() {
+    if (!db || !editingWorkId) return;
+    try {
+        await db.updWork(editingWorkId, {
+            company: gid('w-comp').value,
+            position: gid('w-pos').value,
+            period: gid('w-period').value,
+            location: '',
+            description: gid('w-desc').value
+        });
+        showMsg('msg-work', '更新成功！', true);
+        resetEditState('w');
+        loadWork();
+    } catch (err) {
+        showMsg('msg-work', '更新失败: ' + err.message, false);
+    }
+}
+
+window.editWorkItem = function(id) {
+    db.getWork().then(function(items) {
+        var item = items.find(function(x) { return x.id === id; });
+        if (item) {
+            editingWorkId = item.id;
+            gid('w-comp').value = item.company || '';
+            gid('w-pos').value = item.position || '';
+            gid('w-period').value = item.period || '';
+            gid('w-desc').value = item.description || '';
+            enterEditMode('w');
+        }
+    });
+};
+
+window.deleteWorkItem = async function(id) {
+    if (!confirm('确定删除这条工作经历？')) return;
+    try {
+        await db.delWork(id);
+        showMsg('msg-work', '删除成功！', true);
+        loadWork();
+    } catch (err) {
+        showMsg('msg-work', '删除失败: ' + err.message, false);
+    }
+};
+
+function cancelWork() {
+    resetEditState('w');
+    clearFields(['w-comp', 'w-pos', 'w-period', 'w-desc']);
+}
+
+
+// ========== 项目经验 ==========
+var editingProjId = null;
+
+async function loadProj() {
+    if (!db) return;
+    try {
+        var items = await db.getProj();
+        renderList('list-proj', items.map(function(i) {
+            return {
+                id: i.id,
+                title: i.name + (i.role ? ' (' + i.role + ')' : ''),
+                sub: i.period + (i.description ? '\n' + i.description.substring(0, 100) : '')
+            };
+        }), 'proj');
+    } catch (err) { console.error(err); }
+}
+
+async function addProj() {
+    if (!db) return;
+    var techStr = gid('pr-tech').value;
+    var techArr = techStr.split(',').map(function(t) { return t.trim(); }).filter(Boolean);
+    try {
+        await db.addProj({
+            name: gid('pr-name').value,
+            role: gid('pr-role').value,
+            period: gid('pr-period').value,
+            description: gid('pr-desc').value,
+            technologies: techArr,
+            outcomes: []
+        });
+        showMsg('msg-proj', '添加成功！', true);
+        clearFields(['pr-name', 'pr-role', 'pr-period', 'pr-desc', 'pr-tech']);
+        resetEditState('pr');
+        loadProj();
+    } catch (err) {
+        showMsg('msg-proj', '添加失败: ' + err.message, false);
+    }
+}
+
+async function updProj() {
+    if (!db || !editingProjId) return;
+    var techStr = gid('pr-tech').value;
+    var techArr = techStr.split(',').map(function(t) { return t.trim(); }).filter(Boolean);
+    try {
+        await db.updProj(editingProjId, {
+            name: gid('pr-name').value,
+            role: gid('pr-role').value,
+            period: gid('pr-period').value,
+            description: gid('pr-desc').value,
+            technologies: techArr
+        });
+        showMsg('msg-proj', '更新成功！', true);
+        resetEditState('pr');
+        loadProj();
+    } catch (err) {
+        showMsg('msg-proj', '更新失败: ' + err.message, false);
+    }
+}
+
+window.editProjItem = function(id) {
+    db.getProj().then(function(items) {
+        var item = items.find(function(x) { return x.id === id; });
+        if (item) {
+            editingProjId = item.id;
+            gid('pr-name').value = item.name || '';
+            gid('pr-role').value = item.role || '';
+            gid('pr-period').value = item.period || '';
+            gid('pr-desc').value = item.description || '';
+            gid('pr-tech').value = (item.technologies || []).join(', ');
+            enterEditMode('pr');
+        }
+    });
+};
+
+window.deleteProjItem = async function(id) {
+    if (!confirm('确定删除这个项目？')) return;
+    try {
+        await db.delProj(id);
+        showMsg('msg-proj', '删除成功！', true);
+        loadProj();
+    } catch (err) {
+        showMsg('msg-proj', '删除失败: ' + err.message, false);
+    }
+};
+
+function cancelProj() {
+    resetEditState('pr');
+    clearFields(['pr-name', 'pr-role', 'pr-period', 'pr-desc', 'pr-tech']);
+}
+
+
+// ========== 技能管理 ==========
+var editingSkId = null;
+
+async function loadSkill() {
+    if (!db) return;
+    try {
+        var skills = await db.getSkills();
+        var container = gid('list-skill');
+        var html = '';
+
+        var catNames = { design: '设计技能', development: '开发技能', other: '其他技能' };
+        var cats = ['development', 'design', 'other'];
+
+        for (var c = 0; c < cats.length; c++) {
+            var cat = cats[c];
+            if (skills[cat] && skills[cat].length > 0) {
+                html += '<h3 style="margin:18px 0 12px;color:#667eea">' + catNames[cat] + '</h3>';
+                for (var s = 0; s < skills[cat].length; s++) {
+                    var sk = skills[cat][s];
+                    var stars = '';
+                    for (var st = 0; st < 5; st++) {
+                        stars += st < sk.proficiency ? '&#9733;' : '&#9734;';
+                    }
+                    html += '<div class="data-item">' +
+                        '<div>' +
+                            '<h3>' + sk.name + '</h3>' +
+                            '<p>熟练度: ' + stars + '</p>' +
+                        '</div>' +
+                        '<div class="item-actions">' +
+                            '<button class="btn-warning" onclick="editSkItem(\'' + sk.id + '\')">编辑</button>' +
+                            '<button class="btn-danger" onclick="deleteSkItem(\'' + sk.id + '\')">删除</button>' +
+                        '</div>' +
+                        '</div>';
+                }
+            }
+        }
+        container.innerHTML = html || '<p style="color:#999;text-align:center;padding:30px;">暂无技能数据</p>';
+    } catch (err) { console.error(err); }
+}
+
+async function addSkill() {
+    if (!db) return;
+    try {
+        await db.addSkill({
+            category: gid('sk-cat').value,
+            name: gid('sk-name').value,
+            proficiency: parseInt(gid('sk-prof').value)
+        });
+        showMsg('msg-skill', '添加成功！', true);
+        clearFields(['sk-name', 'sk-prof']);
+        resetEditState('sk');
+        loadSkill();
+    } catch (err) {
+        showMsg('msg-skill', '添加失败: ' + err.message, false);
+    }
+}
+
+async function updSkill() {
+    if (!db || !editingSkId) return;
+    try {
+        await db.updSkill(editingSkId, {
+            category: gid('sk-cat').value,
+            name: gid('sk-name').value,
+            proficiency: parseInt(gid('sk-prof').value)
+        });
+        showMsg('msg-skill', '更新成功！', true);
+        resetEditState('sk');
+        loadSkill();
+    } catch (err) {
+        showMsg('msg-skill', '更新失败: ' + err.message, false);
+    }
+}
+
+window.editSkItem = function(id) {
+    db.getSkills().then(function(skills) {
+        var found = null;
+        var keys = ['design', 'development', 'other'];
+        for (var k = 0; k < keys.length; k++) {
+            var arr = skills[keys[k]];
+            if (arr) {
+                var f = arr.find(function(x) { return x.id === id; });
+                if (f) { found = f; break; }
+            }
+        }
+        if (found) {
+            editingSkId = found.id;
+            gid('sk-cat').value = found.category || 'development';
+            gid('sk-name').value = found.name || '';
+            gid('sk-prof').value = found.proficiency || 3;
+            enterEditMode('sk');
+        }
+    });
+};
+
+window.deleteSkItem = async function(id) {
+    if (!confirm('确定删除这个技能？')) return;
+    try {
+        await db.delSkill(id);
+        showMsg('msg-skill', '删除成功！', true);
+        loadSkill();
+    } catch (err) {
+        showMsg('msg-skill', '删除失败: ' + err.message, false);
+    }
+};
+
+function cancelSkill() {
+    resetEditState('sk');
+    clearFields(['sk-name', 'sk-prof']);
+}
+
+
+// ========== 工具函数 ==========
+
+function renderList(containerId, items, prefix) {
+    var el = gid(containerId);
+    if (!items || items.length === 0) {
+        el.innerHTML = '<p style="color:#999;text-align:center;padding:30px;">暂无数据</p>';
+        return;
+    }
+    var html = '';
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        var editFn = 'edit' + capitalize(prefix) + 'Item';
+        var delFn = 'delete' + capitalize(prefix) + 'Item';
+        html += '<div class="data-item">' +
+            '<div>' +
+                '<h3>' + item.title + '</h3>' +
+                '<p>' + item.sub + '</p>' +
+            '</div>' +
+            '<div class="item-actions">' +
+                '<button class="btn-warning" onclick="' + editFn + '(\'' + item.id + '\')">编辑</button>' +
+                '<button class="btn-danger" onclick="' + delFn + '(\'' + item.id + '\')">删除</button>' +
+            '</div>' +
+            '</div>';
+    }
+    el.innerHTML = html;
+}
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function enterEditMode(shortKey) {
+    gid('btn-' + shortKey + '-upd').style.display = 'inline-block';
+    gid('btn-' + shortKey + '-can').style.display = 'inline-block';
+    var addBtn = gid('btn-add-' + shortKey.charAt(0));
+    if (addBtn) addBtn.style.display = 'none';
+}
+
+function resetEditState(shortKey) {
+    gid('btn-' + shortKey + '-upd').style.display = 'none';
+    gid('btn-' + shortKey + '-can').style.display = 'none';
+    var addBtn = gid('btn-add-' + shortKey.charAt(0));
+    if (addBtn) addBtn.style.display = 'inline-block';
+
+    if (shortKey === 'e') editingEduId = null;
+    else if (shortKey === 'w') editingWorkId = null;
+    else if (shortKey === 'pr') editingProjId = null;
+    else if (shortKey === 'sk') editingSkId = null;
+}
+
+function clearFields(ids) {
+    for (var i = 0; i < ids.length; i++) {
+        var el = gid(ids[i]);
+        if (el) el.value = '';
+    }
+}
+
+
+// ========== 初始化绑定事件 ==========
+document.addEventListener('DOMContentLoaded', function() {
+
+    // 加载已保存的配置
+    var savedUrl = localStorage.getItem('supabase_url');
+    var savedKey = localStorage.getItem('supabase_key');
+    if (savedUrl) gid('cfg-url').value = savedUrl;
+    if (savedKey) gid('cfg-key').value = savedKey;
+
+    // 连接按钮
+    gid('btn-connect').addEventListener('click', doConnect);
+    gid('btn-test').addEventListener('click', doTest);
+
+    // 个人信息保存
+    gid('btn-save-p').addEventListener('click', savePersonal);
+
+    // 教育经历按钮
+    gid('btn-add-e').addEventListener('click', addEdu);
+    gid('btn-e-upd').addEventListener('click', updEdu);
+    gid('btn-e-can').addEventListener('click', cancelEdu);
+
+    // 工作经历按钮
+    gid('btn-add-w').addEventListener('click', addWork);
+    gid('btn-w-upd').addEventListener('click', updWork);
+    gid('btn-w-can').addEventListener('click', cancelWork);
+
+    // 项目按钮
+    gid('btn-add-pr').addEventListener('click', addProj);
+    gid('btn-pr-upd').addEventListener('click', updProj);
+    gid('btn-pr-can').addEventListener('click', cancelProj);
+
+    // 技能按钮
+    gid('btn-add-sk').addEventListener('click', addSkill);
+    gid('btn-sk-upd').addEventListener('click', updSkill);
+    gid('btn-sk-can').addEventListener('click', cancelSkill);
+
+    // 标签切换
+    var tabBtns = document.querySelectorAll('.tab-btn');
+    for (var i = 0; i < tabBtns.length; i++) {
+        tabBtns[i].addEventListener('click', function() {
+            var tab = this.getAttribute('data-tab');
+            if (!this.disabled) switchTab(tab);
+        });
+    }
+
+});
+
+})();
+</script>
+</body>
+</html>

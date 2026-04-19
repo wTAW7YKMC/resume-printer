@@ -1,0 +1,174 @@
+/* pages/about/about.wxss */
+.page-container {
+  padding: 30rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.content-section {
+  margin-bottom: 30rpx;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+  padding: 30rpx;
+  transition: all 0.3s ease;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8rpx;
+  height: 32rpx;
+  width: 6rpx;
+  background-color: #1890ff;
+  border-radius: 3rpx;
+}
+.profile-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.profile-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  margin-right: 30rpx;
+  border: 2rpx solid #f0f0f0;
+}
+
+.profile-details {
+  flex: 1;
+}
+
+.profile-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+  color: #333;
+}
+
+.profile-title {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.profile-location {
+  font-size: 26rpx;
+  color: #888;
+}
+
+.typewriter-container {
+  min-height: 200rpx;
+  margin-bottom: 30rpx;
+}
+
+.about-details {
+  margin-top: 30rpx;
+}
+
+.detail-item {
+  display: flex;
+  margin-bottom: 20rpx;
+  border-bottom: 1rpx solid #eee;
+  padding-bottom: 15rpx;
+}
+
+.detail-label {
+  width: 160rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.detail-value {
+  flex: 1;
+  font-size: 28rpx;
+  color: #555;
+}
+
+.contact-list {
+  margin-top: 20rpx;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25rpx;
+  padding: 15rpx;
+  border-radius: 8rpx;
+  transition: all 0.3s ease;
+}
+
+.contact-item:active {
+  background-color: #f9f9f9;
+}
+
+.contact-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+}
+
+.contact-info {
+  flex: 1;
+}
+
+.contact-type {
+  font-size: 26rpx;
+  color: #888;
+  margin-bottom: 5rpx;
+}
+
+.contact-value {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.social-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 20rpx;
+}
+
+.social-item {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30rpx;
+  padding: 20rpx 10rpx;
+  border-radius: 8rpx;
+  transition: all 0.3s ease;
+}
+
+.social-item:active {
+  transform: scale(0.95);
+}
+
+.social-icon {
+  width: 60rpx;
+  height: 60rpx;
+  margin-bottom: 15rpx;
+}
+
+.social-name {
+  font-size: 26rpx;
+  color: #333;
+  text-align: center;
+}

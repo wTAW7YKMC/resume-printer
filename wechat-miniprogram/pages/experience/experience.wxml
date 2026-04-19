@@ -1,0 +1,42 @@
+<!--experience.wxml-->
+<view class="container page-with-bottom-nav">
+  <view class="experience-list" wx:if="{{resumeData.workExperience && resumeData.workExperience.length > 0}}">
+    <view class="experience-item" wx:for="{{resumeData.workExperience}}" wx:key="index">
+      <view class="company-info">
+        <view class="company-name">{{item.company}}</view>
+        <view class="job-title">{{item.position}}</view>
+        <view class="work-period">{{item.startDate}} - {{item.endDate}}</view>
+      </view>
+      
+      <view class="job-details">
+        <view class="detail-section" wx:if="{{item.responsibilities}}">
+          <view class="detail-title">工作职责</view>
+          <view class="detail-content">
+            <text class="detail-item" wx:for="{{item.responsibilities}}" wx:for-item="responsibility" wx:key="index">• {{responsibility}}</text>
+          </view>
+        </view>
+        
+        <view class="detail-section" wx:if="{{item.achievements}}">
+          <view class="detail-title">主要成就</view>
+          <view class="detail-content">
+            <text class="detail-item" wx:for="{{item.achievements}}" wx:for-item="achievement" wx:key="index">• {{achievement}}</text>
+          </view>
+        </view>
+        
+        <view class="detail-section" wx:if="{{item.skills}}">
+          <view class="detail-title">技能应用</view>
+          <view class="detail-content">
+            <text class="skill-tag" wx:for="{{item.skills}}" wx:for-item="skill" wx:key="index">{{skill}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="empty-state" wx:else>
+    <text>暂无工作经历信息</text>
+  </view>
+
+  <!-- 底部导航栏 -->
+  <include src="../common/bottom-nav.wxml" />
+</view>
