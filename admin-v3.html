@@ -92,10 +92,97 @@
 
         .btn-row { display: flex; gap: 10px; margin-top: 15px; }
         small { color: #888; font-size: 12px; }
+
+        /* 登录验证界面样式 */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .login-box {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-box h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        .login-box p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        .login-box input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+        .login-box button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .login-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102,126,234,0.4);
+        }
+        .login-error {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: -12px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        #admin-content {
+            display: none;
+        }
     </style>
 </head>
 <body>
-<div class="container">
+
+<!-- 登录验证界面 -->
+<div id="login-overlay">
+    <div class="login-box">
+        <h2>🔐 管理员登录</h2>
+        <p>请输入管理员密码以访问后台管理系统</p>
+        <input type="password" id="admin-password" placeholder="请输入密码" autocomplete="off">
+        <div class="login-error" id="login-error">密码错误，请重新输入！</div>
+        <button onclick="verifyPassword()">确认登录</button>
+    </div>
+</div>
+
+<!-- 管理界面内容（登录后显示） -->
+<div class="container" id="admin-content">
     <h1>☁️ 简历数据管理系统</h1>
     <p class="subtitle">基于 Supabase 云数据库 · 数据实时同步到云端</p>
 
@@ -258,6 +345,46 @@
 
 <script>
 (function() {
+
+// ========== 管理员登录验证 ==========
+const ADMIN_PASSWORD = 'resume2024';
+
+function verifyPassword() {
+    const inputPassword = document.getElementById('admin-password').value;
+    const errorEl = document.getElementById('login-error');
+
+    if (inputPassword === ADMIN_PASSWORD) {
+        sessionStorage.setItem('isAdminLoggedIn', 'true');
+        document.getElementById('login-overlay').style.display = 'none';
+        document.getElementById('admin-content').style.display = 'block';
+        errorEl.style.display = 'none';
+        console.log('管理员登录成功');
+    } else {
+        errorEl.style.display = 'block';
+        document.getElementById('admin-password').value = '';
+        document.getElementById('admin-password').focus();
+    }
+}
+
+function checkLoginStatus() {
+    const isLoggedIn = sessionStorage.getItem('isAdminLoggedIn') === 'true';
+    if (isLoggedIn) {
+        document.getElementById('login-overlay').style.display = 'none';
+        document.getElementById('admin-content').style.display = 'block';
+    } else {
+        document.getElementById('login-overlay').style.display = 'flex';
+        document.getElementById('admin-content').style.display = 'none';
+        document.getElementById('admin-password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                verifyPassword();
+            }
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    checkLoginStatus();
+});
 
 // ========== Supabase 客户端 ==========
 function SDB(url, key) {
