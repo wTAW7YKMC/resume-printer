@@ -1391,3 +1391,33 @@ body {
 .ai-toggle-btn:hover {
     background-color: #d4b89a !important;
 }
+
+/* 后台管理入口 - 装饰性齿轮图标 */
+.header {
+    position: relative;
+}
+
+.admin-entry {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #a67c52;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    opacity: 0.5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-entry:hover {
+    color: #8b4513;
+    opacity: 1;
+    transform: rotate(90deg) scale(1.15);
+}
+
+.gear-icon {
+    width: 16px;
+    height: 16px;
+}
