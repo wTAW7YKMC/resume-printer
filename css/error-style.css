@@ -1,0 +1,510 @@
+/* ========================================
+   异常页面样式 - 复古打字机风格
+   完美匹配主站UI设计
+   ======================================== */
+
+/* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 基础样式 - 与主站保持一致 */
+body {
+    font-family: 'Courier New', 'Courier Prime', monospace;
+    background-color: #3e2723; /* 深棕色打字机机身背景 */
+    color: #212121;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* 页面淡入动画 */
+    opacity: 0;
+    animation: fadeIn 0.8s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 容器 - 与主站保持一致的宽度和居中 */
+.container {
+    max-width: 900px;
+    width: 100%;
+    margin: 40px auto;
+    padding: 0 20px;
+    position: relative;
+}
+
+/* 打字机机身装饰 - 完全复用主站设计 */
+.typewriter-body {
+    background-color: #3e2723;
+    height: 30px;
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    margin-bottom: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* 打字机滚筒装饰 */
+.typewriter-roller {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 10px;
+    height: 10px;
+    background-color: #555;
+    border-radius: 50%;
+}
+
+/* 纸张容器 - 米黄色打字纸效果 */
+.paper-container {
+    background-color: #f5f1e6; /* 米黄色打字纸 */
+    position: relative;
+    padding: 60px 40px;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    min-height: 600px;
+    
+    /* 纸张纹理 - 模拟打字纸横线 */
+    background-image: 
+        linear-gradient(rgba(139, 69, 19, 0.08) 1px, transparent 1px);
+    background-size: 100% 24px;
+    
+    /* 噪点效果，增加复古质感 */
+    filter: contrast(105%) brightness(95%);
+}
+
+/* 错误内容区域 */
+.error-content {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* 错误代码 - 超大号显示 */
+.error-code {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: 120px;
+    font-weight: bold;
+    color: #8b4513; /* 鞍棕色 - 主站主色调 */
+    line-height: 1;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    
+    /* 数字逐个显示的动画效果 */
+    animation: typeInCode 0.6s ease-out;
+}
+
+@keyframes typeInCode {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 分隔线 - 复古风格 */
+.error-divider {
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(to right, transparent, #a67c52, transparent);
+    margin: 30px auto;
+    border-radius: 2px;
+}
+
+/* 错误标题 */
+.error-title {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: 28px;
+    color: #654321; /* 深棕色 */
+    margin-bottom: 20px;
+    font-weight: bold;
+    animation: slideUp 0.6s ease-out 0.2s both;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 错误描述文字 */
+.error-description {
+    font-family: 'Courier Prime', 'Courier New', monospace;
+    font-size: 18px;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    animation: slideUp 0.6s ease-out 0.4s both;
+}
+
+/* 操作按钮区域 */
+.action-area {
+    margin: 30px 0;
+    animation: slideUp 0.6s ease-out 0.6s both;
+}
+
+.secondary-action {
+    animation-delay: 0.7s;
+}
+
+/* 返回主页按钮 - 打字机按键风格 */
+.home-button,
+.refresh-button {
+    display: inline-block;
+    background-color: #e8dcc8; /* 浅米色 */
+    border: 2px solid #a67c52; /* 棕褐色边框 */
+    color: #333;
+    padding: 15px 40px;
+    font-family: 'Special Elite', 'Courier New', monospace;
+    font-size: 18px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-radius: 5px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 按钮悬停效果 - 与主站导航按钮一致 */
+.home-button:hover,
+.refresh-button:hover {
+    background-color: #d4b89a; /* 加深棕色 */
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    border-color: #8b4513;
+}
+
+/* 按钮点击效果 */
+.home-button:active,
+.refresh-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 刷新按钮特殊样式 */
+.refresh-button {
+    background-color: transparent;
+    border: 2px dashed #a67c52;
+    color: #666;
+    padding: 12px 35px;
+    font-size: 16px;
+}
+
+.refresh-button:hover {
+    background-color: rgba(232, 220, 200, 0.5);
+    border-style: solid;
+}
+
+/* 快速导航链接区域 */
+.quick-links {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(166, 124, 82, 0.3);
+    animation: slideUp 0.6s ease-out 0.8s both;
+}
+
+.links-label {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.links-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.nav-link {
+    color: #8b4513; /* 鞍棕色 */
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    position: relative;
+    padding: 5px 0;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #8b4513;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #654321; /* 更深的棕色 */
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.separator {
+    color: #ccc;
+    font-size: 14px;
+}
+
+/* 光标闪烁效果 - 标志性打字机元素 */
+.cursor {
+    display: inline-block;
+    animation: blink 1s step-end infinite;
+    color: #8b4513;
+    font-weight: bold;
+    font-size: 24px;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* 页脚提示区域 */
+.error-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: rgba(244, 240, 230, 0.9);
+    border-radius: 0 0 5px 5px;
+    font-size: 14px;
+    color: #666;
+    animation: slideUp 0.6s ease-out 1s both;
+}
+
+.footer-link {
+    color: #8b4513;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+    color: #654321;
+}
+
+/* ========================================
+   响应式设计
+   ======================================== */
+
+/* 平板设备 */
+@media screen and (max-width: 768px) {
+    .container {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+    
+    .paper-container {
+        padding: 40px 25px;
+        min-height: 500px;
+    }
+    
+    .error-code {
+        font-size: 80px;
+    }
+    
+    .error-title {
+        font-size: 24px;
+    }
+    
+    .error-description {
+        font-size: 16px;
+    }
+    
+    .home-button,
+    .refresh-button {
+        padding: 12px 30px;
+        font-size: 16px;
+    }
+    
+    .links-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .separator {
+        display: none;
+    }
+}
+
+/* 手机设备 */
+@media screen and (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        margin: 10px auto;
+        padding: 0 10px;
+    }
+    
+    .typewriter-body {
+        height: 25px;
+    }
+    
+    .typewriter-roller {
+        width: 8px;
+        height: 8px;
+        left: 8px;
+        top: 8px;
+    }
+    
+    .paper-container {
+        padding: 30px 20px;
+        min-height: 450px;
+    }
+    
+    .error-content {
+        padding: 20px 10px;
+    }
+    
+    .error-code {
+        font-size: 60px;
+        margin-bottom: 15px;
+    }
+    
+    .error-divider {
+        width: 60px;
+        margin: 20px auto;
+    }
+    
+    .error-title {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .error-description {
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+    
+    .home-button,
+    .refresh-button {
+        padding: 10px 25px;
+        font-size: 14px;
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .quick-links {
+        margin-top: 30px;
+        padding-top: 20px;
+    }
+    
+    .nav-link {
+        font-size: 14px;
+    }
+    
+    .cursor {
+        font-size: 18px;
+    }
+    
+    .error-footer {
+        font-size: 12px;
+        padding: 15px;
+    }
+}
+
+/* 大屏幕优化 */
+@media screen and (min-width: 1200px) {
+    .container {
+        max-width: 1000px;
+    }
+    
+    .error-code {
+        font-size: 140px;
+    }
+    
+    .paper-container {
+        padding: 80px 60px;
+    }
+}
+
+/* 打印样式 - 确保打印时也能正常显示 */
+@media print {
+    body {
+        background: white;
+        animation: none;
+    }
+    
+    .typewriter-body {
+        background: #333;
+    }
+    
+    .paper-container {
+        box-shadow: none;
+        filter: none;
+    }
+    
+    .cursor {
+        display: none;
+    }
+    
+    .home-button,
+    .refresh-button {
+        border: 1px solid #999;
+    }
+}
+
+/* 无障碍访问支持 */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .cursor {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+    .error-code {
+        color: #000;
+        text-shadow: none;
+    }
+    
+    .nav-link {
+        text-decoration: underline;
+    }
+    
+    .home-button,
+    .refresh-button {
+        border-width: 3px;
+    }
+}
