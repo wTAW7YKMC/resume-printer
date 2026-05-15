@@ -508,3 +508,445 @@ body {
         border-width: 3px;
     }
 }
+
+/* ========================================
+   互动功能样式 - 方案1：可点击错误代码
+   ======================================== */
+
+/* 错误代码点击弹跳动画 */
+@keyframes errorCodeBounce {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.15) rotate(-3deg); }
+    50% { transform: scale(1.1) rotate(0deg); }
+    75% { transform: scale(1.15) rotate(3deg); }
+}
+
+/* 点击波纹效果 */
+.click-ripple {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(139, 69, 19, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    animation: rippleExpand 0.6s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes rippleExpand {
+    to {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+/* 彩蛋容器 */
+.easter-egg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(62, 39, 35, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.easter-egg-container.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.easter-egg-content {
+    background-color: #f5f1e6;
+    padding: 40px 50px;
+    border-radius: 10px;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 3px solid #a67c52;
+    position: relative;
+}
+
+.easter-egg-container.active .easter-egg-content {
+    transform: scale(1) translateY(0);
+}
+
+.easter-egg-icon {
+    font-size: 60px;
+    display: block;
+    margin-bottom: 15px;
+    animation: eggIconBounce 1s ease infinite;
+}
+
+@keyframes eggIconBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.easter-egg-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 28px;
+    color: #8b4513;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.easter-egg-message {
+    font-family: 'Courier Prime', monospace;
+    font-size: 18px;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.easter-egg-detail {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    margin-bottom: 25px;
+}
+
+.easter-egg-btn {
+    display: inline-block;
+    background-color: #e8dcc8;
+    border: 2px solid #a67c52;
+    padding: 10px 25px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+    font-family: 'Special Elite', monospace;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.easter-egg-btn:hover {
+    background-color: #d4b89a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.easter-egg-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+    transition: color 0.2s;
+    font-family: inherit;
+}
+
+.easter-egg-close:hover {
+    color: #333;
+}
+
+/* ========================================
+   互动功能样式 - 方案2：键盘敲击效果
+   ======================================== */
+
+.key-ripple {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, rgba(139, 69, 19, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Special Elite', monospace;
+    font-size: 18px;
+    color: #8b4513;
+    font-weight: bold;
+}
+
+.key-ripple.active {
+    animation: keyRippleExpand 0.3s ease-out forwards;
+}
+
+@keyframes keyRippleExpand {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* ========================================
+   互动功能样式 - 方案3：鼠标光标轨迹
+   ======================================== */
+
+.cursor-trail {
+    position: fixed;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    color: rgba(139, 69, 19, 0.7);
+    pointer-events: none;
+    z-index: 9997;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.5s ease;
+    font-weight: bold;
+    text-shadow: 0 0 3px rgba(139, 69, 19, 0.3);
+}
+
+.cursor-trail.fading {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+}
+
+/* ========================================
+   互动功能样式 - 方案4：提示轮播系统
+   ======================================== */
+
+.fun-tip-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 35px;
+    padding: 20px;
+    background-color: rgba(232, 220, 200, 0.5);
+    border: 2px dashed #a67c52;
+    border-radius: 8px;
+    animation: slideUp 0.6s ease-out 1s both;
+}
+
+.tip-nav {
+    background-color: transparent;
+    border: 2px solid #a67c52;
+    color: #8b4513;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+}
+
+.tip-nav:hover {
+    background-color: #d4b89a;
+    transform: scale(1.1);
+}
+
+.tip-content {
+    flex: 1;
+    text-align: center;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.tip-content.changing {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.tip-icon {
+    font-size: 20px;
+    display: inline-block;
+}
+
+.tip-text {
+    font-family: 'Courier Prime', monospace;
+    font-size: 15px;
+    color: #555;
+    font-style: italic;
+}
+
+/* ========================================
+   互动功能样式 - 方案5：快捷搜索助手
+   ======================================== */
+
+.search-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(62, 39, 35, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.search-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.search-modal-content {
+    background-color: #f5f1e6;
+    padding: 35px 40px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+    transform: scale(0.9) translateY(-20px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 3px double #a67c52;
+}
+
+.search-modal.active .search-modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.search-modal h3 {
+    font-family: 'Special Elite', monospace;
+    font-size: 22px;
+    color: #8b4513;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #a67c52;
+    border-radius: 5px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 16px;
+    background-color: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.search-input:focus {
+    border-color: #8b4513;
+    box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+}
+
+.search-results {
+    max-height: 250px;
+    overflow-y: auto;
+    margin-top: 15px;
+    border: 1px solid #d4b89a;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+.search-result-item {
+    display: block;
+    padding: 12px 15px;
+    color: #333;
+    text-decoration: none;
+    font-family: 'Courier Prime', monospace;
+    font-size: 15px;
+    border-bottom: 1px solid #eee;
+    transition: all 0.2s ease;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background-color: #e8dcc8;
+    color: #8b4513;
+    padding-left: 20px;
+}
+
+.no-results {
+    padding: 20px;
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}
+
+.search-shortcut-hint {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 12px;
+    color: #888;
+    font-family: 'Courier Prime', monospace;
+}
+
+/* ========================================
+   响应式调整 - 互动功能
+   ======================================== */
+
+@media screen and (max-width: 768px) {
+    /* 禁用光标轨迹（移动端性能优化） */
+    .cursor-trail {
+        display: none !important;
+    }
+
+    .easter-egg-content {
+        padding: 30px 25px;
+        margin: 20px;
+    }
+
+    .easter-egg-title {
+        font-size: 24px;
+    }
+
+    .easter-egg-message {
+        font-size: 16px;
+    }
+
+    .fun-tip-container {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .tip-nav {
+        align-self: center;
+    }
+
+    .search-modal-content {
+        padding: 25px 20px;
+        width: 95%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .easter-egg-icon {
+        font-size: 45px;
+    }
+
+    .easter-egg-title {
+        font-size: 20px;
+    }
+
+    .easter-egg-message {
+        font-size: 14px;
+    }
+
+    .easter-egg-btn {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+
+    .key-ripple {
+        width: 45px;
+        height: 45px;
+        font-size: 14px;
+    }
+}
