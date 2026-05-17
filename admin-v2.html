@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☁️ 简历数据管理系统</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { color: white; text-align: center; margin-bottom: 10px; font-size: 2.2em; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .subtitle { text-align: center; color: rgba(255,255,255,0.9); margin-bottom: 25px; }
+
+        .config-section {
+            background: white; border-radius: 12px; padding: 25px;
+            margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .config-section h3 { color: #333; margin-bottom: 15px; }
+
+        input[type="text"], input[type="password"] {
+            width: 100%; padding: 12px; border: 2px solid #e0e0e0;
+            border-radius: 8px; font-size: 14px; margin-bottom: 10px;
+        }
+        input:focus { outline: none; border-color: #667eea; }
+
+        button {
+            padding: 12px 24px; border: none; border-radius: 8px;
+            cursor: pointer; font-size: 16px; font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+        .btn-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        .btn-danger { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); color: white; padding: 8px 16px; font-size: 14px; }
+        .btn-warning { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 8px 16px; font-size: 14px; }
+
+        .api-status {
+            background: #f8f9fa; border-left: 4px solid #667eea;
+            padding: 15px 20px; border-radius: 6px; margin-top: 15px;
+            display: none; align-items: center; justify-content: space-between;
+        }
+        .status-dot { width: 12px; height: 12px; border-radius: 50%; background: #ccc; animation: pulse 2s infinite; display: inline-block; margin-right: 10px; }
+        .status-dot.on { background: #38ef7d; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn {
+            padding: 12px 24px; background: rgba(255,255,255,0.9); border: none;
+            border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;
+            transition: all 0.3s ease; color: #333;
+        }
+        .tab-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .tab-btn.active { background: white; color: #667eea; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .tab-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .tab-content {
+            display: none; background: white; border-radius: 12px;
+            padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .tab-content.active { display: block; }
+
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: #555; font-size: 14px; }
+        textarea, select {
+            width: 100%; padding: 12px; border: 2px solid #e0e0e0;
+            border-radius: 8px; font-size: 14px; resize: vertical; min-height: 80px; font-family: inherit;
+        }
+        textarea:focus, select:focus { outline: none; border-color: #667eea; }
+
+        .form-group { margin-bottom: 18px; }
+        .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+
+        .data-list { margin-top: 25px; }
+        .data-item {
+            background: #f8f9fa; border-left: 4px solid #667eea;
+            padding: 18px; margin-bottom: 12px; border-radius: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.3s ease;
+        }
+        .data-item:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: translateX(5px); }
+        .data-item h3 { color: #333; margin-bottom: 6px; font-size: 17px; }
+        .data-item p { color: #666; font-size: 14px; line-height: 1.5; }
+        .item-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+        .status-msg {
+            padding: 12px 16px; border-radius: 8px; margin-bottom: 18px;
+            display: none; animation: slideIn 0.3s ease;
+        }
+        .status-msg.ok { background: #d4edda; color: #155724; display: block; border: 1px solid #c3e6cb; }
+        .status-msg.err { background: #f8d7da; color: #721c24; display: block; border: 1px solid #f5c6cb; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-row button { flex: 1; }
+        .btn-row button[style*="display:none"] { flex: 0; }
+
+        code { background: rgba(0,0,0,0.08); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 13px; }
+        small { color: #888; font-size: 12px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>☁️ 简历数据管理系统</h1>
+    <p class="subtitle">基于 Supabase 云数据库 · 数据实时同步到云端</p>
+
+    <!-- 配置区域 -->
+    <div class="config-section" id="config-box">
+        <h3>🔗 第一步：配置连接</h3>
+        <div class="row">
+            <div>
+                <label>Project URL</label>
+                <input type="text" id="cfg-url" placeholder="https://xxxxx.supabase.co"
+                       value="https://crqwokrpcwvvsibcukkh.supabase.co">
+                <small>在 Supabase Dashboard → Settings → API</small>
+            </div>
+            <div>
+                <label>anon public key</label>
+                <input type="text" id="cfg-key" placeholder="eyJhbGci..."
+                       value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNycXdva3JwY3d2dnNpYmN1a2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1ODEyNjAsImV4cCI6MjA5MjE1NzI2MH0.J-SsRlUXHrmfxasPlkFl70IXf-BXs_f5XvaeQEGNe8g">
+                <small>同上位置的 anon public key</small>
+            </div>
+        </div>
+        <div style="margin-top:15px;">
+            <button class="btn-primary" onclick="doConnect()">🔌 连接数据库</button>
+            <button class="btn-success" onclick="doTest()" style="margin-left:10px;">🧪 测试</button>
+        </div>
+        <div class="api-status" id="conn-status">
+            <div><span class="status-dot" id="st-dot"></span><span id="st-text">未连接</span></div>
+        </div>
+    </div>
+
+    <!-- 标签页 -->
+    <div class="tabs" id="tabs-area">
+        <button class="tab-btn active" onclick="sw('personal')" disabled>👤 个人信息</button>
+        <button class="tab-btn" onclick="sw('edu')" disabled>🎓 教育经历</button>
+        <button class="tab-btn" onclick="sw('work')" disabled>💼 工作经历</button>
+        <button class="tab-btn" onclick="sw('proj')" disabled>🚀 项目经验</button>
+        <button class="tab-btn" onclick="sw('skill')" disabled>⭐ 技能列表</button>
+    </div>
+
+    <!-- 个人信息 -->
+    <div id="tab-personal" class="tab-content active">
+        <h2>个人信息</h2>
+        <div class="status-msg" id="msg-personal"></div>
+        <input type="hidden" id="p-id">
+        <div class="row"><div class="form-group">
+            <label>姓名 *</label><input type="text" id="p-name" required placeholder="张三">
+        </div><div class="form-group">
+            <label>职位</label><input type="text" id="p-title" placeholder="前端工程师">
+        </div></div>
+        <div class="form-group">
+            <label>简介</label><textarea id="p-tagline" placeholder="简短介绍..."></textarea>
+        </div>
+        <div class="row"><div class="form-group">
+            <label>所在地</label><input type="text" id="p-location" placeholder="北京">
+        </div><div class="form-group">
+            <label>邮箱 *</label><input type="email" id="p-email" required placeholder="a@b.com">
+        </div></div>
+        <div class="form-group">
+            <label>电话</label><input type="tel" id="p-phone" placeholder="+86 138...">
+        </div>
+        <button class="btn-primary" style="width:100%" onclick="savePersonal()">💾 保存</button>
+    </div>
+
+    <!-- 教育经历 -->
+    <div id="tab-edu" class="tab-content">
+        <h2>教育经历</h2>
+        <div class="status-msg" id="msg-edu"></div>
+        <input type="hidden" id="e-id">
+        <div class="row"><div class="form-group">
+            <label>学校 *</label><input type="text" id="e-inst" required placeholder="北京大学">
+        </div><div class="form-group">
+            <label>学历</label><input type="text" id="e-deg" placeholder="学士/硕士">
+        </div></div>
+        <div class="row"><div class="form-group">
+            <label>专业</label><input type="text" id="e-major" placeholder="计算机">
+        </div><div class="form-group">
+            <label>时间</label><input type="text" id="e-period" placeholder="2018-2022">
+        </div></div>
+        <div class="btn-row">
+            <button class="btn-primary" onclick="addEdu()">➕ 添加</button>
+            <button class="btn-warning" id="btn-e-upd" onclick="updEdu()" style="display:none">✏️ 更新</button>
+            <button class="btn-danger" id="btn-e-can" onclick="canEdu()" style="display:none">取消</button>
+        </div>
+        <div class="data-list" id="list-edu"></div>
+    </div>
+
+    <!-- 工作经历 -->
+    <div id="tab-work" class="tab-content">
+        <h2>工作经历</h2>
+        <div class="status-msg" id="msg-work"></div>
+        <input type="hidden" id="w-id">
+        <div class="row"><div class="form-group">
+            <label>公司 *</label><input type="text" id="w-comp" required placeholder="阿里巴巴">
+        </div><div class="form-group">
+            <label>职位</label><input type="text" id="w-pos" placeholder="高级前端">
+        </div><div class="form-group">
+            <label>时间</label><input type="text" id="w-period" placeholder="2022-至今">
+        </div></div>
+        <div class="form-group">
+            <label>描述</label><textarea id="w-desc" placeholder="工作内容..."></textarea>
+        </div>
+        <div class="btn-row">
+            <button class="btn-primary" onclick="addWork()">➕ 添加</button>
+            <button class="btn-warning" id="btn-w-upd" onclick="updWork()" style="display:none">✏️ 更新</button>
+            <button class="btn-danger" id="btn-w-can" onclick="canWork()" style="display:none">取消</button>
+        </div>
+        <div class="data-list" id="list-work"></div>
+    </div>
+
+    <!-- 项目 -->
+    <div id="tab-proj" class="tab-content">
+        <h2>项目经验</h2>
+        <div class="status-msg" id="msg-proj"></div>
+        <input type="hidden" id="pr-id">
+        <div class="row"><div class="form-group">
+            <label>项目名 *</label><input type="text" id="pr-name" required placeholder="电商平台">
+        </div><div class="form-group">
+            <label>角色</label><input type="text" id="pr-role" placeholder="前端负责人">
+        </div><div class="form-group">
+            <label>时间</label><input type="text" id="pr-period" placeholder="2023.01-06">
+        </div></div>
+        <div class="form-group">
+            <label>描述</label><textarea id="pr-desc" placeholder="项目介绍..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>技术栈（逗号分隔）</label><input type="text" id="pr-tech" placeholder="React, Node.js">
+        </div>
+        <div class="btn-row">
+            <button class="btn-primary" onclick="addProj()">➕ 添加</button>
+            <button class="btn-warning" id="btn-pr-upd" onclick="updProj()" style="display:none">✏️ 更新</button>
+            <button class="btn-danger" id="btn-pr-can" onclick="canProj()" style="display:none">取消</button>
+        </div>
+        <div class="data-list" id="list-proj"></div>
+    </div>
+
+    <!-- 技能 -->
+    <div id="tab-skill" class="tab-content">
+        <h2>技能管理</h2>
+        <div class="status-msg" id="msg-skill"></div>
+        <input type="hidden" id="sk-id">
+        <div class="row"><div class="form-group">
+            <label>分类</label>
+            <select id="sk-cat">
+                <option value="design">🎨 设计</option>
+                <option value="development">💻 开发</option>
+                <option value="other">⚡ 其他</option>
+            </select>
+        </div><div class="form-group">
+            <label>技能名 *</label><input type="text" id="sk-name" required placeholder="JavaScript">
+        </div><div class="form-group">
+            <label>熟练度 (1-5)</label><input type="number" id="sk-prof" min="1" max="5" value="3">
+        </div></div>
+        <div class="btn-row">
+            <button class="btn-primary" onclick="addSkill()">➕ 添加</button>
+            <button class="btn-warning" id="btn-sk-upd" onclick="updSkill()" style="display:none">✏️ 更新</button>
+            <button class="btn-danger" id="btn-sk-can" onclick="canSkill()" style="display:none">取消</button>
+        </div>
+        <div class="data-list" id="list-skill"></div>
+    </div>
+</div>
+
+<script>
+// ========== Supabase 客户端 ==========
+class SDB {
+    constructor(url, key) {
+        this.url = url;
+        this.key = key;
+        this.base = url + '/rest/v1';
+    }
+    hdr() { return { 'apikey': this.key, 'Authorization': 'Bearer '+this.key, 'Content-Type':'application/json' }; }
+    async req(ep, opts={}) {
+        const r = await fetch(this.base+ep, {...opts, headers:{...this.hdr(), ...opts.headers}});
+        if(!r.ok){const e=await r.json();throw new Error(e.message||'HTTP'+r.status);}
+        if(opts.method==='DELETE')return{};
+        return await r.json();
+    }
+    async getPI(){const d=await this.req('/personal_info?limit=1');return d&&d.length?d[0]:null;}
+    async updPI(id,o){const d=await this.req('/personal_info?id=eq.'+id,{method:'PATCH',body:JSON.stringify({...o,updated_at:new Date().toISOString()})});return d&&d.length?d[0]:null;}
+    async getEdu(){return await this.req('/education?order=sort_order.asc,created_at.asc');}
+    async addEdu(o){const d=await this.req('/education',{method:'POST',body:JSON.stringify(o)});return d&&d.length?d[0]:null;}
+    async updEdu(id,o){const d=await this.req('/education?id=eq.'+id,{method:'PATCH',body:JSON.stringify({...o,updated_at:new Date().toISOString()})});return d&&d.length?d[0]:null;}
+    async delEdu(id){return await this.req('/education?id=eq.'+id,{method:'DELETE'});}
+    async getWork(){return await this.req('/work_experience?order=sort_order.asc,created_at.asc');}
+    async addWork(o){const d=await this.req('/work_experience',{method:'POST',body:JSON.stringify(o)});return d&&d.length?d[0]:null;}
+    async updWork(id,o){const d=await this.req('/work_experience?id=eq.'+id,{method:'PATCH',body:JSON.stringify({...o,updated_at:new Date().toISOString()})});return d&&d.length?d[0]:null;}
+    async delWork(id){return await this.req('/work_experience?id=eq.'+id,{method:'DELETE'});}
+    async getProj(){return await this.req('/projects?order=sort_order.asc,created_at.asc');}
+    async addProj(o){const d=await this.req('/projects',{method:'POST',body:JSON.stringify(o)});return d&&d.length?d[0]:null;}
+    async updProj(id,o){const d=await this.req('/projects?id=eq.'+id,{method:'PATCH',body:JSON.stringify({...o,updated_at:new Date().toISOString()})});return d&&d.length?d[0]:null;}
+    async delProj(id){return await this.req('/projects?id=eq.'+id,{method:'DELETE'});}
+    async getSkills(){
+        const all=await this.req('/skills?order=category,sort_order.asc,created_at.asc');
+        const g={design:[],development:[],other:[]};
+        all.forEach(s=>{if(g[s.category])g[s.category].push(s);});
+        return g;
+    }
+    async addSkill(o){const d=await this.req('/skills',{method:'POST',body:JSON.stringify(o)});return d&&d.length?d[0]:null;}
+    async updSkill(id,o){const d=await this.req('/skills?id=eq.'+id,{method:'PATCH',body:JSON.stringify({...o,updated_at:new Date().toISOString()})});return d&&d.length?d[0]:null;}
+    async delSkill(id){return await this.req('/skills?id=eq.'+id,{method:'DELETE'});}
+}
+
+let db=null;
+
+function $(id){return document.getElementById(id);}
+
+function msg(id,text,ok){
+    const el=$(id);
+    el.textContent=text;
+    el.className='status-msg '+(ok?'ok':'err');
+    setTimeout(()=>el.style.display='none',5000);
+}
+
+function showConn(ok,text){
+    $('conn-status').style.display='flex';
+    $('st-dot').className='status-dot '+(ok?'on':'');
+    $('st-text').textContent=text;
+    if(ok){
+        document.querySelectorAll('.tab-btn').forEach(b=>b.disabled=false);
+        loadPersonal();
+    }
+}
+
+async function doConnect(){
+    const url=$('cfg-url').value.trim();
+    const key=$('cfg-key').value.trim();
+    if(!url||!key){alert('请填写完整');return;}
+
+    try{
+        db=new SDB(url,key);
+        localStorage.setItem('supabase_url',url);
+        localStorage.setItem('supabase_key',key);
+
+        // 测试连接
+        await db.getPI();
+        showConn(true,'✅ 已连接到云端数据库');
+        msg('msg-personal','✅ 连接成功！配置已保存。',true);
+    }catch(e){
+        showConn(false,'❌ 连接失败: '+e.message);
+        alert('连接失败: '+e.message+'\n\n请确认:\n1. URL和Key是否正确\n2. 是否已执行SQL初始化脚本');
+    }
+}
+
+async function doTest(){
+    const url=$('cfg-url').value.trim();
+    const key=$('cfg-key').value.trim();
+    if(!url||!key){alert('请填写完整');return;}
+    try{
+        const t=new SDB(url,key);
+        await t.getPI();
+        alert('✅ 连接测试成功！');
+    }catch(e){
+        alert('❌ 失败: '+e.message);
+    }
+}
+
+// 标签切换
+let curTab='personal';
+function sw(tab){
+    curTab=tab;
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    $('tab-'+tab).classList.add('active');
+    event.target.classList.add('active');
+    if(tab==='edu')loadEdu();
+    if(tab==='work')loadWork();
+    if(tab==='proj')loadProj();
+    if(tab==='skill')loadSkill();
+    if(tab==='personal')loadPersonal();
+}
+
+// ===== 个人信息 =====
+async function loadPersonal(){
+    if(!db)return;
+    try{
+        const pi=await db.getPI();
+        if(pi){
+            $('p-id').value=pi.id||'';
+            $('p-name').value=pi.name||'';
+            $('p-title').value=pi.title||'';
+            $('p-tagline').value=pi.tagline||'';
+            $('p-location').value=pi.location||'';
+            $('p-email').value=pi.email||'';
+            $('p-phone').value=pi.phone||'';
+        }
+    }catch(e){console.error(e);}
+}
+async function savePersonal(){
+    if(!db)return;
+    const id=$('p-id').value;
+    const o={
+        name:$('p-name').value,
+        title:$('p-title').value,
+        tagline:$('p-tagline').value,
+        location:$('p-location').value,
+        email:$('p-email').value,
+        phone:$('p-phone').value
+    };
+    try{
+        if(id){
+            await db.updPI(id,o);
+            msg('msg-personal','✅ 已更新！',true);
+        }else{
+            msg('msg-personal','❌ 请先初始化数据',false);
+        }
+    }catch(e){
+        msg('msg-personal','❌ 失败: '+e.message,false);
+    }
+}
+
+// ===== 教育经历 =====
+async function loadEdu(){
+    if(!db)return;
+    try{
+        const items=await db.getEdu();
+        renderList('list-edu',items.map(i=>({
+            id:i.id,title:i.institution+(i.degree?' - '+i.degree:''),
+            sub:[i.major,i.period,i.location].filter(Boolean).join(' | ')
+        })),'edu');
+    }catch(e){console.error(e);}
+}
+async function addEdu(){
+    if(!db)return;
+    try{
+        await db.addEdu({institution:$('e-inst').value,degree:$('e-deg').value,major:$('e-major').value,period:$('e-period').value,location:'',achievements:[]});
+        msg('msg-edu','✅ 添加成功！',true);
+        clearF(['e-inst','e-deg','e-major','e-period']);loadEdu();
+    }catch(e){msg('msg-edu','❌ '+e.message,false);}
+}
+async function updEdu(){
+    if(!db)return;
+    try{
+        await db.updEdu($('e-id').value,{institution:$('e-inst').value,degree:$('e-deg').value,major:$('e-major').value,period:$('e-period').value,location:''});
+        msg('msg-edu','✅ 更新成功！',true);
+        resetBtn('e');loadEdu();
+    }catch(e){msg('msg-edu','❌ '+e.message,false);}
+}
+window.editEdu=function(id){
+    db.getEdu().then(items=>{
+        const i=items.find(x=>x.id===id);
+        if(i){$('e-id').value=i.id;$('e-inst').value=i.institution||'';$('e-deg').value=i.degree||'';$('e-major').value=i.major||'';$('e-period').value=i.period||'';$('btn-e-upd').style.display='inline';$('btn-e-can').style.display='inline';document.querySelector('#tab-edu .btn-primary').style.display='none';}
+    });
+};
+window.delEdu=async function(id){
+    if(!confirm('确定删除？'))return;
+    try{await db.delEdu(id);msg('msg-edu','✅ 删除成功',true);loadEdu();}catch(e){msg('msg-edu','❌ '+e.message,false);}
+};
+function canEdu(){resetBtn('e');clearF(['e-inst','e-deg','e-major','e-period']);}
+
+// ===== 工作经历 =====
+async function loadWork(){
+    if(!db)return;
+    try{
+        const items=await db.getWork();
+        renderList('list-work',items.map(i=>({
+            id:i.id,title:i.company+(i.position?' - '+i.position:''),
+            sub:[i.period,i.location].filter(Boolean).join(' | ')+(i.description?'\n'+i.description.substring(0,80):'')
+        })),'work');
+    }catch(e){console.error(e);}
+}
+async function addWork(){
+    if(!db)return;
+    try{
+        await db.addWork({company:$('w-comp').value,position:$('w-pos').value,period:$('w-period').value,location:'',description:$('w-desc').value,highlights:[]});
+        msg('msg-work','✅ 添加成功！',true);
+        clearF(['w-comp','w-pos','w-period','w-desc']);loadWork();
+    }catch(e){msg('msg-work','❌ '+e.message,false);}
+}
+async function updWork(){
+    if(!db)return;
+    try{
+        await db.updWork($('w-id').value,{company:$('w-comp').value,position:$('w-pos').value,period:$('w-period').value,location:'',description:$('w-desc').value});
+        msg('msg-work','✅ 更新成功！',true);
+        resetBtn('w');loadWork();
+    }catch(e){msg('msg-work','❌ '+e.message,false);}
+}
+window.editWork=function(id){
+    db.getWork().then(items=>{
+        const i=items.find(x=>x.id===id);
+        if(i){$('w-id').value=i.id;$('w-comp').value=i.company||'';$('w-pos').value=i.position||'';$('w-period').value=i.period||'';$('w-desc').value=i.description||'';$('btn-w-upd').style.display='inline';$('btn-w-can').style.display='inline';document.querySelector('#tab-work .btn-primary').style.display='none';}
+    });
+};
+window.delWork=async function(id){
+    if(!confirm('确定删除？'))return;
+    try{await db.delWork(id);msg('msg-work','✅ 删除成功',true);loadWork();}catch(e){msg('msg-work','❌ '+e.message,false);}
+};
+function canWork(){resetBtn('w');clearF(['w-comp','w-pos','w-period','w-desc']);}
+
+// ===== 项目 =====
+async function loadProj(){
+    if(!db)return;
+    try{
+        const items=await db.getProj();
+        renderList('list-proj',items.map(i=>({
+            id:i.id,title:i.name+(i.role?' ('+i.role+')':''),
+            sub:i.period+(i.description?'\n'+i.description.substring(0,80):'')
+        })),'proj');
+    }catch(e){console.error(e);}
+}
+async function addProj(){
+    if(!db)return;
+    const tech=$('pr-tech').value.split(',').map(t=>t.trim()).filter(Boolean);
+    try{
+        await db.addProj({name:$('pr-name').value,role:$('pr-role').value,period:$('pr-period').value,description:$('pr-desc').value,technologies:tech,outcomes:[]});
+        msg('msg-proj','✅ 添加成功！',true);
+        clearF(['pr-name','pr-role','pr-period','pr-desc','pr-tech']);loadProj();
+    }catch(e){msg('msg-proj','❌ '+e.message,false);}
+}
+async function updProj(){
+    if(!db)return;
+    const tech=$('pr-tech').value.split(',').map(t=>t.trim()).filter(Boolean);
+    try{
+        await db.updProj($('pr-id').value,{name:$('pr-name').value,role:$('pr-role').value,period:$('pr-period').value,description:$('pr-desc').value,technologies:tech});
+        msg('msg-proj','✅ 更新成功！',true);
+        resetBtn('pr');loadProj();
+    }catch(e){msg('msg-proj','❌ '+e.message,false);}
+}
+window.editProj=function(id){
+    db.getProj().then(items=>{
+        const i=items.find(x=>x.id===id);
+        if(i){$('pr-id').value=i.id;$('pr-name').value=i.name||'';$('pr-role').value=i.role||'';$('pr-period').value=i.period||'';$('pr-desc').value=i.description||'';$('pr-tech').value=(i.technologies||[]).join(', ');$('btn-pr-upd').style.display='inline';$('btn-pr-can').style.display='inline';document.querySelector('#tab-proj .btn-primary').style.display='none';}
+    });
+};
+window.delProj=async function(id){
+    if(!confirm('确定删除？'))return;
+    try{await db.delProj(id);msg('msg-proj','✅ 删除成功',true);loadProj();}catch(e){msg('msg-proj','❌ '+e.message,false);}
+};
+function canProj(){resetBtn('pr');clearF(['pr-name','pr-role','pr-period','pr-desc','pr-tech']);}
+
+// ===== 技能 =====
+async function loadSkill(){
+    if(!db)return;
+    try{
+        const skills=await db.getSkills();
+        const c=$('list-skill');
+        let html='';
+        const cn={design:'🎨 设计技能',development:'💻 开发技能',other:'⚡ 其他技能'};
+        Object.keys(skills).forEach(k=>{
+            if(skills[k]&&skills[k].length){
+                html+='<h3 style="margin:18px 0 12px;color:#667eea">'+cn[k]+'</h3>';
+                skills[k].forEach(s=>{
+                    html+='<div class="data-item"><div><h3>'+s.name+'</h3><p>熟练度: '+⭐.repeat(s.proficiency)+☆.repeat(5-s.proficiency)+'</p></div><div class="item-actions"><button class="btn-warning"onclick="editSk(\''+s.id+'\')">✏️</button><button class="btn-danger"onclick="delSk(\''+s.id+'\')">🗑️</button></div></div>';
+                });
+            }
+        });
+        c.innerHTML=html||'<p style="color:#999;text-align:center;padding:30px;">暂无数据</p>';
+    }catch(e){console.error(e);}
+}
+async function addSkill(){
+    if(!db)return;
+    try{
+        await db.addSkill({category:$('sk-cat').value,name:$('sk-name').value,proficiency:+$('sk-prof').value});
+        msg('msg-skill','✅ 添加成功！',true);
+        clearF(['sk-name','sk-prof']);loadSkill();
+    }catch(e){msg('msg-skill','❌ '+e.message,false);}
+}
+async function updSkill(){
+    if(!db)return;
+    try{
+        await db.updSkill($('sk-id').value,{category:$('sk-cat').value,name:$('sk-name').value,proficiency:+$('sk-prof').value});
+        msg('msg-skill','✅ 更新成功！',true);
+        resetBtn('sk');loadSkill();
+    }catch(e){msg('msg-skill','❌ '+e.message,false);}
+}
+window.editSk=function(id){
+    db.getSkills().then(s=>{
+        let found=null;
+        Object.values(s).forEach(arr=>{const f=arr.find(x=>x.id===id);if(f)found=f;});
+        if(found){$('sk-id').value=found.id;$('sk-cat').value=found.category||'development';$('sk-name').value=found.name||'';$('sk-prof').value=found.proficiency||3;$('btn-sk-upd').style.display='inline';$('btn-sk-can').style.display='inline';document.querySelector('#tab-skill .btn-primary').style.display='none';}
+    });
+};
+window.delSk=async function(id){
+    if(!confirm('确定删除？'))return;
+    try{await db.delSkill(id);msg('msg-skill','✅ 删除成功',true);loadSkill();}catch(e){msg('msg-skill','❌ '+e.message,false)};
+};
+function canSkill(){resetBtn('sk');clearF(['sk-name','sk-prof']);}
+
+// ===== 工具函数 =====
+function renderList(cid,items,prefix){
+    const el=$(cid);
+    el.innerHTML=items.map(i=>
+        '<div class="data-item"><div><h3>'+i.title+'</h3><p style="white-space:pre-line">'+i.sub+'</p></div>'+
+        '<div class="item-actions">'+
+        '<button class="btn-warning" onclick="edit'+prefix.charAt(0).toUpperCase()+prefix.slice(1)+(\''+i.id+'\')">✏️ 编辑</button>'+
+        '<button class="btn-danger" onclick="del'+prefix.charAt(0).toUpperCase()+prefix.slice(1)+(\''+i.id+'\')">🗑️ 删除</button>'+
+        '</div></div>'
+    ).join('');
+}
+function resetBtn(prefix){
+    const short=prefix.slice(0,2);
+    $('btn-'+short+'-upd').style.display='none';
+    $('btn-'+short+'-can').style.display='none';
+    document.querySelector('#tab-'+prefix+' .btn-primary').style.display='';
+}
+function clearF(ids){
+    ids.forEach(id=>{
+        const el=$(id);
+        if(el)el.value='';
+    });
+}
+// 星星字符
+const ⭐='★';
+const ☆='☆';
+
+// 自动加载已保存的配置
+(function(){
+    const savedUrl=localStorage.getItem('supabase_url');
+    const savedKey=localStorage.getItem('supabase_key');
+    if(savedUrl&&savedKey){
+        $('cfg-url').value=savedUrl;
+        $('cfg-key').value=savedKey;
+    }
+})();
+</script>
+</body>
+</html>

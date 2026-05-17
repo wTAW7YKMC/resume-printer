@@ -11,17 +11,36 @@
     <constant name="struts.ui.theme" value="simple"/>
     <constant name="struts.i18n.encoding" value="UTF-8"/>
 
-    <!-- 全局异常映射（Global Exception Mappings） -->
-    <package name="default" extends="struts-default" namespace="/">
+    <!-- 自定义拦截器栈（包含权限控制） -->
+    <package name="auth-default" extends="struts-default" namespace="/">
+
+        <!-- 定义拦截器 -->
+        <interceptors>
+            <!-- 权限验证拦截器 -->
+            <interceptor name="authInterceptor"
+                        class="com.resume.interceptor.AuthenticationInterceptor"/>
+
+            <!-- 自定义拦截器栈：包含权限验证 -->
+            <interceptor-stack name="authStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="authInterceptor"/>
+            </interceptor-stack>
+        </interceptors>
+
+        <!-- 设置默认拦截器栈为自定义权限拦截器栈 -->
+        <default-interceptor-ref name="authStack"/>
 
         <!-- 全局结果 -->
         <global-results>
+            <!-- 登录页面 -->
+            <result name="login">/login.jsp</result>
+
             <!-- 404页面未找到 -->
             <result name="error404">/WEB-INF/error/404.jsp</result>
-            
+
             <!-- 500服务器内部错误 -->
             <result name="error500">/WEB-INF/error/500.jsp</result>
-            
+
             <!-- 通用错误页面 -->
             <result name="error">/WEB-INF/error/error.jsp</result>
         </global-results>
@@ -83,10 +102,42 @@
                               result="error"/>
         </action>
 
+        <!-- 登录相关Action（不需要权限验证） -->
+        <!-- 显示登录页面 -->
+        <action name="login"
+                class="com.resume.action.LoginAction"
+                method="execute">
+            <interceptor-ref name="defaultStack"/>
+            <result name="success">/login.jsp</result>
+        </action>
+
+        <!-- 处理登录请求（不需要权限验证） -->
+        <action name="doLogin"
+                class="com.resume.action.LoginAction"
+                method="doLogin">
+            <interceptor-ref name="defaultStack"/>
+            <result name="success">/welcome.jsp</result>
+            <result name="input">/login.jsp</result>
+        </action>
+
+        <!-- 用户登出（不需要权限验证） -->
+        <action name="logout"
+                class="com.resume.action.LoginAction"
+                method="logout">
+            <interceptor-ref name="defaultStack"/>
+            <result name="login">/login.jsp</result>
+        </action>
+
+        <!-- 欢迎页面（需要权限验证） -->
+        <action name="welcome"
+                class="com.resume.action.LoginAction">
+            <result name="success">/welcome.jsp</result>
+        </action>
+
     </package>
 
-    <!-- 示例：简历相关Action的局部异常映射 -->
-    <package name="resume" extends="struts-default" namespace="/resume">
+    <!-- 示例：简历相关Action的局部异常映射（需要权限验证） -->
+    <package name="resume" extends="auth-default" namespace="/resume">
 
         <action name="viewResume"
                 class="com.resume.action.ResumeAction"

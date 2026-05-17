@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Becky's Resume - 邮件模板预览</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f2f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 40px 20px;
+        }
+
+        .preview-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .email-wrapper {
+            background: #e0e0e0;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .email-label {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .info-box {
+            background: white;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #333;
+        }
+
+        .btn-group {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+<div class="preview-container">
+    <h1>📧 邮件模板预览</h1>
+    <p class="subtitle">Becky's Resume 登录验证邮件 · 实际发送效果</p>
+
+    <span class="email-label">✉️ 用户收件箱中的显示效果</span>
+
+    <div class="email-wrapper">
+        
+        <div style="max-width: 600px; margin: 0 auto; font-family: 'Georgia', serif; background: #fff;">
+            
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                        padding: 35px 30px; text-align: center; 
+                        border-radius: 12px 12px 0 0;">
+                <h1 style="color: white; margin: 0; font-size: 28px; letter-spacing: 2px;">✨ Becky's Resume ✨</h1>
+                <p style="color: rgba(255,255,255,0.9); margin: 12px 0 0 0; font-size: 16px;">登录验证</p>
+            </div>
+
+            <div style="background: #fafafa; padding: 40px 35px; border: 1px solid #e0e0e0; border-top: none;">
+                
+                <h2 style="color: #333; margin: 0 0 15px 0; font-size: 22px;">您好！</h2>
+                
+                <p style="color: #555; line-height: 1.8; font-size: 16px; margin: 0 0 25px 0;">
+                    欢迎使用 <strong style="color: #667eea;">Becky's Resume</strong> 简历打印机！<br>
+                    请点击下方按钮完成登录验证：
+                </p>
+
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="#" onclick="alert('这是预览模式，实际使用时会跳转到登录确认页面'); return false;" 
+                       style="display: inline-block; padding: 16px 45px; 
+                              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                              color: white; text-decoration: none; border-radius: 50px; 
+                              font-size: 18px; font-weight: bold; 
+                              box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                              transition: all 0.3s ease;">
+                        🔐 确认并登录
+                    </a>
+                </div>
+
+                <div style="background: #fff8e1; border-left: 4px solid #ffc107; 
+                            padding: 18px 20px; margin: 25px 0; border-radius: 6px;
+                            font-size: 14px; color: #856404; line-height: 1.6;">
+                    <strong>🔒 安全提示：</strong><br>
+                    • 此链接仅用于本次登录，30分钟内有效<br>
+                    • 请勿将此链接分享给他人<br>
+                    • 如非本人操作，请忽略此邮件
+                </div>
+
+                <p style="color: #999; text-align: center; font-size: 13px; margin: 25px 0 0 0;">
+                    如果按钮无法点击，请复制以下链接到浏览器打开：<br>
+                    <span style="word-break: break-all; color: #667eea; font-size: 11px;">
+                        https://your-app.com/verify?token=xxxxx...
+                    </span>
+                </p>
+
+            </div>
+
+            <div style="background: #f5f5f5; padding: 22px; text-align: center; 
+                        border: 1px solid #e0e0e0; border-top: none; 
+                        border-radius: 0 0 12px 12px;">
+                <p style="margin: 0 0 8px 0; color: #888; font-size: 13px;">
+                    此邮件由系统自动发送 · 请勿回复
+                </p>
+                <p style="margin: 0; color: #aaa; font-size: 12px;">
+                    © 2026 Becky's Resume · 让简历更精彩 ✨
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="info-box">
+        <strong>💡 使用说明：</strong><br><br>
+        1️⃣ 复制上面的 HTML 代码（<code>email-wrapper</code> 内的内容）<br>
+        2️⃣ 打开 Supabase Dashboard → Authentication → Email Templates<br>
+        3️⃣ 找到 "Confirm signup" 模板并粘贴<br>
+        4️⃣ 保存后即可生效
+    </div>
+
+    <div class="btn-group">
+        <button class="btn" onclick="window.open('https://supabase.com/dashboard/project/crqwokrpcwvvsibcukkh/auth/templates', '_blank')">
+            🚀 去Supabase修改模板
+        </button>
+    </div>
+
+</div>
+
+</body>
+</html>
