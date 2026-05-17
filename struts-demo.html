@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Printer - Struts2 权限控制演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier Prime', 'Special Elite', monospace;
+            background: linear-gradient(135deg, #f5f5dc 0%, #e8e8d0 100%);
+            min-height: 100vh;
+        }
+
+        .demo-header {
+            background: linear-gradient(135deg, #333 0%, #000 100%);
+            color: #fffef9;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .demo-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ff6b35;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .info-box {
+            background: #fffef9;
+            border: 3px solid #333;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .info-box h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 22px;
+            border-bottom: 2px dashed #999;
+            padding-bottom: 10px;
+        }
+
+        .info-box p, .info-box li {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+        }
+
+        .code-block {
+            background: #f8f8f0;
+            border-left: 4px solid #333;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .test-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .test-card {
+            background: #fffef9;
+            border: 2px solid #333;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .test-card .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .test-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .test-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .credentials {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .credentials strong {
+            color: #856404;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: #333;
+            color: #fffef9;
+            padding: 12px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+            font-family: inherit;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn-primary:hover {
+            background: #000;
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .flow-diagram {
+            background: #f0f0e8;
+            border: 2px solid #666;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .flow-step {
+            display: inline-block;
+            background: #fffef9;
+            border: 2px solid #333;
+            padding: 15px 25px;
+            margin: 10px;
+            position: relative;
+            font-weight: bold;
+        }
+
+        .flow-arrow {
+            display: inline-block;
+            font-size: 24px;
+            color: #333;
+            margin: 0 10px;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .feature-item {
+            background: #f8f8f0;
+            border-left: 4px solid #333;
+            padding: 15px;
+        }
+
+        .feature-item strong {
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 演示头部 -->
+    <div class="demo-header">
+        <h1>🔐 Struts2 权限控制系统<span class="badge">演示模式</span></h1>
+        <p>基于拦截器机制的完整认证与授权解决方案 | 无需Maven/Tomcat即可预览</p>
+    </div>
+
+    <div class="container">
+        <!-- 系统介绍 -->
+        <div class="info-box">
+            <h2>📋 系统概述</h2>
+            <p>本系统实现了完整的<strong>Struts2拦截器权限控制</strong>机制，包括：</p>
+            <ul>
+                <li><strong>AuthenticationInterceptor</strong> - 权限验证拦截器</li>
+                <li><strong>LoginAction</strong> - 登录/登出控制器</li>
+                <li><strong>Session管理</strong> - 完整的会话生命周期</li>
+                <li><strong>自动重定向</strong> - 未登录用户强制跳转到登录页</li>
+            </ul>
+
+            <div class="flow-diagram">
+                <div style="margin-bottom: 15px; font-weight: bold; color: #333;">🔄 权限验证流程</div>
+                <div class="flow-step">用户请求</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">拦截器检查</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">Session验证</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step" style="background: #d4edda;">✅ 放行 / 🔒 重定向</div>
+            </div>
+        </div>
+
+        <!-- 测试账号 -->
+        <div class="credentials">
+            <strong>🔑 测试账号：</strong><br/>
+            用户名：<code>admin</code> &nbsp;&nbsp;|&nbsp;&nbsp; 密码：<code>admin123</code>
+        </div>
+
+        <!-- 功能测试区域 -->
+        <div class="info-box">
+            <h2>🧪 功能测试入口</h2>
+            <p>点击下方卡片体验不同的功能场景：</p>
+
+            <div class="test-section">
+                <a href="struts-demo-login.html" class="test-card">
+                    <div class="icon">🔐</div>
+                    <h3>场景1：正常登录</h3>
+                    <p>输入正确的用户名密码，体验完整登录流程并跳转到欢迎页面</p>
+                </a>
+
+                <a href="struts-demo-unauthorized.html" class="test-card">
+                    <div class="icon">🚫</div>
+                    <h3>场景2：未授权访问</h3>
+                    <p>直接访问受保护资源，观察系统如何重定向到登录页</p>
+                </a>
+
+                <a href="struts-demo-welcome.html" class="test-card">
+                    <div class="icon">🎉</div>
+                    <h3>场景3：欢迎页面</h3>
+                    <p>查看登录成功后的欢迎界面（需要先登录）</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- 核心特性 -->
+        <div class="info-box">
+            <h2>✨ 核心特性</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <strong>🛡️ 自动拦截</strong>
+                    所有受保护Action默认应用权限验证
+                </div>
+                <div class="feature-item">
+                    <strong>⚡ 智能放行</strong>
+                    登录/登出等公开请求自动识别
+                </div>
+                <div class="feature-item">
+                    <strong>📝 日志记录</strong>
+                    详细的访问日志和审计跟踪
+                </div>
+                <div class="feature-item">
+                    <strong>🎨 UI一致</strong>
+                    复古打字机风格，与项目整体统一
+                </div>
+                <div class="feature-item">
+                    <strong>🔒 会话安全</strong>
+                    30分钟超时，防止会话固定攻击
+                </div>
+                <div class="feature-item">
+                    <strong>🚀 易于扩展</strong>
+                    支持数据库集成、角色控制等
+                </div>
+            </div>
+        </div>
+
+        <!-- 技术架构 -->
+        <div class="info-box">
+            <h2>🏗️ 技术架构</h2>
+
+            <h3 style="color: #333; margin: 15px 0 10px 0;">文件结构</h3>
+            <div class="code-block">struts/src/main/java/com/resume/
+├── interceptor/
+│   └── AuthenticationInterceptor.java   ← 权限拦截器
+├── action/
+│   └── LoginAction.java                 ← 登录控制器
+└── exception/
+    └── *.java                           ← 异常处理
+
+struts/src/main/webapp/
+├── login.jsp                            ← 登录页面
+├── welcome.jsp                          ← 欢迎页面
+└── WEB-INF/
+    └── web.xml                          ← Web配置
+
+struts/src/main/resources/
+└── struts.xml                           ← Struts2配置</div>
+
+            <h3 style="color: #333; margin: 15px 0 10px 0;">关键配置（struts.xml）</h3>
+            <div class="code-block">&lt;!-- 自定义拦截器栈 --&gt;
+&lt;interceptor-stack name="authStack"&gt;
+    &lt;interceptor-ref name="defaultStack"/&gt;
+    &lt;interceptor-ref name="authInterceptor"/&gt;
+&lt;/interceptor-stack&gt;
+
+&lt;!-- 全局结果 --&gt;
+&lt;global-results&gt;
+    &lt;result name="login"&gt;/login.jsp&lt;/result&gt;
+&lt;/global-results&gt;
+
+&lt;!-- 公开Action（不需要权限）--&gt;
+&lt;action name="login" ...&gt;
+    &lt;interceptor-ref name="defaultStack"/&gt;  &lt;!-- 覆盖默认栈 --&gt;
+&lt;/action&gt;</div>
+        </div>
+
+        <!-- 快速开始 -->
+        <div class="info-box">
+            <h2>🚀 生产环境部署步骤</h2>
+            <ol style="margin-left: 20px; line-height: 2;">
+                <li><strong>安装Maven</strong> - 从官网下载并配置环境变量</li>
+                <li><strong>编译项目</strong> - 迧行 <code>cd struts &amp;&amp; mvn clean package</code></li>
+                <li><strong>安装Tomcat</strong> - 下载Tomcat 8+版本</li>
+                <li><strong>部署WAR</strong> - 将 <code>target/resume-printer-struts.war</code> 复制到Tomcat的webapps目录</li>
+                <li><strong>启动服务</strong> - 运行Tomcat的startup脚本</li>
+                <li><strong>访问系统</strong> - 打开浏览器访问 <code>http://localhost:8080/resume/login.action</code></li>
+            </ol>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="struts/AUTHENTICATION_GUIDE.md" target="_blank" class="btn-primary">📖 查看完整文档</a>
+            </div>
+        </div>
+
+        <!-- 常见问题 -->
+        <div class="info-box">
+            <h2>❓ 常见问题</h2>
+
+            <div class="feature-list">
+                <div class="feature-item">
+                    <strong>Q: 为什么用演示模式？</strong>
+                    因为当前环境未安装Maven和Tomcat，演示版可立即预览所有功能
+                </div>
+                <div class="feature-item">
+                    <strong>Q: 演示版和生产版区别？</strong>
+                    功能完全相同，演示版用JavaScript模拟后端逻辑
+                </div>
+                <div class="feature-item">
+                    <strong>Q: 如何切换到生产版？</strong>
+                    安装Maven+Tomcat后执行编译部署即可
+                </div>
+                <div class="feature-item">
+                    <strong>Q: 可以修改测试账号吗？</strong>
+                    可以，编辑LoginAction.java中的常量定义
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div style="text-align: center; margin: 40px 0; color: #666; font-size: 14px;">
+            <p>✨ Struts2 权限控制系统 v1.0 | 基于拦截器架构 | 复古打字机风格 ✨</p>
+            <p style="margin-top: 10px;">
+                详细文档：<a href="struts/AUTHENTICATION_GUIDE.md" style="color: #333; text-decoration: underline;">AUTHENTICATION_GUIDE.md</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

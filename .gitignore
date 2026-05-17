@@ -1,37 +1,44 @@
-# 编译输出目录
-target/
-classes/
-*.class
+# 系统文件
+NUL
+Thumbs.db
+.DS_Store
+Desktop.ini
 
-# IDE文件
-.vscode/
+# IDE配置
 .idea/
+.vscode/
 *.swp
 *.swo
 
-# 依赖JAR文件
-*.jar
-!gson-2.9.0.jar
+# 依赖目录
+node_modules/
+__pycache__/
+*.pyc
 
 # 构建输出
-*.zip
-*.tar.gz
+target/
+dist/
+build/
+
+# 日志文件
+*.log
+logs/
 
 # 临时文件
 *.tmp
 *.temp
+.cache/
 
-# 系统文件
-.DS_Store
-Thumbs.db
+# 环境变量
+.env
+.env.local
+.env.*.local
 
-# 日志文件
-*.log
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
 
-# 数据库文件
-*.db
-*.sqlite
-
-# 部署临时文件
-deploy/*.jar
-deploy/*.zip
+# 备份文件
+*.bak
+*.backup

@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简历数据管理系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button.btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        button.btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102,126,234,0.4);
+        }
+
+        button.btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        button.btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+        }
+
+        button.btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .data-list {
+            margin-top: 30px;
+        }
+
+        .data-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .data-item h3 {
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .data-item p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .api-info {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .api-info h3 {
+            color: #1976D2;
+            margin-bottom: 10px;
+        }
+
+        .api-info code {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .data-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 简历数据管理系统</h1>
+
+        <div class="api-info">
+            <h3>📡 API服务器状态</h3>
+            <p>API地址：<code>http://localhost:3001</code></p>
+            <p id="api-status">正在检查连接...</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('personal')">👤 个人信息</button>
+            <button class="tab-btn" onclick="switchTab('education')">🎓 教育经历</button>
+            <button class="tab-btn" onclick="switchTab('work')">💼 工作经历</button>
+            <button class="tab-btn" onclick="switchTab('projects')">🚀 项目经验</button>
+            <button class="tab-btn" onclick="switchTab('skills')">⭐ 技能列表</button>
+        </div>
+
+        <!-- 个人信息 -->
+        <div id="personal-tab" class="tab-content active">
+            <h2>个人信息管理</h2>
+            <div id="personal-status" class="status-message"></div>
+
+            <form id="personal-form">
+                <input type="hidden" id="personal-id">
+                <div class="form-group">
+                    <label for="name">姓名 *</label>
+                    <input type="text" id="name" required placeholder="例如：张三">
+                </div>
+                <div class="form-group">
+                    <label for="title">职位/头衔</label>
+                    <input type="text" id="title" placeholder="例如：前端开发工程师">
+                </div>
+                <div class="form-group">
+                    <label for="tagline">个人简介</label>
+                    <textarea id="tagline" placeholder="简短介绍自己..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="location">所在地</label>
+                    <input type="text" id="location" placeholder="例如：北京市">
+                </div>
+                <div class="form-group">
+                    <label for="email">邮箱 *</label>
+                    <input type="email" id="email" required placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="phone">电话</label>
+                    <input type="tel" id="phone" placeholder="+86 138 0000 0000">
+                </div>
+                <button type="submit" class="btn-primary">💾 保存个人信息</button>
+            </form>
+        </div>
+
+        <!-- 教育经历 -->
+        <div id="education-tab" class="tab-content">
+            <h2>教育经历管理</h2>
+            <div id="education-status" class="status-message"></div>
+
+            <form id="education-form">
+                <input type="hidden" id="edu-id">
+                <div class="form-group">
+                    <label for="institution">学校名称 *</label>
+                    <input type="text" id="institution" required placeholder="例如：北京大学">
+                </div>
+                <div class="form-group">
+                    <label for="degree">学历</label>
+                    <input type="text" id="degree" placeholder="例如：学士/硕士/博士">
+                </div>
+                <div class="form-group">
+                    <label for="major">专业</label>
+                    <input type="text" id="major" placeholder="例如：计算机科学与技术">
+                </div>
+                <div class="form-group">
+                    <label for="edu-period">时间段</label>
+                    <input type="text" id="edu-period" placeholder="例如：2018 - 2022">
+                </div>
+                <div class="form-group">
+                    <label for="edu-location">地点</label>
+                    <input type="text" id="edu-location" placeholder="例如：北京">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn-primary">➕ 添加教育经历</button>
+                    <button type="button" id="update-edu-btn" class="btn-primary" style="display:none; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">✏️ 更新</button>
+                </div>
+            </form>
+
+            <div class="data-list" id="education-list"></div>
+        </div>
+
+        <!-- 工作经历 -->
+        <div id="work-tab" class="tab-content">
+            <h2>工作经历管理</h2>
+            <div id="work-status" class="status-message"></div>
+
+            <form id="work-form">
+                <input type="hidden" id="work-id">
+                <div class="form-group">
+                    <label for="company">公司名称 *</label>
+                    <input type="text" id="company" required placeholder="例如：阿里巴巴">
+                </div>
+                <div class="form-group">
+                    <label for="position">职位</label>
+                    <input type="text" id="position" placeholder="例如：高级前端工程师">
+                </div>
+                <div class="form-group">
+                    <label for="work-period">时间段</label>
+                    <input type="text" id="work-period" placeholder="例如：2022 - 至今">
+                </div>
+                <div class="form-group">
+                    <label for="work-location">地点</label>
+                    <input type="text" id="work-location" placeholder="例如：杭州">
+                </div>
+                <div class="form-group">
+                    <label for="work-description">工作描述</label>
+                    <textarea id="work-description" placeholder="描述你的工作内容和职责..."></textarea>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn-primary">➕ 添加工作经历</button>
+                    <button type="button" id="update-work-btn" class="btn-primary" style="display:none; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">✏️ 更新</button>
+                </div>
+            </form>
+
+            <div class="data-list" id="work-list"></div>
+        </div>
+
+        <!-- 项目经验 -->
+        <div id="projects-tab" class="tab-content">
+            <h2>项目经验管理</h2>
+            <div id="project-status" class="status-message"></div>
+
+            <form id="project-form">
+                <input type="hidden" id="proj-id">
+                <div class="form-group">
+                    <label for="proj-name">项目名称 *</label>
+                    <input type="text" id="proj-name" required placeholder="例如：电商平台重构">
+                </div>
+                <div class="form-group">
+                    <label for="proj-role">你的角色</label>
+                    <input type="text" id="proj-role" placeholder="例如：前端负责人">
+                </div>
+                <div class="form-group">
+                    <label for="proj-period">项目时间</label>
+                    <input type="text" id="proj-period" placeholder="例如：2023.01 - 2023.06">
+                </div>
+                <div class="form-group">
+                    <label for="proj-description">项目描述</label>
+                    <textarea id="proj-description" placeholder="描述这个项目的目标和你的贡献..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="proj-tech">技术栈（用逗号分隔）</label>
+                    <input type="text" id="proj-tech" placeholder="例如：React, Node.js, MongoDB">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn-primary">➕ 添加项目</button>
+                    <button type="button" id="update-proj-btn" class="btn-primary" style="display:none; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">✏️ 更新</button>
+                </div>
+            </form>
+
+            <div class="data-list" id="project-list"></div>
+        </div>
+
+        <!-- 技能列表 -->
+        <div id="skills-tab" class="tab-content">
+            <h2>技能管理</h2>
+            <div id="skill-status" class="status-message"></div>
+
+            <form id="skill-form">
+                <input type="hidden" id="skill-id">
+                <div class="form-group">
+                    <label for="skill-category">技能分类</label>
+                    <select id="skill-category">
+                        <option value="design">设计技能</option>
+                        <option value="development">开发技能</option>
+                        <option value="other">其他技能</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="skill-name">技能名称 *</label>
+                    <input type="text" id="skill-name" required placeholder="例如：JavaScript">
+                </div>
+                <div class="form-group">
+                    <label for="skill-proficiency">熟练度 (1-5)</label>
+                    <input type="number" id="skill-proficiency" min="1" max="5" value="3">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn-primary">➕ 添加技能</button>
+                    <button type="button" id="update-skill-btn" class="btn-primary" style="display:none; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">✏️ 更新</button>
+                </div>
+            </form>
+
+            <div class="data-list" id="skill-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3001';
+
+        // 检查API连接
+        async function checkApiConnection() {
+            try {
+                const response = await fetch(`${API_BASE}/api/resume`);
+                if (response.ok) {
+                    document.getElementById('api-status').innerHTML = '✅ API服务器连接正常';
+                    document.getElementById('api-status').style.color = '#155724';
+                } else {
+                    document.getElementById('api-status').innerHTML = '❌ API服务器响应异常';
+                    document.getElementById('api-status').style.color = '#721c24';
+                }
+            } catch (error) {
+                document.getElementById('api-status').innerHTML = `❌ 无法连接到API服务器 - 请确保已启动后端服务（运行 node api-server.js）`;
+                document.getElementById('api-status').style.color = '#721c24';
+            }
+        }
+
+        // 切换标签页
+        function switchTab(tabName) {
+            // 隐藏所有标签内容
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            // 移除所有按钮的active类
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // 显示选中的标签
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            event.target.classList.add('active');
+
+            // 加载对应的数据
+            if (tabName === 'education') loadEducation();
+            if (tabName === 'work') loadWork();
+            if (tabName === 'projects') loadProjects();
+            if (tabName === 'skills') loadSkills();
+            if (tabName === 'personal') loadPersonal();
+        }
+
+        // 显示状态消息
+        function showStatus(elementId, message, isSuccess) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.className = `status-message ${isSuccess ? 'success' : 'error'}`;
+            setTimeout(() => {
+                el.style.display = 'none';
+            }, 5000);
+        }
+
+        // ========== 个人信息 ==========
+        async function loadPersonal() {
+            try {
+                const response = await fetch(`${API_BASE}/api/resume`);
+                const result = await response.json();
+                if (result.code === 200 && result.data.personalInfo) {
+                    const pi = result.data.personalInfo;
+                    document.getElementById('personal-id').value = pi.id || '';
+                    document.getElementById('name').value = pi.name || '';
+                    document.getElementById('title').value = pi.title || '';
+                    document.getElementById('tagline').value = pi.tagline || '';
+                    document.getElementById('location').value = pi.location || '';
+                    document.getElementById('email').value = pi.email || '';
+                    document.getElementById('phone').value = pi.phone || '';
+                }
+            } catch (error) {
+                console.error('加载个人信息失败:', error);
+            }
+        }
+
+        document.getElementById('personal-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('personal-id').value;
+            const data = {
+                name: document.getElementById('name').value,
+                title: document.getElementById('title').value,
+                tagline: document.getElementById('tagline').value,
+                location: document.getElementById('location').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value
+            };
+
+            try {
+                let response;
+                if (id) {
+                    response = await fetch(`${API_BASE}/api/resume/personal/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                } else {
+                    showStatus('personal-status', '请先在数据库中创建个人信息记录', false);
+                    return;
+                }
+                const result = await response.json();
+                showStatus('personal-status', result.message, result.code === 200);
+            } catch (error) {
+                showStatus('personal-status', '操作失败: ' + error.message, false);
+            }
+        });
+
+        // ========== 教育经历 ==========
+        async function loadEducation() {
+            try {
+                const response = await fetch(`${API_BASE}/api/resume`);
+                const result = await response.json();
+                if (result.code === 200) {
+                    renderEducationList(result.data.education || []);
+                }
+            } catch (error) {
+                console.error('加载教育经历失败:', error);
+            }
+        }
+
+        function renderEducationList(items) {
+            const container = document.getElementById('education-list');
+            container.innerHTML = items.map(item => `
+                <div class="data-item">
+                    <div>
+                        <h3>${item.institution} - ${item.degree || ''}</h3>
+                        <p>${item.major || ''} | ${item.period || ''} | ${item.location || ''}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-warning" onclick="editEducation(${item.id})">✏️ 编辑</button>
+                        <button class="btn-danger" onclick="deleteEducation(${item.id})">🗑️ 删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.editEducation = async function(id) {
+            try {
+                const response = await fetch(`${API_BASE}/api/resume`);
+                const result = await response.json();
+                const edu = result.data.education.find(e => e.id === id);
+                if (edu) {
+                    document.getElementById('edu-id').value = edu.id;
+                    document.getElementById('institution').value = edu.institution || '';
+                    document.getElementById('degree').value = edu.degree || '';
+                    document.getElementById('major').value = edu.major || '';
+                    document.getElementById('edu-period').value = edu.period || '';
+                    document.getElementById('edu-location').value = edu.location || '';
+                    document.querySelector('#education-form button[type="submit"]').style.display = 'none';
+                    document.getElementById('update-edu-btn').style.display = 'inline-block';
+                }
+            } catch (error) {
+                showStatus('education-status', '编辑失败: ' + error.message, false);
+            }
+        };
+
+        window.deleteEducation = async function(id) {
+            if (!confirm('确定要删除这条教育经历吗？')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/resume/education/${id}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                showStatus('education-status', result.message, result.code === 200);
+                loadEducation();
+            } catch (error) {
+                showStatus('education-status', '删除失败: ' + error.message, false);
+            }
+        };
+
+        document.getElementById('education-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                institution: document.getElementById('institution').value,
+                degree: document.getElementById('degree').value,
+                major: document.getElementById('major').value,
+                period: document.getElementById('edu-period').value,
+                location: document.getElementById('edu-location').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/resume/education`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                showStatus('education-status', result.message, result.code === 200);
+                e.target.reset();
+                loadEducation();
+            } catch (error) {
+                showStatus('education-status', '添加失败: ' + error.message, false);
+            }
+        });
+
+        document.getElementById('update-edu-btn').addEventListener('click', async () => {
+            const id = document.getElementById('edu-id').value;
+            const data = {
+                institution: document.getElementById('institution').value,
+                degree: document.getElementById('degree').value,
+                major: document.getElementById('major').value,
+                period: document.getElementById('edu-period').value,
+                location: document.getElementById('edu-location').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/resume/education/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                showStatus('education-status', result.message, result.code === 200);
+                document.getElementById('education-form').reset();
+                document.querySelector('#education-form button[type="submit"]').style.display = 'inline-block';
+                document.getElementById('update-edu-btn').style.display = 'none';
+                loadEducation();
+            } catch (error) {
+                showStatus('education-status', '更新失败: ' + error.message, false);
+            }
+        });
+
+        // ========== 工作经历 ==========
+        async function loadWork() {
+            try {
+                const response = await fetch(`${API_BASE}/api/resume`);
+                const result = await response.json();
+                if (result.code === 200) {
+                    renderWorkList(result.data.workExperience || []);
+                }
+            } catch (error) {
+                console.error('加载工作经历失败:', error);
+            }
+        }
+
+        function renderWorkList(items) {
+            const container = document.getElementById('work-list');
+            container.innerHTML = items.map(item => `
+                <div class="data-item">
+                    <div>
+                        <h3>${item.company} - ${item.position || ''}</h3>
+                        <p>${item.period || ''} | ${item.location || ''}</p>
+                        <p style="margin-top: 8px;">${item.description ? item.description.substring(0, 100) + '...' : ''}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-warning" onclick="editWork(${item.id})">✏️ 编辑</button>
+                        <button class="btn-danger" onclick="deleteWork(${item.id})">🗑️ 删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.editWork = async function(id) {
+            try {
+                const response = await fetch(`${API_BASE}/api/resume`);
+                const result = await response.json();
+                const work = result.data.workExperience.find(w => w.id === id);
+                if (work) {
+                    document.getElementById('work-id').value = work.id;
+                    document.getElementById('company').value = work.company || '';
+                    document.getElementById('position').value = work.position || '';
+                    document.getElementById('work-period').value = work.period || '';
+                    document.getElementById('work-location').value = work.location || '';
+                    document.getElementById('work-description').value = work.description || '';
+                    document.querySelector('#work-form button[type="submit"]').style.display = 'none';
+                    document.getElementById('update-work-btn').style.display = 'inline-block';
+                }
+            } catch (error) {
+                showStatus('work-status', '编辑失败: ' + error.message, false);
+            }
+        };
+
+        window.deleteWork = async function(id) {
+            if (!confirm('确定要删除这条工作经历吗？')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/resume/work/${id}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                showStatus('work-status', result.message, result.code === 200);
+                loadWork();
+            } catch (error) {
+                showStatus('work-status', '删除失败: ' + error.message, false);
+            }
+        };
+
+        document.getElementById('work-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                company: document.getElementById('company').value,
+                position: document.getElementById('position').value,
+                period: document.getElementById('work-period').value,
+                location: document.getElementById('work-location').value,
+                description: document.getElementById('work-description').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/resume/work`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                showStatus('work-status', result.message, result.code === 200);
+                e.target.reset();
+                loadWork();
+            } catch (error) {
+                showStatus('work-status', '添加失败: ' + error.message, false);
+            }
+        });
+
+        document.getElementById('update-work-btn').addEventListener('click', async () => {
+            const id = document.getElementById('work-id').value;
+            const data = {
+                company: document.getElementById('company').value,
+                position: document.getElementById('position').value,
+                period: document.getElementById('work-period').value,
+                location: document.getElementById('work-location').value,
+                description: document.getElementById('work-description').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/resume/work/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                showStatus('work-status', result.message, result.code === 200);
+                document.getElementById('work-form').reset();
+                document.querySelector('#work-form button[type="submit"]').style.display = 'inline-block';
+                document.getElementById('update-work-btn').style.display = 'none';
+                loadWork();
+            } catch (error) {
+                showStatus('work-status', '更新失败: ' + error.message, false);
+            }
+        });
+
+        // ========== 项目经验 ==========
+        async function loadProjects() {
+            try {
+                const response = await fetch(`${API_BASE}/api/resume`);
+                const result = await response.json();
+                if (result.code === 200) {
+                    renderProjectList(result.data.projects || []);
+                }
+            } catch (error) {
+                console.error('加载项目经验失败:', error);
+            }
+        }
+
+        function renderProjectList(items) {
+            const container = document.getElementById('project-list');
+            container.innerHTML = items.map(item => `
+                <div class="data-item">
+                    <div>
+                        <h3>${item.name} - ${item.role || ''}</h3>
+                        <p>${item.period || ''}</p>
+                        <p style="margin-top: 8px;">${item.description ? item.description.substring(0, 100) + '...' : ''}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-warning" onclick="editProject(${item.id})">✏️ 编辑</button>
+                        <button class="btn-danger" onclick="deleteProject(${item.id})">🗑️ 删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.editProject = async function(id) {
+            try {
+                const response = await fetch(`${API_BASE}/api/resume`);
+                const result = await response.json();
+                const proj = result.data.projects.find(p => p.id === id);
+                if (proj) {
+                    document.getElementById('proj-id').value = proj.id;
+                    document.getElementById('proj-name').value = proj.name || '';
+                    document.getElementById('proj-role').value = proj.role || '';
+                    document.getElementById('proj-period').value = proj.period || '';
+                    document.getElementById('proj-description').value = proj.description || '';
+                    document.getElementById('proj-tech').value = (proj.technologies || []).join(', ');
+                    document.querySelector('#project-form button[type="submit"]').style.display = 'none';
+                    document.getElementById('update-proj-btn').style.display = 'inline-block';
+                }
+            } catch (error) {
+                showStatus('project-status', '编辑失败: ' + error.message, false);
+            }
+        };
+
+        window.deleteProject = async function(id) {
+            if (!confirm('确定要删除这个项目吗？')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/resume/project/${id}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                showStatus('project-status', result.message, result.code === 200);
+                loadProjects();
+            } catch (error) {
+                showStatus('project-status', '删除失败: ' + error.message, false);
+            }
+        };
+
+        document.getElementById('project-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const techArray = document.getElementById('proj-tech').value.split(',').map(t => t.trim()).filter(t => t);
+            const data = {
+                name: document.getElementById('proj-name').value,
+                role: document.getElementById('proj-role').value,
+                period: document.getElementById('proj-period').value,
+                description: document.getElementById('proj-description').value,
+                technologies: techArray
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/resume/project`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                showStatus('project-status', result.message, result.code === 200);
+                e.target.reset();
+                loadProjects();
+            } catch (error) {
+                showStatus('project-status', '添加失败: ' + error.message, false);
+            }
+        });
+
+        document.getElementById('update-proj-btn').addEventListener('click', async () => {
+            const id = document.getElementById('proj-id').value;
+            const techArray = document.getElementById('proj-tech').value.split(',').map(t => t.trim()).filter(t => t);
+            const data = {
+                name: document.getElementById('proj-name').value,
+                role: document.getElementById('proj-role').value,
+                period: document.getElementById('proj-period').value,
+                description: document.getElementById('proj-description').value,
+                technologies: techArray
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/resume/project/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                showStatus('project-status', result.message, result.code === 200);
+                document.getElementById('project-form').reset();
+                document.querySelector('#project-form button[type="submit"]').style.display = 'inline-block';
+                document.getElementById('update-proj-btn').style.display = 'none';
+                loadProjects();
+            } catch (error) {
+                showStatus('project-status', '更新失败: ' + error.message, false);
+            }
+        });
+
+        // ========== 技能管理 ==========
+        async function loadSkills() {
+            try {
+                const response = await fetch(`${API_BASE}/api/resume`);
+                const result = await response.json();
+                if (result.code === 200) {
+                    renderSkillList(result.data.skills || {});
+                }
+            } catch (error) {
+                console.error('加载技能失败:', error);
+            }
+        }
+
+        function renderSkillList(skills) {
+            const container = document.getElementById('skill-list');
+            let html = '';
+
+            Object.keys(skills).forEach(category => {
+                if (skills[category] && skills[category].length > 0) {
+                    html += `<h3 style="margin-top: 20px; color: #667eea;">${category.toUpperCase()}</h3>`;
+                    skills[category].forEach(skill => {
+                        html += `
+                            <div class="data-item">
+                                <div>
+                                    <h3>${skill.name}</h3>
+                                    <p>熟练度: ${'⭐'.repeat(skill.proficiency)}${'☆'.repeat(5-skill.proficiency)}</p>
+                                </div>
+                                <div class="item-actions">
+                                    <button class="btn-warning" onclick="editSkill(${skill.id})">✏️ 编辑</button>
+                                    <button class="btn-danger" onclick="deleteSkill(${skill.id})">🗑️ 删除</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            });
+
+            container.innerHTML = html || '<p style="color: #999; text-align: center; padding: 40px;">暂无技能数据</p>';
+        }
+
+        window.editSkill = async function(id) {
+            try {
+                const response = await fetch(`${API_BASE}/api/resume`);
+                const result = await response.json();
+
+                let skill = null;
+                Object.values(result.data.skills).forEach(categorySkills => {
+                    const found = categorySkills.find(s => s.id === id);
+                    if (found) skill = found;
+                });
+
+                if (skill) {
+                    document.getElementById('skill-id').value = skill.id;
+                    document.getElementById('skill-category').value = skill.category || 'development';
+                    document.getElementById('skill-name').value = skill.name || '';
+                    document.getElementById('skill-proficiency').value = skill.proficiency || 3;
+                    document.querySelector('#skill-form button[type="submit"]').style.display = 'none';
+                    document.getElementById('update-skill-btn').style.display = 'inline-block';
+                }
+            } catch (error) {
+                showStatus('skill-status', '编辑失败: ' + error.message, false);
+            }
+        };
+
+        window.deleteSkill = async function(id) {
+            if (!confirm('确定要删除这项技能吗？')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/resume/skill/${id}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                showStatus('skill-status', result.message, result.code === 200);
+                loadSkills();
+            } catch (error) {
+                showStatus('skill-status', '删除失败: ' + error.message, false);
+            }
+        };
+
+        document.getElementById('skill-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                category: document.getElementById('skill-category').value,
+                name: document.getElementById('skill-name').value,
+                proficiency: parseInt(document.getElementById('skill-proficiency').value)
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/resume/skill`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                showStatus('skill-status', result.message, result.code === 200);
+                e.target.reset();
+                loadSkills();
+            } catch (error) {
+                showStatus('skill-status', '添加失败: ' + error.message, false);
+            }
+        });
+
+        document.getElementById('update-skill-btn').addEventListener('click', async () => {
+            const id = document.getElementById('skill-id').value;
+            const data = {
+                category: document.getElementById('skill-category').value,
+                name: document.getElementById('skill-name').value,
+                proficiency: parseInt(document.getElementById('skill-proficiency').value)
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/resume/skill/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                showStatus('skill-status', result.message, result.code === 200);
+                document.getElementById('skill-form').reset();
+                document.querySelector('#skill-form button[type="submit"]').style.display = 'inline-block';
+                document.getElementById('update-skill-btn').style.display = 'none';
+                loadSkills();
+            } catch (error) {
+                showStatus('skill-status', '更新失败: ' + error.message, false);
+            }
+        });
+
+        // 页面加载时检查连接并加载数据
+        checkApiConnection();
+        loadPersonal();
+    </script>
+</body>
+</html>
