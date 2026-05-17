@@ -169,6 +169,28 @@
             box-shadow: 0 6px 12px rgba(139, 69, 19, 0.3);
         }
 
+        .guest-btn {
+            width: 100%;
+            padding: 11px;
+            background-color: #a67c52;
+            color: #fffef9;
+            border: none;
+            font-family: 'Special Elite', 'Courier New', monospace;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        .guest-btn:hover {
+            background-color: #8b5e3c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(166, 124, 82, 0.3);
+        }
+
         .error-message {
             background-color: #fff3cd;
             border: 2px solid #ffc107;
@@ -219,6 +241,8 @@
                     </div>
 
                     <button type="submit" class="login-btn">登 录</button>
+
+                    <button type="button" class="guest-btn" onclick="handleGuestLogin()">游客浏览</button>
                 </form>
             </main>
         </div>
@@ -274,6 +298,23 @@
                     errorMsg.style.display = 'none';
                 }, 4000);
             }
+        }
+
+        function handleGuestLogin() {
+            console.log('[GuestLogin] === 游客登录请求 ===');
+
+            const sessionId = 'GUEST_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            const loginTime = new Date().toISOString();
+
+            sessionStorage.setItem('currentUser', 'guest');
+            sessionStorage.setItem('loginTime', loginTime);
+            sessionStorage.setItem('sessionId', sessionId);
+            sessionStorage.setItem('userType', 'guest');
+
+            console.log(`[GuestLogin] ✅ 游客Session已创建: ${sessionId}`);
+            console.log(`[GuestLogin] 登录时间: ${loginTime}`);
+
+            window.location.href = 'index.html?showSplash=false';
         }
 
         window.onload = function() {
