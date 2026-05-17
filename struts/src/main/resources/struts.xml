@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <!-- 常量配置 -->
+    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.enable.DynamicMethodInvocation" value="false"/>
+    <constant name="struts.action.extension" value="action,,"/>
+    <constant name="struts.ui.theme" value="simple"/>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+
+    <!-- 全局异常映射（Global Exception Mappings） -->
+    <package name="default" extends="struts-default" namespace="/">
+
+        <!-- 全局结果 -->
+        <global-results>
+            <!-- 404页面未找到 -->
+            <result name="error404">/WEB-INF/error/404.jsp</result>
+            
+            <!-- 500服务器内部错误 -->
+            <result name="error500">/WEB-INF/error/500.jsp</result>
+            
+            <!-- 通用错误页面 -->
+            <result name="error">/WEB-INF/error/error.jsp</result>
+        </global-results>
+
+        <!-- 全局异常映射 -->
+        <global-exception-mappings>
+            <!-- 页面未找到异常 -->
+            <exception-mapping exception="com.resume.exception.PageNotFoundException"
+                              result="error404"/>
+            
+            <!-- 服务器内部错误 -->
+            <exception-mapping exception="java.lang.Exception"
+                              result="error500"/>
+            
+            <!-- 数据库访问异常 -->
+            <exception-mapping exception="java.sql.SQLException"
+                              result="error500"/>
+            
+            <!-- 空指针异常 -->
+            <exception-mapping exception="java.lang.NullPointerException"
+                              result="error500"/>
+            
+            <!-- 文件操作异常 -->
+            <exception-mapping exception="java.io.IOException"
+                              result="error500"/>
+            
+            <!-- 业务逻辑异常 -->
+            <exception-mapping exception="com.resume.exception.BusinessException"
+                              result="error"/>
+        </global-exception-mappings>
+
+        <!-- 默认Action（处理未知请求） -->
+        <default-action-ref name="notFound"/>
+
+        <!-- 404处理Action -->
+        <action name="notFound"
+                class="com.resume.action.ErrorAction"
+                method="handle404">
+            <result name="success">/WEB-INF/error/404.jsp</result>
+            <exception-mapping exception="java.lang.Exception"
+                              result="error500"/>
+        </action>
+
+        <!-- 错误处理Action -->
+        <action name="error"
+                class="com.resume.action.ErrorAction"
+                method="handleError">
+            <result name="input">/WEB-INF/error/error.jsp</result>
+            <result name="success">/WEB-INF/error/error.jsp</result>
+        </action>
+
+        <!-- 测试异常触发的Action（用于演示） -->
+        <action name="testException"
+                class="com.resume.action.TestExceptionAction"
+                method="execute">
+            <result name="success">/index.jsp</result>
+            <!-- 局部异常映射示例 -->
+            <exception-mapping exception="com.resume.exception.BusinessException"
+                              result="error"/>
+        </action>
+
+    </package>
+
+    <!-- 示例：简历相关Action的局部异常映射 -->
+    <package name="resume" extends="struts-default" namespace="/resume">
+
+        <action name="viewResume"
+                class="com.resume.action.ResumeAction"
+                method="view">
+            <result name="success">/resume/view.jsp</result>
+            <result name="error">/WEB-INF/error/error.jsp</result>
+            <!-- 局部异常：数据加载失败 -->
+            <exception-mapping exception="com.resume.exception.DataLoadException"
+                              result="error"/>
+        </action>
+
+        <action name="exportPDF"
+                class="com.resume.action.ResumeAction"
+                method="exportPDF">
+            <result name="success" type="stream">
+                <param name="contentType">application/pdf</param>
+                <param name="inputName">fileStream</param>
+                <param name="contentDisposition">attachment;filename="${fileName}"</param>
+                <param name="bufferSize">1024</param>
+            </result>
+            <result name="error">/WEB-INF/error/500.jsp</result>
+            <!-- 局部异常：导出失败 -->
+            <exception-mapping exception="com.resume.exception.PDFExportException"
+                              result="error"/>
+        </action>
+
+    </package>
+
+</struts>
