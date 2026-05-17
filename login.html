@@ -40,23 +40,23 @@
 
             <!-- 登录表单区域 -->
             <main class="login-content">
-                <!-- 手机号登录表单 -->
-                <div id="phone-login" class="login-form active">
-                    <form id="phone-form" class="form-container">
+                <!-- 邮箱登录表单 -->
+                <div id="email-login" class="login-form active">
+                    <form id="email-form" class="form-container">
                         <div class="input-group">
-                            <label for="phone-input" class="input-label">手机号码</label>
-                            <input type="tel" id="phone-input" class="input-field" placeholder="请输入手机号码" maxlength="11" autocomplete="tel">
+                            <label for="email-input" class="input-label">📧 邮箱地址</label>
+                            <input type="email" id="email-input" class="input-field" placeholder="请输入您的邮箱地址" autocomplete="email">
                         </div>
 
                         <div class="input-group">
-                            <label for="code-input" class="input-label">验证码</label>
+                            <label for="code-input" class="input-label">🔐 验证码</label>
                             <div class="code-input-wrapper">
-                                <input type="text" id="code-input" class="input-field code-field" placeholder="请输入验证码" maxlength="6" autocomplete="one-time-code">
+                                <input type="text" id="code-input" class="input-field code-field" placeholder="请输入6位验证码" maxlength="6" autocomplete="one-time-code">
                                 <button type="button" id="send-code-btn" class="send-code-btn">获取验证码</button>
                             </div>
                         </div>
 
-                        <button type="submit" id="phone-submit" class="submit-btn">
+                        <button type="submit" id="email-submit" class="submit-btn">
                             <span class="btn-text">登 录</span>
                             <span class="btn-arrow">→</span>
                         </button>
@@ -96,6 +96,40 @@
     </div>
 
     <!-- JavaScript 文件 -->
-    <script src="js/login.js?v=20250417"></script>
+    <!-- Supabase Client SDK (必需) - 使用UMD版本确保兼容性 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8/dist/umd/supabase.min.js"></script>
+
+    <script src="js/login-service.js?v=20250424_004"></script>
+    <script src="js/login.js?v=20250424_004"></script>
+
+    <!-- 处理 Magic Link 回调 -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasToken = urlParams.has('access_token') || urlParams.has('code');
+
+            if (hasToken && typeof loginService !== 'undefined' && loginService.getSupabase()) {
+                console.log('🔗 [MAGIC-LINK] 检测到 Magic Link 回调...');
+
+                const supabase = loginService.getSupabase();
+
+                supabase.auth.getSession().then(({ data: { session } }) => {
+                    if (session?.user) {
+                        console.log('✅ [MAGIC-LINK] 登录成功！用户:', session.user.email);
+
+                        alert('🎉 登录成功！正在跳转到主页...\n\n欢迎 ' + (session.user.email || '用户'));
+
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 1500);
+                    } else {
+                        console.log('⏳ [MAGIC-LINK] 等待 session 建立...');
+                    }
+                }).catch(err => {
+                    console.error('❌ [MAGIC-LINK] 处理失败:', err);
+                });
+            }
+        })();
+    </script>
 </body>
 </html>

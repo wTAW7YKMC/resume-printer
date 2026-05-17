@@ -15,13 +15,14 @@ class DataFetcher {
         this.cacheExpiry = options.cacheExpiry || 24 * 60 * 60 * 1000; // 默认24小时
         this.cacheKey = options.cacheKey || 'resume-data-cache';
         this.useLocalFallback = options.useLocalFallback !== undefined ? options.useLocalFallback : true;
-        
+        this.isApiMode = options.isApiMode || false; // API模式标记
+
         // 请求配置
         this.requestHeaders = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         };
-        
+
         // 缓存策略
         this.cacheStrategy = options.cacheStrategy || 'cache-first'; // 可选: 'network-first', 'cache-only', 'network-only'
     }
@@ -153,14 +154,21 @@ class DataFetcher {
             throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
         }
         
-        const data = await response.json();
+        const rawData = await response.json();
         console.log(`DataFetcher: Data loaded successfully`);
-        
+
+        // 如果是API模式，需要提取data字段
+        let data = rawData;
+        if (this.isApiMode && rawData && rawData.code === 200 && rawData.data) {
+            console.log('DataFetcher: API模式，提取data字段');
+            data = rawData.data;
+        }
+
         // 验证数据结构
         if (!this.validateDataStructure(data)) {
             throw new Error('Invalid data structure');
         }
-        
+
         return data;
     }
     
