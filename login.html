@@ -8,96 +8,38 @@
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap"></noscript>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Courier New', 'Courier Prime', monospace;
-            background-color: #3e2723;
-            color: #212121;
-            line-height: 1.6;
-            overflow-x: hidden;
-            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 600px;
-            width: 90%;
             margin: 0;
-            position: relative;
-        }
-
-        .typewriter-body {
-            background-color: #3e2723;
-            height: 25px;
-            border-radius: 5px 5px 0 0;
-            position: relative;
-            margin-bottom: 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .typewriter-roller {
-            position: absolute;
-            left: 10px;
-            top: 8px;
-            width: 10px;
-            height: 10px;
-            background-color: #555;
-            border-radius: 50%;
         }
 
         .paper-container {
-            background-color: #f5f1e6;
-            position: relative;
-            padding: 30px;
-            border-radius: 0 0 5px 5px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             min-height: auto;
-
-            background-image: linear-gradient(rgba(139, 69, 19, 0.1) 1px, transparent 1px);
-            background-size: 100% 24px;
-
-            filter: contrast(105%) brightness(95%);
+            padding: 35px 40px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 18px;
             border-bottom: 2px dashed #a67c52;
         }
 
         .main-title {
-            font-family: 'Special Elite', 'Courier New', monospace;
-            font-size: 42px;
-            color: #8b4513;
-            display: inline-block;
-            position: relative;
-        }
-
-        .cursor {
-            animation: blink 1s step-end infinite;
-            color: #8b4513;
-            font-weight: bold;
-            margin-left: 2px;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+            font-size: 48px;
         }
 
         .login-subtitle {
             font-family: 'Courier Prime', monospace;
-            font-size: 13px;
+            font-size: 14px;
             color: #a67c52;
-            margin-top: 6px;
+            margin-top: 8px;
         }
 
         .content-area {
@@ -108,14 +50,15 @@
         .login-form-area {
             background-color: #fffef9;
             border-left: 4px solid #8b4513;
-            padding: 20px 25px;
+            padding: 22px 30px;
             border-radius: 3px;
             box-shadow: 0 2px 8px rgba(139, 69, 19, 0.1);
             width: 100%;
+            max-width: 420px;
         }
 
         .form-group {
-            margin-bottom: 14px;
+            margin-bottom: 15px;
         }
 
         .form-group label {
@@ -124,7 +67,7 @@
             color: #555;
             font-weight: bold;
             font-family: 'Special Elite', 'Courier New', monospace;
-            font-size: 12px;
+            font-size: 13px;
         }
 
         .form-group input {
@@ -133,7 +76,7 @@
             border: 2px solid #a67c52;
             background-color: #f5f1e6;
             font-family: 'Courier Prime', monospace;
-            font-size: 13px;
+            font-size: 14px;
             border-radius: 3px;
             transition: all 0.3s ease;
             color: #333;
@@ -152,13 +95,13 @@
             color: #fffef9;
             border: none;
             font-family: 'Special Elite', 'Courier New', monospace;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 3px;
             transition: all 0.3s ease;
             letter-spacing: 2px;
-            margin-top: 4px;
+            margin-top: 5px;
         }
 
         .login-btn:hover {
@@ -172,12 +115,12 @@
             border: 2px solid #ffc107;
             color: #856404;
             padding: 10px;
-            margin-bottom: 14px;
+            margin-bottom: 15px;
             border-radius: 3px;
             text-align: center;
             display: none;
             font-family: 'Courier Prime', monospace;
-            font-size: 12px;
+            font-size: 13px;
             animation: shake 0.5s;
         }
 
