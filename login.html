@@ -3,133 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Becky's Resume - 登录</title>
-    <link rel="stylesheet" href="css/login-style.css?v=20250417">
-    <!-- 异步加载Google Fonts -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap"></noscript>
+    <title>登录 - Becky's Resume</title>
+    <link rel="stylesheet" href="css/style.css?v=20250517">
+    <style>
+        .login-form {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fffef9;
+            border-left: 4px solid #8b4513;
+            border-radius: 3px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-form h2 {
+            font-family: 'Special Elite', 'Courier New', monospace;
+            color: #8b4513;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+            font-family: 'Special Elite', 'Courier New', monospace;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #a67c52;
+            background-color: #f5f1e6;
+            font-family: 'Courier Prime', monospace;
+            font-size: 14px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #8b4513;
+            box-shadow: 0 0 5px rgba(139, 69, 19, 0.3);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #8b4513;
+            color: #fffef9;
+            border: none;
+            font-family: 'Special Elite', 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background-color: #6d360f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+        }
+
+        .error-message {
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 3px;
+            text-align: center;
+            display: none;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        .credentials-hint {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #d4c4a8;
+            color: #a67c52;
+            font-size: 13px;
+            font-family: 'Courier Prime', monospace;
+        }
+    </style>
 </head>
 <body>
-    <div class="login-container">
+    <div class="container">
         <!-- 打字机机身装饰 -->
         <div class="typewriter-body">
             <div class="typewriter-roller"></div>
-            <div class="typewriter-keys">
-                <div class="key"></div>
-                <div class="key"></div>
-                <div class="key"></div>
-                <div class="key"></div>
-                <div class="key"></div>
-                <div class="key"></div>
-                <div class="key"></div>
-                <div class="key"></div>
-                <div class="key"></div>
-                <div class="key"></div>
-            </div>
         </div>
 
         <!-- 纸张区域 -->
         <div class="paper-container">
             <!-- 标题区域 -->
             <header class="header">
-                <h1 id="main-title" class="main-title">
-                    <span id="title-text">Welcome Back</span><span class="cursor">|</span>
+                <h1 class="main-title">
+                    🔐 系统登录<span class="cursor">|</span>
                 </h1>
-                <p class="subtitle">请选择您的登录方式</p>
+                <p style="text-align: center; color: #a67c52; margin-top: 10px; font-family: 'Special Elite', monospace;">
+                    请输入用户名和密码访问系统
+                </p>
             </header>
 
-            <!-- 登录表单区域 -->
-            <main class="login-content">
-                <!-- 邮箱登录表单 -->
-                <div id="email-login" class="login-form active">
-                    <form id="email-form" class="form-container">
-                        <div class="input-group">
-                            <label for="email-input" class="input-label">📧 邮箱地址</label>
-                            <input type="email" id="email-input" class="input-field" placeholder="请输入您的邮箱地址" autocomplete="email">
-                        </div>
+            <!-- 登录表单 -->
+            <main class="content-area">
+                <div id="errorMsg" class="error-message"></div>
 
-                        <div class="input-group">
-                            <label for="code-input" class="input-label">🔐 验证码</label>
-                            <div class="code-input-wrapper">
-                                <input type="text" id="code-input" class="input-field code-field" placeholder="请输入6位验证码" maxlength="6" autocomplete="one-time-code">
-                                <button type="button" id="send-code-btn" class="send-code-btn">获取验证码</button>
-                            </div>
-                        </div>
+                <form id="loginForm" class="login-form" onsubmit="handleLogin(event)">
+                    <h2>🔑 用户认证</h2>
 
-                        <button type="submit" id="email-submit" class="submit-btn">
-                            <span class="btn-text">登 录</span>
-                            <span class="btn-arrow">→</span>
-                        </button>
-                    </form>
-                </div>
+                    <div class="form-group">
+                        <label for="username">用户名</label>
+                        <input type="text" id="username" name="username" required placeholder="请输入用户名" autocomplete="username">
+                    </div>
 
-                <!-- 装饰性分隔线 -->
-                <div class="divider">
-                    <div class="divider-line"></div>
-                    <div class="divider-symbol">✦</div>
-                    <div class="divider-line"></div>
-                </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" id="password" name="password" required placeholder="请输入密码" autocomplete="current-password">
+                    </div>
 
-                <!-- 游客登录按钮 -->
-                <div class="guest-login-section">
-                    <button id="guest-login-btn" class="guest-btn">
-                        <span class="btn-icon">👤</span>
-                        <span class="btn-text">游客访问</span>
-                        <span class="btn-hint">无需注册</span>
-                    </button>
-                    <p class="guest-hint">以游客身份浏览简历内容</p>
-                </div>
+                    <button type="submit" class="login-btn">登 录</button>
+
+                    <div class="credentials-hint">
+                        测试账号：admin / admin123
+                    </div>
+                </form>
             </main>
-
-            <!-- 页脚信息 -->
-            <footer class="login-footer">
-                <p class="footer-text">登录即表示同意我们的服务条款</p>
-            </footer>
         </div>
     </div>
 
-    <!-- 背景装饰 -->
-    <div class="background-elements">
-        <div class="floating-element elem1"></div>
-        <div class="floating-element elem2"></div>
-        <div class="floating-element elem3"></div>
-    </div>
-
-    <!-- JavaScript 文件 -->
-    <!-- Supabase Client SDK (必需) - 使用UMD版本确保兼容性 -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8/dist/umd/supabase.min.js"></script>
-
-    <script src="js/login-service.js?v=20250424_004"></script>
-    <script src="js/login.js?v=20250424_004"></script>
-
-    <!-- 处理 Magic Link 回调 -->
     <script>
-        (function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const hasToken = urlParams.has('access_token') || urlParams.has('code');
+        function handleLogin(event) {
+            event.preventDefault();
 
-            if (hasToken && typeof loginService !== 'undefined' && loginService.getSupabase()) {
-                console.log('🔗 [MAGIC-LINK] 检测到 Magic Link 回调...');
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
 
-                const supabase = loginService.getSupabase();
+            console.log('[LoginAction] === 用户登录请求 ===');
+            console.log(`[LoginAction] 用户名: ${username}`);
 
-                supabase.auth.getSession().then(({ data: { session } }) => {
-                    if (session?.user) {
-                        console.log('✅ [MAGIC-LINK] 登录成功！用户:', session.user.email);
+            // 验证用户名和密码
+            if (username === 'admin' && password === 'admin123') {
+                console.log('[LoginAction] ✅ 验证成功');
 
-                        alert('🎉 登录成功！正在跳转到主页...\n\n欢迎 ' + (session.user.email || '用户'));
+                // 创建Session
+                const sessionId = 'SESSION_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const loginTime = new Date().toISOString();
 
-                        setTimeout(() => {
-                            window.location.href = 'index.html';
-                        }, 1500);
-                    } else {
-                        console.log('⏳ [MAGIC-LINK] 等待 session 建立...');
-                    }
-                }).catch(err => {
-                    console.error('❌ [MAGIC-LINK] 处理失败:', err);
-                });
+                sessionStorage.setItem('currentUser', username);
+                sessionStorage.setItem('loginTime', loginTime);
+                sessionStorage.setItem('sessionId', sessionId);
+
+                console.log(`[LoginAction] Session已创建: ${sessionId}`);
+                console.log(`[LoginAction] 登录时间: ${loginTime}`);
+
+                alert('✅ 登录成功！\n\n正在跳转到主页...');
+
+                // 跳转到主页（带参数跳过开屏页面）
+                window.location.href = 'index.html?showSplash=false';
+
+            } else {
+                console.log('[LoginAction] ❌ 验证失败：用户名或密码错误');
+
+                errorMsg.style.display = 'block';
+                errorMsg.innerHTML = '❌ 用户名或密码错误，请重试！';
+
+                // 清空密码框
+                document.getElementById('password').value = '';
+
+                // 3秒后隐藏错误信息
+                setTimeout(() => {
+                    errorMsg.style.display = 'none';
+                }, 3000);
             }
-        })();
+        }
+
+        // 检查是否已经登录
+        window.onload = function() {
+            const currentUser = sessionStorage.getItem('currentUser');
+
+            if (currentUser) {
+                console.log(`[LoginInterceptor] 检测到用户已登录: ${currentUser}`);
+                console.log('[LoginInterceptor] 重定向到主页...');
+
+                // 如果已登录，直接跳转
+                window.location.href = 'index.html?showSplash=false';
+            } else {
+                console.log('[LoginInterceptor] 用户未登录，显示登录表单');
+            }
+        };
     </script>
 </body>
 </html>

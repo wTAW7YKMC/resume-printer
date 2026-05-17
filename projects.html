@@ -8,6 +8,23 @@
     <!-- 异步加载Google Fonts，避免阻塞页面渲染 -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap"></noscript>
+    <script>
+        // 权限拦截器 - 检查用户是否已登录
+        (function() {
+            const currentUser = sessionStorage.getItem('currentUser');
+
+            if (!currentUser) {
+                console.log('[AuthenticationInterceptor] === 权限检查 ===');
+                console.log('[AuthenticationInterceptor] 用户未登录');
+                console.log('[AuthenticationInterceptor] 重定向到登录页面...');
+
+                window.location.href = 'login.html';
+                return;
+            } else {
+                console.log(`[AuthenticationInterceptor] ✅ 用户已认证: ${currentUser}`);
+            }
+        })();
+    </script>
 </head>
 <body class="projects-page">
     <div class="container">
