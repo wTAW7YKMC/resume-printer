@@ -5,27 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登录 - Becky's Resume</title>
     <link rel="stylesheet" href="css/style.css?v=20250517">
+    <!-- 异步加载Google Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap"></noscript>
     <style>
-        .login-form {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: #fffef9;
-            border-left: 4px solid #8b4513;
-            border-radius: 3px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        /* 登录表单容器 */
+        .login-wrapper {
+            max-width: 500px;
+            margin: 60px auto 40px;
+            padding: 0;
         }
 
-        .login-form h2 {
-            font-family: 'Special Elite', 'Courier New', monospace;
-            color: #8b4513;
-            margin-bottom: 25px;
+        .login-header {
             text-align: center;
-            font-size: 28px;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 2px dashed #a67c52;
+        }
+
+        .login-title {
+            font-family: 'Special Elite', 'Courier New', monospace;
+            font-size: 42px;
+            color: #8b4513;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .login-subtitle {
+            font-family: 'Courier Prime', monospace;
+            font-size: 16px;
+            color: #a67c52;
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
+        /* 表单区域 */
+        .login-form-area {
+            background-color: #fffef9;
+            border-left: 4px solid #8b4513;
+            padding: 35px;
+            margin-bottom: 25px;
+            border-radius: 3px;
+            box-shadow: 0 2px 8px rgba(139, 69, 19, 0.1);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
         .form-group label {
@@ -34,67 +59,147 @@
             color: #555;
             font-weight: bold;
             font-family: 'Special Elite', 'Courier New', monospace;
+            font-size: 14px;
+            letter-spacing: 0.5px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px;
+            padding: 13px 15px;
             border: 2px solid #a67c52;
             background-color: #f5f1e6;
             font-family: 'Courier Prime', monospace;
-            font-size: 14px;
+            font-size: 15px;
             border-radius: 3px;
             transition: all 0.3s ease;
+            color: #333;
         }
 
         .form-group input:focus {
             outline: none;
             border-color: #8b4513;
-            box-shadow: 0 0 5px rgba(139, 69, 19, 0.3);
+            box-shadow: 0 0 8px rgba(139, 69, 19, 0.2);
+            background-color: #fffef9;
         }
 
+        .form-group input::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* 登录按钮 */
         .login-btn {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             background-color: #8b4513;
             color: #fffef9;
             border: none;
             font-family: 'Special Elite', 'Courier New', monospace;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 3px;
             transition: all 0.3s ease;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             margin-top: 10px;
+            text-transform: uppercase;
         }
 
         .login-btn:hover {
             background-color: #6d360f;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+            box-shadow: 0 6px 12px rgba(139, 69, 19, 0.3);
         }
 
+        .login-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(139, 69, 19, 0.2);
+        }
+
+        /* 错误提示 */
         .error-message {
             background-color: #fff3cd;
             border: 2px solid #ffc107;
             color: #856404;
-            padding: 15px;
-            margin-bottom: 20px;
+            padding: 18px;
+            margin-bottom: 22px;
             border-radius: 3px;
             text-align: center;
             display: none;
             font-family: 'Courier Prime', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            animation: shake 0.5s;
         }
 
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* 提示信息区域 */
         .credentials-hint {
+            background-color: #e8dcc8;
+            border: 2px solid #d4c4a8;
+            padding: 20px;
+            margin-top: 25px;
+            border-radius: 5px;
             text-align: center;
-            margin-top: 20px;
+            color: #654321;
+            font-family: 'Courier Prime', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .credentials-hint strong {
+            color: #8b4513;
+            display: block;
+            margin-bottom: 8px;
+            font-family: 'Special Elite', monospace;
+            font-size: 15px;
+        }
+
+        /* 页脚装饰 */
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
             padding-top: 20px;
             border-top: 1px dashed #d4c4a8;
             color: #a67c52;
-            font-size: 13px;
-            font-family: 'Courier Prime', monospace;
+            font-size: 12px;
+            font-family: 'Special Elite', monospace;
+            letter-spacing: 1px;
+        }
+
+        /* 打字机按键动画增强 */
+        .typewriter-keys {
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4px;
+            z-index: 10;
+        }
+
+        .key {
+            width: 20px;
+            height: 20px;
+            background-color: #d4c4a8;
+            border: 1px solid #a67c52;
+            border-radius: 3px;
+            animation: keyPress 2s infinite;
+        }
+
+        .key:nth-child(2) { animation-delay: 0.2s; }
+        .key:nth-child(3) { animation-delay: 0.4s; }
+        .key:nth-child(4) { animation-delay: 0.6s; }
+        .key:nth-child(5) { animation-delay: 0.8s; }
+
+        @keyframes keyPress {
+            0%, 90%, 100% { transform: translateY(0); }
+            95% { transform: translateY(3px); }
         }
     </style>
 </head>
@@ -103,43 +208,65 @@
         <!-- 打字机机身装饰 -->
         <div class="typewriter-body">
             <div class="typewriter-roller"></div>
+            <div class="typewriter-keys">
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+                <div class="key"></div>
+            </div>
         </div>
 
         <!-- 纸张区域 -->
         <div class="paper-container">
             <!-- 标题区域 -->
-            <header class="header">
-                <h1 class="main-title">
+            <header class="header login-header">
+                <h1 class="main-title login-title">
                     🔐 系统登录<span class="cursor">|</span>
                 </h1>
-                <p style="text-align: center; color: #a67c52; margin-top: 10px; font-family: 'Special Elite', monospace;">
-                    请输入用户名和密码访问系统
-                </p>
+                <p class="login-subtitle">请输入您的用户名和密码以访问系统</p>
             </header>
 
-            <!-- 登录表单 -->
+            <!-- 登录表单区域 -->
             <main class="content-area">
-                <div id="errorMsg" class="error-message"></div>
+                <div class="login-wrapper">
+                    <!-- 错误提示 -->
+                    <div id="errorMsg" class="error-message"></div>
 
-                <form id="loginForm" class="login-form" onsubmit="handleLogin(event)">
-                    <h2>🔑 用户认证</h2>
+                    <!-- 登录表单 -->
+                    <form id="loginForm" class="login-form-area" onsubmit="handleLogin(event)">
+                        <div style="text-align: center; margin-bottom: 25px;">
+                            <h2 style="font-family: 'Special Elite', monospace; color: #8b4513; font-size: 24px; letter-spacing: 1px;">
+                                👤 用户认证
+                            </h2>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="username">用户名</label>
-                        <input type="text" id="username" name="username" required placeholder="请输入用户名" autocomplete="username">
-                    </div>
+                        <div class="form-group">
+                            <label for="username">📝 用户名</label>
+                            <input type="text" id="username" name="username" required placeholder="请输入用户名..." autocomplete="username">
+                        </div>
 
-                    <div class="form-group">
-                        <label for="password">密码</label>
-                        <input type="password" id="password" name="password" required placeholder="请输入密码" autocomplete="current-password">
-                    </div>
+                        <div class="form-group">
+                            <label for="password">🔑 密码</label>
+                            <input type="password" id="password" name="password" required placeholder="请输入密码..." autocomplete="current-password">
+                        </div>
 
-                    <button type="submit" class="login-btn">登 录</button>
+                        <button type="submit" class="login-btn">登 录 系 统</button>
+                    </form>
 
+                    <!-- 测试账号提示 -->
                     <div class="credentials-hint">
-                        测试账号：admin / admin123
+                        <strong>🔓 测试账号</strong>
+                        用户名：<code style="background:#f5f1e6;padding:2px 6px;border:1px solid #a67c52;border-radius:2px;">admin</code>
+                        &nbsp;&nbsp;|&nbsp;&nbsp;
+                        密码：<code style="background:#f5f1e6;padding:2px 6px;border:1px solid #a67c52;border-radius:2px;">admin123</code>
                     </div>
-                </form>
+                </div>
+
+                <!-- 页脚 -->
+                <footer class="login-footer">
+                    Resume Printer © 2026 | 安全登录系统
+                </footer>
             </main>
         </div>
     </div>
@@ -170,24 +297,25 @@
                 console.log(`[LoginAction] Session已创建: ${sessionId}`);
                 console.log(`[LoginAction] 登录时间: ${loginTime}`);
 
-                alert('✅ 登录成功！\n\n正在跳转到主页...');
+                alert('✅ 登录成功！\n\n欢迎回来，' + username + '！\n\n正在跳转到主页...');
 
-                // 跳转到主页（带参数跳过开屏页面）
+                // 跳转到主页
                 window.location.href = 'index.html?showSplash=false';
 
             } else {
                 console.log('[LoginAction] ❌ 验证失败：用户名或密码错误');
 
                 errorMsg.style.display = 'block';
-                errorMsg.innerHTML = '❌ 用户名或密码错误，请重试！';
+                errorMsg.innerHTML = '❌ <strong>验证失败</strong><br/>用户名或密码错误，请重新输入！';
 
                 // 清空密码框
                 document.getElementById('password').value = '';
+                document.getElementById('password').focus();
 
-                // 3秒后隐藏错误信息
+                // 5秒后隐藏错误信息
                 setTimeout(() => {
                     errorMsg.style.display = 'none';
-                }, 3000);
+                }, 5000);
             }
         }
 
@@ -199,10 +327,17 @@
                 console.log(`[LoginInterceptor] 检测到用户已登录: ${currentUser}`);
                 console.log('[LoginInterceptor] 重定向到主页...');
 
+                alert('💡 您已处于登录状态！\n\n即将跳转到主页...');
+
                 // 如果已登录，直接跳转
                 window.location.href = 'index.html?showSplash=false';
             } else {
                 console.log('[LoginInterceptor] 用户未登录，显示登录表单');
+
+                // 自动聚焦到用户名输入框
+                setTimeout(() => {
+                    document.getElementById('username').focus();
+                }, 500);
             }
         };
     </script>
