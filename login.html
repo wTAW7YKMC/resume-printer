@@ -8,51 +8,118 @@
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap"></noscript>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
+            font-family: 'Courier New', 'Courier Prime', monospace;
+            background-color: #3e2723;
+            color: #212121;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
         }
 
         .container {
+            max-width: 900px;
+            width: 90%;
             margin: 0;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .typewriter-body {
+            background-color: #3e2723;
+            height: 30px;
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            margin-bottom: 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .typewriter-roller {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            width: 10px;
+            height: 10px;
+            background-color: #555;
+            border-radius: 50%;
         }
 
         .paper-container {
+            background-color: #f5f1e6;
+            position: relative;
+            padding: 40px;
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             min-height: auto;
-            padding: 50px 40px;
+            max-height: 100vh;
+            overflow-y: auto;
+
+            background-image: linear-gradient(rgba(139, 69, 19, 0.1) 1px, transparent 1px);
+            background-size: 100% 24px;
+
+            filter: contrast(105%) brightness(95%);
         }
 
-        .login-header {
+        .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             padding-bottom: 20px;
             border-bottom: 2px dashed #a67c52;
         }
 
         .main-title {
+            font-family: 'Special Elite', 'Courier New', monospace;
             font-size: 48px;
+            color: #8b4513;
+            display: inline-block;
+            position: relative;
+        }
+
+        .cursor {
+            animation: blink 1s step-end infinite;
+            color: #8b4513;
+            font-weight: bold;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         .login-subtitle {
             font-family: 'Courier Prime', monospace;
-            font-size: 15px;
+            font-size: 14px;
             color: #a67c52;
-            margin-top: 10px;
-            letter-spacing: 0.5px;
+            margin-top: 8px;
+        }
+
+        .content-area {
+            display: flex;
+            justify-content: center;
         }
 
         .login-form-area {
             background-color: #fffef9;
             border-left: 4px solid #8b4513;
-            padding: 30px;
+            padding: 25px 35px;
             border-radius: 3px;
             box-shadow: 0 2px 8px rgba(139, 69, 19, 0.1);
+            width: 100%;
+            max-width: 450px;
         }
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .form-group label {
@@ -66,7 +133,7 @@
 
         .form-group input {
             width: 100%;
-            padding: 12px 14px;
+            padding: 11px 13px;
             border: 2px solid #a67c52;
             background-color: #f5f1e6;
             font-family: 'Courier Prime', monospace;
@@ -84,18 +151,18 @@
 
         .login-btn {
             width: 100%;
-            padding: 13px;
+            padding: 12px;
             background-color: #8b4513;
             color: #fffef9;
             border: none;
             font-family: 'Special Elite', 'Courier New', monospace;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 3px;
             transition: all 0.3s ease;
             letter-spacing: 2px;
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         .login-btn:hover {
@@ -108,8 +175,8 @@
             background-color: #fff3cd;
             border: 2px solid #ffc107;
             color: #856404;
-            padding: 14px;
-            margin-bottom: 18px;
+            padding: 12px;
+            margin-bottom: 16px;
             border-radius: 3px;
             text-align: center;
             display: none;
@@ -123,52 +190,16 @@
             25% { transform: translateX(-10px); }
             75% { transform: translateX(10px); }
         }
-
-        .typewriter-keys {
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 4px;
-            z-index: 10;
-        }
-
-        .key {
-            width: 20px;
-            height: 20px;
-            background-color: #d4c4a8;
-            border: 1px solid #a67c52;
-            border-radius: 3px;
-            animation: keyPress 2s infinite;
-        }
-
-        .key:nth-child(2) { animation-delay: 0.2s; }
-        .key:nth-child(3) { animation-delay: 0.4s; }
-        .key:nth-child(4) { animation-delay: 0.6s; }
-        .key:nth-child(5) { animation-delay: 0.8s; }
-
-        @keyframes keyPress {
-            0%, 90%, 100% { transform: translateY(0); }
-            95% { transform: translateY(3px); }
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="typewriter-body">
             <div class="typewriter-roller"></div>
-            <div class="typewriter-keys">
-                <div class="key"></div>
-                <div class="key"></div>
-                <div class="key"></div>
-                <div class="key"></div>
-                <div class="key"></div>
-            </div>
         </div>
 
         <div class="paper-container">
-            <header class="header login-header">
+            <header class="header">
                 <h1 id="main-title" class="main-title">
                     <span id="title-text"></span><span class="cursor">|</span>
                 </h1>
